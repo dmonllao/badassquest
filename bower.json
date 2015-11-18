@@ -1,0 +1,23 @@
+{
+  "name": "Bad ass quest",
+  "version": "0.0.1",
+  "authors": [
+    "David Monllao <david.monllao@gmail.com>"
+  ],
+  "main": "app.js",
+  "license": "GPL",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "font-awesome": "~4.4.0",
+    "jquery": "~2.1.4",
+    "bootstrap": "~3.3.5",
+    "requirejs": "~2.1.20",
+    "phaser": "~2.4.4"
+  }
+}

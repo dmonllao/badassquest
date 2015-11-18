@@ -1,0 +1,117 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+#map {
+    height: 100%;
+    float: left;
+    width: 100%;
+}
+
+.modal {
+    text-align: center;
+}
+
+/** To keep the modal window centered vertically on big screens */
+@media screen and (min-width: 768px) {
+    .modal:before {
+        display: inline-block;
+        vertical-align: middle;
+        content: "";
+        height: 100%;
+    }
+}
+
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.game-container .modal-dialog {
+    width: auto;
+}
+
+/** Game controls */
+.control {
+    margin: 10px;
+    font-weight: bolder;
+    font-size: 150%;
+    color: #f5f5f5;
+    background-color: #474747;
+    border: 1px solid #f5f5f5;
+}
+
+/* For icon with text */
+pre.control span {
+    margin-left: 10px;
+}
+
+.actionable-control {
+    cursor: pointer;
+}
+
+/** Mimics a bootstrap p*/
+.zoom {
+    font-size: 170%;
+    border-radius: 4px;
+}
+
+.zoom i {
+    padding: 10px;
+}
+
+@media screen and (max-width : 480px) {
+    .control {
+        font-size: 100%;
+    }
+}
+
+.infowindow-content {
+    color: #f5f5f5;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.infowindow-content h3 {
+    position: absolute;
+    left: 20px;
+}
+
+.infowindow-content .action-buttons {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.infowindow-content .action-buttons button {
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    font-size: 150%;
+}
+
+.action-buttons button {
+    margin: 3px 10px;
+}
+
+.info-box {
+    text-align: center;
+    margin: 20px auto 10px auto;
+}
+
+.story-name {
+    margin-bottom: 20px;
+}
+
+.step-img {
+    width: 40%;
+    margin: 20px auto 10px auto;
+    border-style: solid;
+    border-width: thick;
+}
+
+.game-tip {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: larger;
+}
