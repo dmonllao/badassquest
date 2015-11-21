@@ -40,7 +40,7 @@ define(['bs'], function($) {
         initFood: function(state, attrs) {
             var foodDiv = document.createElement('div');
             foodDiv.setAttribute('id', 'food');
-            foodDiv.innerHTML = '<pre class="control"><i style="color: #3366FF;" class="fa fa-bed"></i><span>' + this.round(state.cFood) + ' / ' + this.round(attrs.tFood) + '</span></pre>';
+            foodDiv.innerHTML = '<pre class="control"><i style="color: #8397D2;" class="fa fa-cutlery"></i><span>' + this.round(state.cFood) + ' / ' + this.round(attrs.tFood) + '</span></pre>';
             map.controls[google.maps.ControlPosition.LEFT_TOP].push(foodDiv);
         },
 

@@ -1,25 +1,17 @@
-define(['bs', 'Util', 'Game', 'action/Cure', 'action/Food', 'action/Steal', 'action/Fight', 'External', 'Icon'], function($, Util, Game, ActionCure, ActionFood, ActionSteal, ActionFight, External, Icon) {
+define(['bs', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/Steal', 'action/Fight', 'External', 'Icon'], function($, UI, Util, InfoWindow, ActionCure, ActionFood, ActionSteal, ActionFight, External, Icon) {
 
     var enableButtons = function(position) {
         $('.start-action').attr('disabled', false);
     };
 
-    var getActionButtonStyle = function(index) {
-        var styles = ['btn-success', 'btn-warning', 'btn-primary', 'btn-info', 'btn-danger'];
-        if (typeof styles[index] !== "undefined") {
-            return styles[index];
-        }
-        // Mod otherwise.
-        return styles[index % styles.length];
-    };
-
-    function PoisManager(placesService, appMap, user) {
+    function PoisManager(placesService, map, game, user) {
         this.placesService = placesService;
-        this.map = appMap;
+        this.map = map;
+        this.game = game;
         this.user = user;
 
         // Now that google.maps is available.
-        this.infoWindow = new google.maps.InfoWindow();
+        this.infoWindow = InfoWindow.getInstance();
 
         this.typeActions = {
             health: [ActionCure],
@@ -37,10 +29,6 @@ define(['bs', 'Util', 'Game', 'action/Cure', 'action/Food', 'action/Steal', 'act
             restaurant: 'food',
             bar: 'food'
         };
-
-        // Start the game.
-        var appGame = new Game();
-        this.game = appGame.getInstance();
 
         $('#game-action').on('hidden.bs.modal', function (e) {
 
@@ -125,7 +113,7 @@ define(['bs', 'Util', 'Game', 'action/Cure', 'action/Food', 'action/Steal', 'act
             var marker = new google.maps.Marker({
                 map: this.map,
                 position: data.geometry.location,
-                icon: Icon.get(data.types, this.poiTypes),
+                icon: Icon.get(data.types, this.poiTypes, 0.5),
                 zIndex: 1
             });
 
@@ -152,7 +140,7 @@ define(['bs', 'Util', 'Game', 'action/Cure', 'action/Food', 'action/Steal', 'act
                             content = content + '<div class="action-buttons">';
                             for(var i = 0; i < actions.length; i++) {
                                 var id = 'id-action-' + i;
-                                var buttonClass = 'start-action btn ' + getActionButtonStyle(i);
+                                var buttonClass = 'start-action btn ' + UI.getActionButtonStyle(i);
                                 content = content + '<button id="' + id + '" class="' + buttonClass + '" disabled="disabled">' + actions[i].getVisibleName() + '</button>';
                             }
                             content = content + '</div>';
@@ -161,7 +149,7 @@ define(['bs', 'Util', 'Game', 'action/Cure', 'action/Food', 'action/Steal', 'act
                         content = content + '</div>';
 
                         this.infoWindow.setContent(content);
-                        this.infoWindow.open(this.map, marker);
+                        InfoWindow.open(this.infoWindow, this.map, marker);
 
                         // On click we render the selected action.
                         $('.start-action').click(function(ev) {
@@ -175,16 +163,7 @@ define(['bs', 'Util', 'Game', 'action/Cure', 'action/Food', 'action/Steal', 'act
                             var actionType = action.getActionType();
 
                             if (actionType === "game-action") {
-
-                                var gamePromise = action.setState();
-                                gamePromise.done(function(stateName) {
-
-                                    // Start the selected state passing the action arguments.
-                                    this.game.state.start(stateName, true, false, action);
-
-                                    $('#game-action').modal('show');
-
-                                }.bind(this));
+                                action.start();
 
                             } else if (actionType === "text-action") {
                                 // Render the selected action.

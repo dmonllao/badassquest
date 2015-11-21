@@ -1,20 +1,21 @@
-define(['bs', 'External', 'Icon', 'story/Example', 'story/ModernAlchemist'], function($, External, Icon, StoryExample, StoryModernAlchemist) {
+define(['bs', 'External', 'Icon', 'InfoWindow', 'story/PerthUnderground', 'story/ModernAlchemist'], function($, External, Icon, InfoWindow, StoryPerthUnderground, StoryModernAlchemist) {
 
     // This contains the game instructions, they are attached to the first steps of the game.
     var instructions = [
         'Find your next destination looking at the map, zoom out if you can\'t see any specially big marker',
         'You can use <i class="fa fa-eye"></i> button to see nearby places, you can visit them to recover yourself or to get money',
-        'Note that you can see your energy <i style="color: #3366FF;" class="fa fa-bed"></i> in the top left screen corner, it decreases over time, if it reaches 0 your life will start decreasing, you can recover ryouself eating',
+        'Note that you can see your energy <i style="color: #8397D2;" class="fa fa-cutlery"></i> in the top left screen corner, it decreases over time, if it reaches 0 your life will start decreasing, you can recover ryouself eating',
     ];
 
-    function StoryManager(placesService, map, user) {
+    function StoryManager(placesService, map, game, user) {
         this.map = map;
+        this.game = game;
         this.user = user;
         this.placesService = placesService;
 
         // TODO Hardcoded as this is supposed to cover all StoryStep API.
-        //this.story = new StoryModernAlchemist(this.user.playerName);
-        this.story = new StoryExample(this.user.playerName);
+        //this.story = new StoryModernAlchemist(this.user, this.game);
+        this.story = new StoryPerthUnderground(this.user, this.game);
 
         // Set the story initial position.
         this.user.setInitialPosition(this.story.initialPosition);
@@ -39,6 +40,7 @@ define(['bs', 'External', 'Icon', 'story/Example', 'story/ModernAlchemist'], fun
     StoryManager.prototype = {
 
         map: null,
+        game: null,
         user: null,
         placesService: null,
 
@@ -71,7 +73,7 @@ define(['bs', 'External', 'Icon', 'story/Example', 'story/ModernAlchemist'], fun
             if (typeof placeData === "undefined") {
                 placeData = {
                     fakePlace: true,
-                    icon: Icon.getByType('idea', 1),
+                    icon: Icon.getByType('idea'),
                     name: 'You arrived'
                 };
             }
@@ -174,7 +176,7 @@ define(['bs', 'External', 'Icon', 'story/Example', 'story/ModernAlchemist'], fun
 
         openInfoWindow: function(marker, step, contents) {
             var content = '<h3>' + step.name + '</h3>' +
-                '<p>' + contents + '</p>';
+                '<div>' + contents + '</div>';
 
             // Add a tip if there is one.
             var tip = this.getTip();
@@ -182,16 +184,15 @@ define(['bs', 'External', 'Icon', 'story/Example', 'story/ModernAlchemist'], fun
                 content = content + tip;
             }
 
-            var infoWindow = new google.maps.InfoWindow({
-                content: content
-            });
-            infoWindow.open(this.map, marker);
+            step.infoWindow.setContent(content);
 
             // Add some wikipedia info if available.
             //var promise = External.getWikipediaInfo(step.name);
             //promise.done(function(article) {
-            //    infoWindow.setContent(infoWindow.getContent() + '<br/>' + article);
+            //    step.infoWindow.setContent(infoWindow.getContent() + '<br/>' + article);
             //});
+
+            InfoWindow.open(step.infoWindow, this.map, marker);
         },
 
         getTip: function(index) {

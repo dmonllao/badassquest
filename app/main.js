@@ -1,4 +1,4 @@
-define(['bs', 'User', 'StoryManager', 'ChaseTracker', 'PoisManager', 'MapOptions'], function($, User, StoryManager, ChaseTracker, PoisManager, MapOptions) {
+define(['bs', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManager', 'MapOptions'], function($, User, Game, StoryManager, ChaseTracker, PoisManager, MapOptions) {
 
     // @param {ChaseTracker}
     var chaseTracker;
@@ -11,6 +11,9 @@ define(['bs', 'User', 'StoryManager', 'ChaseTracker', 'PoisManager', 'MapOptions
 
     // @param {google.maps.Map}
     var map;
+
+    // @param {Phaser}
+    var game;
 
     // @type {User}
     var user = null;
@@ -32,17 +35,22 @@ define(['bs', 'User', 'StoryManager', 'ChaseTracker', 'PoisManager', 'MapOptions
             // The current user.
             user = new User(map, 'Juanito', 'img/mushroom2.png');
 
-            storyManager = new StoryManager(placesService, map, user);
+            // Start the game.
+            var appGame = new Game();
+            game = appGame.getInstance();
+
+            storyManager = new StoryManager(placesService, map, game, user);
 
             chaseTracker = new ChaseTracker(map, user);
 
-            poisManager = new PoisManager(placesService, map, user);
+            poisManager = new PoisManager(placesService, map, game, user);
 
             // Search near by pois.
             poisManager.addNearbyPois(storyManager.story.initialPosition);
 
             // Move the user to a new position.
             map.addListener('click', function(e) {
+                console.log('Move to ' + e.latLng);
                 user.moveTo(e.latLng);
             });
         });

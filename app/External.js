@@ -44,7 +44,7 @@ define(['bs', 'Util'], function($, Util) {
             return promise;
         },
 
-        getStreetViewImage: function(address, width, height) {
+        getStreetViewImage: function(position, width, height) {
 
             if (!width || !height) {
                 var size = Util.getImageSize();
@@ -57,7 +57,7 @@ define(['bs', 'Util'], function($, Util) {
                 }
             }
 
-            return 'https://maps.googleapis.com/maps/api/streetview?size=' + width + 'x' + height + '&location=' + address + '&pitch=10'
+            return 'https://maps.googleapis.com/maps/api/streetview?size=' + width + 'x' + height + '&location=' + position + '&pitch=10'
         }
     }
 });

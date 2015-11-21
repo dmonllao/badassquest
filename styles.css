@@ -13,6 +13,10 @@ html, body {
     text-align: center;
 }
 
+.gm-style-iw {
+    text-align: center;
+}
+
 /** To keep the modal window centered vertically on big screens */
 @media screen and (min-width: 768px) {
     .modal:before {

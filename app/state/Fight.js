@@ -17,22 +17,33 @@ define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, Ex
 
         finished: false,
 
-        init: function(actionData) {
+        init: function(args) {
 
             // Clean up from last use.
             this.characters = [];
             this.foeSprites = {};
             this.finished = false;
 
-            this.actionData = actionData;
+            // Required params.
+            this.user = args.user;
+            this.foes = args.foes;
+            for (var i in this.foes) {
+                // We need to set the user so they can attack it.
+                this.foes[i].setUser(this.user);
+            }
+
+            // Optional params.
+            this.location = args.location;
+            this.wonCallback = args.wonCallback;
+
             this.establishTurnsOrder();
         },
 
         establishTurnsOrder: function() {
 
             // Foes.
-            for (var i in this.actionData.foes) {
-                var character = this.actionData.foes[i];
+            for (var i in this.foes) {
+                var character = this.foes[i];
                 character.prepareTurn = this.removeFoesHits.bind(this);
                 character.counter = 0;
                 character.type = 'foe';
@@ -41,7 +52,7 @@ define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, Ex
             }
 
             // The player.
-            var player = this.actionData.user;
+            var player = this.user;
             player.prepareTurn = this.enableFoesHits.bind(this);
             player.counter = 0;
             player.type = 'player';
@@ -55,16 +66,25 @@ define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, Ex
 
         preload: function() {
 
-            for (var i in this.actionData.foes) {
-                this.actionData.foes[i].preloadAssets(game);
+            for (var i in this.foes) {
+                this.foes[i].preloadAssets(game);
             }
 
             // Particle.
             game.load.image('particle', 'img/pixel2x2_red.png');
 
             // Same size than the whole game canvas.
+            game.load.image('background', this.getBackground());
+        },
+
+        getBackground: function() {
             var size = Util.getGameSize();
-            game.load.image('background', External.getStreetViewImage(this.actionData.poiData.vicinity, size.width, size.height));
+
+            var img = 'img/default-battlefield.png';
+            if (this.location) {
+                img = External.getStreetViewImage(this.location, size.width, size.height);
+            }
+            game.load.image('background', img);
         },
 
         create: function() {
@@ -79,7 +99,7 @@ define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, Ex
             emitter.gravity = 200;
 
             // Depends on the number of foes we have.
-            var foeSpacing = game.world.width / this.actionData.foes.length;
+            var foeSpacing = game.world.width / this.foes.length;
 
             // To center it (although it should consider the foe width.
             var foeX = foeSpacing / 2;
@@ -87,12 +107,12 @@ define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, Ex
             // Some top spacing.
             var foeY = 150;
 
-            for (var i in this.actionData.foes) {
-                var foeSprite = this.actionData.foes[i].createSprite(game, foeX, foeY);
+            for (var i in this.foes) {
+                var foeSprite = this.foes[i].createSprite(game, foeX, foeY);
 
                 foeSprite.inputEnabled = true;
 
-                // Add them to the list so later we can play with them, same index than in actionData.foes.
+                // Add them to the list so later we can play with them, same index than in foes.
                 this.foeSprites[i] = foeSprite;
 
                 foeX = foeX + foeSpacing;
@@ -110,14 +130,14 @@ define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, Ex
             }
 
             // Finish if the player is dead.
-            if (this.actionData.user.isDead()) {
+            if (this.user.isDead()) {
                 return;
             }
 
             // Finish if all foes are dead.
             var anyAlive = false;
-            for (var i in this.actionData.foes) {
-                var isDead = this.actionData.foes[i].isDead();
+            for (var i in this.foes) {
+                var isDead = this.foes[i].isDead();
                 if (!isDead) {
                     anyAlive = true;
                 } else if (isDead) {
@@ -186,16 +206,16 @@ define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, Ex
         },
 
         update: function() {
-            for (var i in this.actionData.foes) {
-                if (!this.actionData.foes[i].isDead()) {
-                    this.actionData.foes[i].updateCanvas(game);
+            for (var i in this.foes) {
+                if (!this.foes[i].isDead()) {
+                    this.foes[i].updateCanvas(game);
                 }
             }
         },
 
         hit: function(foeSprite, pointer, foeIndex) {
 
-            var damagePoints = this.actionData.user.damageFoe(this.actionData.foes[foeIndex]);
+            var damagePoints = this.user.damageFoe(this.foes[foeIndex]);
 
             // Blood.
             emitter.x = pointer.x;
@@ -218,11 +238,11 @@ define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, Ex
         userWins: function() {
 
             var experience = 0;
-            for (var i in this.actionData.foes) {
-                var foe = this.actionData.foes[i];
+            for (var i in this.foes) {
+                var foe = this.foes[i];
                 experience = experience + foe.attrs.attack + foe.attrs.defense + foe.attrs.tHealth;
             }
-            this.actionData.user.addExperience(experience);
+            this.user.addExperience(experience);
 
             setTimeout(function() {
                 var text = game.add.text(game.world.centerX, game.world.centerY - 50, 'You won!');
@@ -233,10 +253,17 @@ define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, Ex
                 var text = game.add.text(game.world.centerX, game.world.centerY + 50, 'Experience: ' + experience);
                 this.formatText(text);
             }.bind(this), 1500);
+
+            // And finally the callback if it was defined.
+            if (this.wonCallback) {
+                setTimeout(function() {
+                    this.wonCallback();
+                }.bind(this), 2500);
+            }
         },
 
         finishFight: function() {
-            console.log('mark fight as finished');
+            console.log('Fight marked as finished');
             this.finished = true;
         },
 

@@ -1,4 +1,4 @@
-define(['jquery'], function($) {
+define(['jquery', 'InfoWindow'], function($, InfoWindow) {
 
     function StoryStep(data) {
 
@@ -28,10 +28,16 @@ define(['jquery'], function($) {
             this.process = data.process;
         }
 
+        this.infoWindow = InfoWindow.getInstance();
+
         return this;
     }
 
     StoryStep.prototype = {
+
+        user: null,
+        game: null,
+        infoWindow: null,
 
         // Static data.
         position: null,
@@ -60,13 +66,21 @@ define(['jquery'], function($) {
             this.completedCallback = callback;
         },
 
+        setUser: function(user) {
+            this.user = user;
+        },
+
+        setGame: function(game) {
+            this.game = game;
+        },
+
         getInfo: function() {
             return this.info;
         },
 
         execute: function() {
             if (this.process !== null) {
-                return this.stepProcess();
+                return this.process();
             }
             // If the step does not pass any execute function we just mark as completed.
             this.complete();

@@ -109,8 +109,8 @@ define(function() {
 
     function MapOptions() {
         // We want this here as we need google.maps to be available when this is called.
-        //this.mapTypeId = google.maps.MapTypeId.SATELLITE;
-        this.mapTypeId = google.maps.MapTypeId.ROADMAP;
+        //this.mapTypeId = google.maps.MapTypeId.ROADMAP;
+        this.mapTypeId = google.maps.MapTypeId.SATELLITE;
     }
 
     MapOptions.prototype = {
@@ -119,6 +119,7 @@ define(function() {
         styles: mapStyles,
         mapTypeId: null, 
         zoomControl: false,
+        rotateControl: false,
         streetViewControl: false
     };
 

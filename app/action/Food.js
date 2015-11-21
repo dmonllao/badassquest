@@ -1,4 +1,4 @@
-define(['bs', 'action/Base', 'Generator'], function($, ActionBase, Generator) {
+define(['bs', 'UI', 'action/Base', 'Generator'], function($, UI, ActionBase, Generator) {
 
     // More or less, Health = price / 2 and Energy = price * 20.
     var randomFood = [
@@ -93,12 +93,18 @@ define(['bs', 'action/Base', 'Generator'], function($, ActionBase, Generator) {
                 '<div id="food-info" class="info-box">' +
                 '<p>I hope you enjoy your lovely ' + this.food.name + '. $' + this.food.price + ' please.' +
                     'You can recover ' + this.food.health + ' life points with it and ' + this.food.energy + ' energy points.</p>' +
-                '<div class="action-buttons">' +
-                    '<button id="pay" class="btn btn-success">Pay</button>' +
-                    '<button id="run" class="btn btn-warning">Run with the ' + this.food.name + '</button>' +
-                    '<button id="cancel" class="btn btn-primary">I don\'t want it</button>' +
-                '</div>' +
-                '</div>'
+                UI.renderActionButtons([
+                    {
+                        id: 'pay',
+                        text: 'Pay'
+                    }, {
+                        id: 'run',
+                        text: 'Run with the ' + this.food.name
+                    }, {
+                        id: 'cancel',
+                        text: 'I don\'t want it'
+                    }
+                ]) + '</div>'
             );
         }.bind(this));
 
@@ -111,6 +117,12 @@ define(['bs', 'action/Base', 'Generator'], function($, ActionBase, Generator) {
         var foodImportance = this.getItemImportance(this.food.price);
 
         $('#pay').on('click', function(ev) {
+
+            if (this.user.state.cWealth < this.food.price) {
+                $('#food-info').html("<p>You can not afford it mate, get out.</p>");
+                return;
+            }
+
             this.closeAction(ev);
 
             this.user.updateState({

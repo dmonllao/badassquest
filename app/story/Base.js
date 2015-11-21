@@ -1,7 +1,8 @@
 define(['jquery', 'Icon', 'StoryStep'], function($, Icon, StoryStep) {
 
-    function StoryBase(playerName) {
-        this.playerName = playerName;
+    function StoryBase(user, game) {
+        this.user = user;
+        this.game = game;
 
         // Setting them in here as google.maps will already be available.
         this.steps = [
@@ -18,7 +19,8 @@ define(['jquery', 'Icon', 'StoryStep'], function($, Icon, StoryStep) {
 
         currentStep: null,
 
-        playerName: null,
+        user: null,
+        game: null,
 
         steps: null,
 
@@ -42,6 +44,11 @@ define(['jquery', 'Icon', 'StoryStep'], function($, Icon, StoryStep) {
             if (typeof this.steps[this.currentStep] === "undefined") {
                 return false;
             }
+
+            // Provide data to the step.
+            this.steps[this.currentStep].setUser(this.user);
+            this.steps[this.currentStep].setGame(this.game);
+
             return this.steps[this.currentStep];
         }
     };

@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'fontawesome', 'Router'], function($, Const, fontawesome, Router) {
+define(['bs', 'Const', 'InfoWindow', 'fontawesome', 'Router'], function($, Const, InfoWindow, fontawesome, Router) {
 
     function Chase(map, user, chaseData) {
 
@@ -24,9 +24,9 @@ define(['bs', 'Const', 'fontawesome', 'Router'], function($, Const, fontawesome,
             zIndex: 8
         });
 
-        this.infoWindow = new google.maps.InfoWindow({
+        this.infoWindow = InfoWindow.getInstance({
             content: '<h4>Hey! Where are you going? I will catch you!</h4>'
-        });
+        }, false);
 
         this.router = new Router(this.map);
     }

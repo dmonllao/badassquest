@@ -1,4 +1,4 @@
-define(['bs', 'Foe', 'action/Base', 'state/Fight'], function($, Foe, ActionBase, StateFight) {
+define(['bs', 'Foe', 'action/Base'], function($, Foe, ActionBase) {
 
     ActionFight.prototype = Object.create(ActionBase.prototype);
 
@@ -38,32 +38,28 @@ define(['bs', 'Foe', 'action/Base', 'state/Fight'], function($, Foe, ActionBase,
         return 'Fight';
     }
 
-    ActionFight.prototype.setState = function() {
+    ActionFight.prototype.start = function() {
 
-        // Add the state to the game.
-        this.game.state.add('Fight', StateFight);
-
-        // Returns a promise.
-        var gamePromise = $.Deferred();
-
-        // TODO Rename it, only used to ensure we got the shop keeper.
+        // Only used to ensure we got the shop keeper.
         var headerPromise = this.printHeader();
         headerPromise.done(function(unused) {
 
             // All foes using the same image.
             for (var i in this.foes) {
                 this.foes[i].setFaceImage(this.shopKeeperImage);
-
-                // We need to set the user too so they can attack.
-                this.foes[i].setUser(this.user);
             }
 
-            // We pass the action object and the state id to initiate.
-            gamePromise.resolve('Fight');
+            // Start the selected state passing the action arguments.
+            var args = {
+                user: this.user,
+                foes: this.foes,
+                location: this.poiData.vicinity
+            };
+            this.game.state.start('Fight', true, false, args);
+
+            $('#game-action').modal('show');
 
         }.bind(this));
-
-        return gamePromise;
     };
 
     return ActionFight;

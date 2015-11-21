@@ -5,6 +5,10 @@ define(['fontawesome'], function(fontawesome) {
             icon: fontawesome.markers.LIGHTBULB_O,
             color: '#dfff98'
         },
+        home: {
+            icon: fontawesome.markers.HOME,
+            color: '#dfff98'
+        },
         institution: {
             icon: fontawesome.markers.UNIVERSITY,
             color: '#fce580'
@@ -36,7 +40,7 @@ define(['fontawesome'], function(fontawesome) {
         getByType: function(type, scale) {
 
             if (typeof scale === "undefined") {
-                scale = 0.5;
+                scale = 1;
             }
 
             return {
@@ -50,10 +54,32 @@ define(['fontawesome'], function(fontawesome) {
             };
         },
 
+        getByFont: function(font, color, scale) {
+
+            if (typeof scale === "undefined") {
+                scale = 1;
+            }
+
+            if (typeof color === "undefined") {
+                color = '#dfff98';
+            }
+
+            return {
+                path: fontawesome.markers[font],
+                scale: scale,
+                strokeWeight: 1,
+                strokeColor: 'black',
+                strokeOpacity: 1,
+                fillColor: color,
+                fillOpacity: 1,
+            };
+
+        },
+
         get: function(placeTypes, poiTypes, scale) {
 
             if (typeof scale === "undefined") {
-                scale = 0.5;
+                scale = 1;
             }
 
             if (typeof poiTypes === "undefined") {
