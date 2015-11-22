@@ -1,4 +1,4 @@
-define(['bs', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/Steal', 'action/Fight', 'External', 'Icon'], function($, UI, Util, InfoWindow, ActionCure, ActionFood, ActionSteal, ActionFight, External, Icon) {
+define(['bs', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/Steal', 'action/Hack', 'action/Fight', 'External', 'Icon'], function($, UI, Util, InfoWindow, ActionCure, ActionFood, ActionSteal, ActionHack, ActionFight, External, Icon) {
 
     var enableButtons = function(position) {
         $('.start-action').attr('disabled', false);
@@ -17,6 +17,7 @@ define(['bs', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/
             health: [ActionCure],
             shop: [ActionSteal],
             wealth: [ActionSteal, ActionFight],
+            hackable: [ActionHack],
             food: [ActionFood],
         };
 
@@ -25,7 +26,7 @@ define(['bs', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/
             doctor: 'health',
             shopping_mall: 'shop',
             bank: 'wealth',
-            atm: 'wealth',
+            atm: 'hackable',
             restaurant: 'food',
             bar: 'food'
         };
@@ -134,14 +135,16 @@ define(['bs', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/
                         var size = Util.getImageSize();
                         var content = '<div class="infowindow-content">' +
                             '<h3>' + data.name + '</h3>' +
-                            '<img src="' + External.getStreetViewImage(data.vicinity, size.width, size.height) + '" width="' + size.width + '" height="' + size.height + '"/>';
+                            '<img src="' + External.getStreetViewImage(data.vicinity, size.width, size.height) + '"' +
+                                ' width="' + size.width + '" height="' + size.height + '"/>';
 
                         if (actions.length > 0) {
                             content = content + '<div class="action-buttons">';
                             for(var i = 0; i < actions.length; i++) {
                                 var id = 'id-action-' + i;
                                 var buttonClass = 'start-action btn ' + UI.getActionButtonStyle(i);
-                                content = content + '<button id="' + id + '" class="' + buttonClass + '" disabled="disabled">' + actions[i].getVisibleName() + '</button>';
+                                content = content + '<button id="' + id + '" class="' + buttonClass + '" disabled="disabled">' +
+                                    actions[i].getVisibleName() + '</button>';
                             }
                             content = content + '</div>';
                         }

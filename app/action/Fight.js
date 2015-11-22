@@ -1,4 +1,4 @@
-define(['bs', 'Foe', 'action/Base'], function($, Foe, ActionBase) {
+define(['bs', 'Foe', 'Icon', 'action/Base'], function($, Foe, Icon, ActionBase) {
 
     ActionFight.prototype = Object.create(ActionBase.prototype);
 
@@ -35,7 +35,7 @@ define(['bs', 'Foe', 'action/Base'], function($, Foe, ActionBase) {
     }
 
     ActionFight.prototype.getVisibleName = function() {
-        return 'Fight';
+        return 'Kill\'em all';
     }
 
     ActionFight.prototype.start = function() {
@@ -53,7 +53,12 @@ define(['bs', 'Foe', 'action/Base'], function($, Foe, ActionBase) {
             var args = {
                 user: this.user,
                 foes: this.foes,
-                location: this.poiData.vicinity
+                location: this.poiData.vicinity,
+                wonCallback: function() {
+                    this.marker.setIcon(Icon.getByType('remove', 0.5));
+                    google.maps.event.clearInstanceListeners(this.marker);
+                    this.marker.clickable(false);
+                }.bind(this)
             };
             this.game.state.start('Fight', true, false, args);
 

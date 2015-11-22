@@ -129,14 +129,20 @@ define(['jquery', 'Const'], function($, Const) {
                 return;
             }
 
-            // Bounce again if the sprite is on the floor.
-            if (this.spriteData.sprite.y > game.world.width - this.spriteData.sprite.height) {
-                this.bounceCounter++;
+            // Check that the spriteData is available.
+            if (this.spriteData.sprite.body) {
+
+                // Bounce again if the sprite is on the floor.
+                if (this.spriteData.sprite.y > game.world.width - this.spriteData.sprite.height) {
+                    this.bounceCounter++;
+                }
+
+                // If the foe has been on the floor for 10 updates means that it is fixed there.
+                if (this.bounceCounter !== 0 && this.bounceCounter % 10 === 0) {
+                    this.spriteData.sprite.body.velocity.setTo(200, 200);
+                }
             }
-            // If the foe has been on the floor for 10 updates means that it is fixed there.
-            if (this.bounceCounter !== 0 && this.bounceCounter % 10 === 0) {
-                this.spriteData.sprite.body.velocity.setTo(200, 200);
-            }
+
         }
     };
 

@@ -8,7 +8,7 @@ define(['bs', 'action/Base'], function($, ActionBase) {
     }
 
     ActionCure.prototype.getVisibleName = function() {
-        return 'Cure';
+        return 'Visit the doctor';
     }
 
     ActionCure.prototype.render = function() {

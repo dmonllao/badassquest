@@ -45,7 +45,7 @@ define(['bs', 'Generator', 'Foe', 'action/Base'], function($, Generator, Foe, Ac
         headerPromise.done(function(html) {
             html = html + '<div id="steal-info" class="info-box">' +
                 '<p>You can steal $' + this.scenario.loot + ' here... There are ' + this.scenario.guards.length + ' guards... Looks like it would be ' + this.scenario.difficulty + '.' +
-                '<p><button id="start-chasing" class="btn btn-success"/>Steal the money and run!</button></p></div>';
+                '<p><button id="run" class="btn btn-success"/>Steal the money and run!</button></p></div>';
             rendererPromise.resolve(html);
 
         }.bind(this));
@@ -54,7 +54,7 @@ define(['bs', 'Generator', 'Foe', 'action/Base'], function($, Generator, Foe, Ac
     };
 
     ActionSteal.prototype.rendered = function() {
-        $('#start-chasing').on('click', function(ev) {
+        $('#run').on('click', function(ev) {
             ev.preventDefault();
 
             var lootImportance = this.getLootImportance(this.scenario.loot);

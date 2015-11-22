@@ -94,6 +94,10 @@ pre.control span {
     font-size: 150%;
 }
 
+.action-header img {
+    margin: auto;
+}
+
 .action-buttons button {
     margin: 3px 10px;
 }

@@ -5,6 +5,10 @@ define(['fontawesome'], function(fontawesome) {
             icon: fontawesome.markers.LIGHTBULB_O,
             color: '#dfff98'
         },
+        remove: {
+            icon: fontawesome.markers.TIMES,
+            color: '#CD3A3A'
+        },
         home: {
             icon: fontawesome.markers.HOME,
             color: '#dfff98'
@@ -29,6 +33,11 @@ define(['fontawesome'], function(fontawesome) {
             icon: fontawesome.markers.MONEY,
             color: '#95c355'
         },
+        hackable: {
+            icon: fontawesome.markers.FAX,
+            color: '#D2CE44'
+        },
+
         food: {
             icon: fontawesome.markers.CUTLERY,
             color: 'grey'

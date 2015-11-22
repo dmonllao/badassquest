@@ -60,7 +60,7 @@ define(['bs', 'External'], function($, External) {
             personPromise.done(function(randomImageUrl) {
                 this.shopKeeperImage = randomImageUrl;
                 promise.resolve(
-                    '<div class="row">' +
+                    '<div class="action-header row">' +
                         '<div class="col-sm-2"><img src="' + this.shopKeeperImage + '" class="img-responsive img-circle"/></div>' +
                         '<div class="col-sm-8"><h4>Welcome to ' + this.poiData.name + '</h4></div>' +
                         '<div class="col-sm-2"><img width="48" height="48" src="' + this.user.photo + '" class="img-responsive img-circle"/></div>' +

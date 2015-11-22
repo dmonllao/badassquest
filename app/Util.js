@@ -10,9 +10,12 @@ define(['jquery'], function($) {
          */
         getImageSize: function() {
 
+            var widthProportion = 0.5;
+            var heightProportion = 0.5;
+
             var size = {
-                width: Math.floor(window.innerWidth * 0.5),
-                height: Math.floor(window.innerHeight * 0.5)
+                width: Math.floor(window.innerWidth * widthProportion),
+                height: Math.floor(window.innerHeight * heightProportion)
             };
 
             // Limited by InfoWindow max-height and max-width.
