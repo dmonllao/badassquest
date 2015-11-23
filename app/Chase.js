@@ -112,8 +112,8 @@ define(['bs', 'Const', 'InfoWindow', 'fontawesome', 'Router'], function($, Const
             var userPosition = this.user.marker.getPosition();
             var chasePosition = chaseRouter.marker.getPosition();
 
-            // Visually these 20 meters in the map looks like really close.
-            if (chasePosition.distanceFrom(userPosition) <= 20) {
+            // Visually these Const.closePosition meters in the map looks like really close.
+            if (chasePosition.distanceFrom(userPosition) <= Const.closePosition) {
 
                 this.data.caughtCallback();
 

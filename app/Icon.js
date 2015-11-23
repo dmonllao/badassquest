@@ -5,9 +5,9 @@ define(['fontawesome'], function(fontawesome) {
             icon: fontawesome.markers.LIGHTBULB_O,
             color: '#dfff98'
         },
-        remove: {
-            icon: fontawesome.markers.TIMES,
-            color: '#CD3A3A'
+        sad: {
+            icon: fontawesome.markers.FROWN_O,
+            color: '#F1B600'
         },
         home: {
             icon: fontawesome.markers.HOME,

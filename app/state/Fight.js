@@ -244,6 +244,7 @@ define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, Ex
             }
             this.user.addExperience(experience);
 
+            // You won info.
             setTimeout(function() {
                 var text = game.add.text(game.world.centerX, game.world.centerY - 50, 'You won!');
                 this.formatText(text);
@@ -271,7 +272,7 @@ define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, Ex
 
             // Big one if undefined.
             if (typeof size === "undefined") {
-                size = 50;
+                size = Util.getGameFontSize();
             }
 
             text.anchor.set(0.5);

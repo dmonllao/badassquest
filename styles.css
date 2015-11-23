@@ -84,7 +84,7 @@ pre.control span {
 
 .infowindow-content .action-buttons {
     position: absolute;
-    bottom: 15px;
+    bottom: 0;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -98,9 +98,20 @@ pre.control span {
     margin: auto;
 }
 
+
 .action-buttons button {
     margin: 3px 10px;
 }
+
+@media only screen and (max-width : 767px) {
+    .action-buttons button {
+        margin: 3px;
+    }
+    .infowindow-content .action-buttons {
+        bottom: -20px;
+    }
+}
+
 
 .info-box {
     text-align: center;

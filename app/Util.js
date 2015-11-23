@@ -31,8 +31,20 @@ define(['jquery'], function($) {
         getGameSize: function() {
             return {
                 width: Math.floor(window.innerWidth * 0.7),
-                height: Math.floor(window.innerHeight * 0.8)
+                height: Math.floor(window.innerHeight * 0.6)
             };
+        },
+
+        getGameFontSize: function() {
+            var size = 50;
+
+            if (window.innerWidth < 480) {
+                size = 25;
+            } else if (window.innerWidth < 768) {
+                size = 40;
+            }
+
+            return size;
         }
     };
 });

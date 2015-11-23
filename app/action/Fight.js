@@ -55,9 +55,17 @@ define(['bs', 'Foe', 'Icon', 'action/Base'], function($, Foe, Icon, ActionBase) 
                 foes: this.foes,
                 location: this.poiData.vicinity,
                 wonCallback: function() {
-                    this.marker.setIcon(Icon.getByType('remove', 0.5));
+
+                    // Clear the marker.
+                    this.marker.setIcon(Icon.getByType('sad', 0.5));
+                    this.marker.setClickable(false);
                     google.maps.event.clearInstanceListeners(this.marker);
-                    this.marker.clickable(false);
+
+                    // Add to pissed off markers.
+                    this.user.addPissedOff({
+                        marker: this.marker
+                    });
+
                 }.bind(this)
             };
             this.game.state.start('Fight', true, false, args);

@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'Generator', 'Router', 'Controls'], function($, Const, Generator, Router, Controls) {
+define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'InfoWindow'], function($, Const, Generator, Router, Controls, InfoWindow) {
 
     var levels = [0, 50, 100, 300, 700, 1500, 3000, 5000, 8000, 10000];
 
@@ -7,6 +7,8 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls'], function($, Const, Ge
         this.map = map;
         this.playerName = playerName;
         this.photo = playerPhoto;
+
+        this.pissedOff = [];
 
         this.state = {
             cHealth: 80,
@@ -85,11 +87,57 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls'], function($, Const, Ge
             });
         },
 
-        runDropFood: function() {
-            // This runs for each step, so every 50 milisecs.
+        passingBy: function() {
+
+            // This runs for each step on the map, so every 50 milisecs.
             this.updateState({
                 cFood: this.state.cFood - 1
             });
+
+            // People shouts at you where you annoyed them.
+            for (var i in this.pissedOff) {
+
+                var pissed = this.pissedOff[i];
+                if (this.pissedComplains(pissed)) {
+
+                    // Tag it as shouting to prevent duplicates.
+                    pissed.shouting = true;
+
+                    InfoWindow.openPissedInstance(
+                        this.map,
+                        pissed.marker,
+                        '<h4>Look what you have done! You will burn in hell</h4>',
+                        function() {
+                            // Reset it to shout again in a while.
+                            pissed.shouting = false;
+                            pissed.time = Math.floor(Date.now() / 1000) + 20;
+                        }.bind(this)
+                    );
+                }
+            }
+        },
+
+        /**
+         * This should be as quick as possible.
+         */
+        pissedComplains: function(pissed) {
+
+            var currentPos = this.marker.getPosition();
+
+            // We check that they are not already complaining.
+            if (!pissed.shouting && pissed.time < (Math.floor(Date.now() / 1000)) &&
+                    currentPos.distanceFrom(pissed.marker.getPosition()) <= Const.closePositionPissed) {
+                return true;
+            }
+
+            return false;
+        },
+
+        addPissedOff: function(pissed) {
+
+            // + something to avoid shouting immediatelly.
+            pissed.time = Math.floor(Date.now() / 1000) + 10;
+            this.pissedOff.push(pissed);
         },
 
         attackTurn: function(game, callback) {
@@ -110,7 +158,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls'], function($, Const, Ge
         },
 
         moveTo: function(position, destinationCallback) {
-            this.router.route(this.marker, position, this.runDropFood.bind(this), destinationCallback, this.attrs.speed);
+            this.router.route(this.marker, position, this.passingBy.bind(this), destinationCallback, this.attrs.speed);
         },
 
         addExperience: function(points) {
