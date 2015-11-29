@@ -113,7 +113,8 @@ pre.control span {
 }
 
 .infowindow-content {
-    margin: 70px 0 15px 20px;
+    margin: 70px 10px 15px 20px;
+    font-size: larger;
 }
 
 .infowindow-wrapper .action-buttons {
@@ -171,5 +172,4 @@ pre.control span {
 .game-tip {
     margin-top: 20px;
     font-weight: bold;
-    font-size: larger;
 }
