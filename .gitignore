@@ -1,3 +1,8 @@
 *~
 *.swp
 *.swo
+
+styles.min.css
+styles.min.css.map
+
+node_modules

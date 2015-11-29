@@ -1,0 +1,39 @@
+module.exports = function(grunt) {
+
+    grunt.initConfig({
+
+        pkg: grunt.file.readJSON("package.json"),
+        cssmin: {
+            options: {
+                sourceMap: true,
+                rebase: true,
+                shorthandCompacting: false,
+                roundingPrecision: -1
+            },
+            target: {
+                files: {
+                    'styles.min.css': [
+                        'bower_components/font-awesome/css/font-awesome.css',
+                        'bower_components/bootstrap/dist/css/bootstrap.css',
+                        'styles.css'
+                    ]
+                }
+            }
+        },
+        requirejs: {
+            compile: {
+                options: {
+                    baseUrl: 'app',
+                    mainConfigFile: 'app.js',
+                    name: 'main',
+                    out: 'modules.js'
+                }
+            }
+        }
+    });
+
+    grunt.registerTask("default", ["cssmin", "requirejs"]);
+
+    grunt.loadNpmTasks("grunt-contrib-cssmin");
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
+};

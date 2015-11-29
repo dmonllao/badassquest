@@ -103,16 +103,16 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'InfoWindow'], functio
                     // Tag it as shouting to prevent duplicates.
                     pissed.shouting = true;
 
-                    InfoWindow.openPissedInstance(
-                        this.map,
-                        pissed.marker,
-                        'Look what you have done! You will burn in hell',
-                        function() {
+                    InfoWindow.openInfoInstance({
+                        map: this.map,
+                        marker: pissed.marker,
+                        content: 'Look what you have done! You will burn in hell',
+                        closedCallback: function() {
                             // Reset it to shout again in a while.
                             pissed.shouting = false;
-                            pissed.time = Math.floor(Date.now() / 1000) + 20;
+                            pissed.time = Math.floor(Date.now() / 1000) + Const.pissedEvery;
                         }.bind(this)
-                    );
+                    });
                 }
             }
         },
@@ -136,7 +136,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'InfoWindow'], functio
         addPissedOff: function(pissed) {
 
             // + something to avoid shouting immediatelly.
-            pissed.time = Math.floor(Date.now() / 1000) + 10;
+            pissed.time = Math.floor(Date.now() / 1000) + Const.pissedAfter;
             this.pissedOff.push(pissed);
         },
 

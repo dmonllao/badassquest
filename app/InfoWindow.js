@@ -2,71 +2,92 @@ define(function() {
 
     var instances = [];
 
-    var infoBoxStyles = {
-         disableAutoPan: false,
-         pixelOffset: new google.maps.Size(-123, 0),
-         boxStyle: {
-            background: "url('http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/examples/tipbox.gif') no-repeat",
-            opacity: 1
-        },
-        closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif"
-    };
-
-    var pissedBoxStyles = {
-        disableAutoPan: false,
-        pixelOffset: new google.maps.Size(-123, 0),
-        boxStyle: {
-            background: "rgb(255, 255, 255)",
-            opacity: 0.8
-        },
-        closeBoxURL: ""
-    };
-
     return {
-        getInstance: function(options, addToList) {
 
-            if (typeof addToList === "undefined") {
-                addToList = true;
-            }
+        initStyles: function() {
 
-            var infoWindow = new InfoBox(infoBoxStyles);
+            this.bgImageStyles = {
+                 disableAutoPan: false,
+                 pixelOffset: new google.maps.Size(-123, 0),
+                 boxStyle: {
+                    background: "url('img/tipbox.gif') no-repeat",
+                    opacity: 1
+                },
+                closeBoxURL: "img/close.png"
+            };
 
-            if (addToList) {
-                instances.push(infoWindow);
-            }
+            this.justTextStyles = {
+                disableAutoPan: false,
+                pixelOffset: new google.maps.Size(-123, 0),
+                boxStyle: {
+                    background: "rgb(255, 255, 255)",
+                    opacity: 0.8
+                },
+                closeBoxURL: ""
+            };
+
+            this.stepStyles = {
+            };
+
+        },
+
+        getInstance: function() {
+
+            var infoWindow = new InfoBox(this.bgImageStyles);
+
+            instances.push(infoWindow);
+
             return infoWindow;
         },
 
-        openPissedInstance: function(map, marker, content, closedCallback, delay) {
+        openInfoInstance: function(options) {
 
-            if (typeof delay === "undefined") {
-                delay = 2000;
+            if (typeof options.delay === "undefined") {
+                options.delay = 2000;
             }
 
-            var infoWindow = new InfoBox(pissedBoxStyles);
-            infoWindow.setContent('<h4 class="pissed-text">' + content + '</h4>');
-            infoWindow.open(map, marker);
+            if (typeof options.closedCallback === "undefined") {
+                options.closedCallback = function() {};
+            }
+
+            var infoWindow = new InfoBox(this.justTextStyles);
+            infoWindow.setContent('<h4 class="just-text">' + options.content + '</h4>');
+            infoWindow.open(options.map, options.marker);
 
             // Close it in delay seconds.
             setTimeout(function() {
-                closedCallback();
-                infoWindow.close();
-                infoWindow = null;
-            }, delay);
+                options.closedCallback();
+
+                // Might have been previously closed.
+                if (infoWindow) {
+                    infoWindow.close();
+                    infoWindow = null;
+                }
+            }, options.delay);
 
             return infoWindow;
         },
 
-        open: function(infoWindow, map, marker) {
+        open: function(options) {
             this.closeAll();
-            infoWindow.open(map, marker);
+
+            options.infoWindow.setContent('<div class="infowindow-wrapper">' + options.content + '</div>');
+            options.infoWindow.open(options.map, options.marker);
         },
 
         closeAll: function() {
             for (var i in instances) {
-                instances[i].close();
+                if (instances[i]) {
+                    // We don't splice as we reuse info windows. Each caller should
+                    // manage their info windows life.
+                    instances[i].close();
+                    instances[i].setMap(null);
+                }
             }
-            instances = [];
-        }
+        },
+
+        infoBoxStyles: {},
+
+        justTextStyles: {}
     };
 });

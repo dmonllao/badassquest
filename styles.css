@@ -81,18 +81,18 @@ pre.control span {
     font-size: 12px;
 }
 
-/** Includes .infowindow-content margin-top. */
+/** Includes .infowindow-wrapper margin-top. */
 .infoBox>img {
     top: 18px;
     right: 10px;
 }
 
-.infoBox .pissed-text {
+.infoBox .just-text {
     margin: 5px;
     white-space: nowrap;
 }
 
-.infowindow-content {
+.infowindow-wrapper {
     margin-top: 8px;
     background: #333;
     overflow: visible;
@@ -103,23 +103,27 @@ pre.control span {
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 
-.infowindow-content img {
-    margin-top: -8px;
+.infowindow-wrapper .poi-img {
+    margin-top: -22px;
 }
 
-.infowindow-content h3 {
+.infowindow-wrapper h3 {
     position: absolute;
     left: 20px;
 }
 
-.infowindow-content .action-buttons {
+.infowindow-content {
+    margin: 70px 0 15px 20px;
+}
+
+.infowindow-wrapper .action-buttons {
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-.infowindow-content .action-buttons button {
+.infowindow-wrapper .action-buttons button {
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
     font-size: 150%;
 }
@@ -141,7 +145,7 @@ pre.control span {
 }
 
 @media only screen and (max-width : 767px) {
-    .infowindow-content .action-buttons {
+    .infowindow-wrapper .action-buttons {
         bottom: -10px;
     }
 }

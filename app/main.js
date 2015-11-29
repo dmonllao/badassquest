@@ -1,4 +1,4 @@
-define(['bs', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManager', 'MapOptions'], function($, User, Game, StoryManager, ChaseTracker, PoisManager, MapOptions) {
+define(['bs', 'Map', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManager'], function($, Map, User, Game, StoryManager, ChaseTracker, PoisManager) {
 
     // @param {ChaseTracker}
     var chaseTracker;
@@ -9,53 +9,35 @@ define(['bs', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManager', 'Ma
     // @param {Controls}
     var controls = null;
 
-    // @param {google.maps.Map}
-    var map;
-
-    // @param {Phaser}
-    var game;
-
-    // @type {User}
-    var user = null;
-
     // @type {StoryManager}
     var storyManager = null;
 
-    function initMap() {
+    // @param {google.maps.Map}
+    var map = Map.init();
 
-        var mapOptions = new MapOptions();
+    var placesService = Map.getPlacesService();
 
-        // New map instance.
-        map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    // @type {User} The current user.
+    var user = new User(map, 'Juanito', 'img/mushroom2.png');
 
-        google.maps.event.addListenerOnce(map, 'idle', function() {
+    // Start the game.
+    var appGame = new Game();
 
-            var placesService = new google.maps.places.PlacesService(map);
+    // @param {Phaser}
+    var game = appGame.getInstance();
 
-            // The current user.
-            user = new User(map, 'Juanito', 'img/mushroom2.png');
+    storyManager = new StoryManager(placesService, map, game, user);
 
-            // Start the game.
-            var appGame = new Game();
-            game = appGame.getInstance();
+    chaseTracker = new ChaseTracker(map, user);
 
-            storyManager = new StoryManager(placesService, map, game, user);
+    poisManager = new PoisManager(placesService, map, game, user);
 
-            chaseTracker = new ChaseTracker(map, user);
+    // Search near by pois.
+    poisManager.addNearbyPois(storyManager.story.initialPosition);
 
-            poisManager = new PoisManager(placesService, map, game, user);
-
-            // Search near by pois.
-            poisManager.addNearbyPois(storyManager.story.initialPosition);
-
-            // Move the user to a new position.
-            map.addListener('click', function(e) {
-                console.log('Move to ' + e.latLng);
-                user.moveTo(e.latLng);
-            });
-        });
-    }
-
-    // Execute initMap onload.
-    window.onload = initMap;
+    // Move the user to a new position.
+    map.addListener('click', function(e) {
+        console.log('Move to ' + e.latLng);
+        user.moveTo(e.latLng);
+    });
 });

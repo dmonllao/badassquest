@@ -1,0 +1,26 @@
+{
+  "name": "badassquest",
+  "version": "0.0.1",
+  "description": "Bad ass game",
+  "main": "app.js",
+  "dependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-cssmin": "~0.14.0"
+  },
+  "devDependencies": {
+    "grunt-contrib-cssmin": "~0.14.0",
+    "grunt-contrib-requirejs": "~0.4.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/badassquest/badassquest.git"
+  },
+  "author": "David Monllao",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/badassquest/badassquest/issues"
+  }
+}

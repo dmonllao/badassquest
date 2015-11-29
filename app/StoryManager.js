@@ -17,14 +17,6 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'story/PerthUnderground', 'story
         //this.story = new StoryModernAlchemist(this.user, this.game);
         this.story = new StoryPerthUnderground(this.user, this.game);
 
-        // Set the story initial position.
-        this.user.setInitialPosition(this.story.initialPosition);
-        this.map.setCenter(this.story.initialPosition);
-
-        this.map.setZoom(this.story.zoom);
-
-        this.setStepLocation(this.story.getNextStep());
-
         // Show intro text, attaching start up instructions.
         var content = '<h1 class="story-name">' + this.story.title + '</h1>' +
             '<p>' + this.story.getIntro() + '</p>' +
@@ -33,6 +25,14 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'story/PerthUnderground', 'story
 
         $('#text-action-content').html(content);
         $('#text-action').modal('show');
+
+        // Set the story initial position.
+        this.user.setInitialPosition(this.story.initialPosition);
+        this.map.setCenter(this.story.initialPosition);
+
+        this.map.setZoom(this.story.zoom);
+
+        this.setStepLocation(this.story.getNextStep());
 
         return this;
     }
@@ -176,7 +176,7 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'story/PerthUnderground', 'story
 
         openInfoWindow: function(marker, step, contents) {
             var content = '<h3>' + step.name + '</h3>' +
-                '<div>' + contents + '</div>';
+                '<div class="infowindow-content">' + contents;
 
             // Add a tip if there is one.
             var tip = this.getTip();
@@ -184,7 +184,7 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'story/PerthUnderground', 'story
                 content = content + tip;
             }
 
-            step.infoWindow.setContent(content);
+            content = content + '</div>';
 
             // Add some wikipedia info if available.
             //var promise = External.getWikipediaInfo(step.name);
@@ -192,7 +192,16 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'story/PerthUnderground', 'story
             //    step.infoWindow.setContent(infoWindow.getContent() + '<br/>' + article);
             //});
 
-            InfoWindow.open(step.infoWindow, this.map, marker);
+            // Initialise it if required.
+            if (!step.infoWindow) {
+                step.infoWindow = InfoWindow.getInstance();
+            }
+            InfoWindow.open({
+                map: this.map,
+                marker: marker,
+                content: content,
+                infoWindow: step.infoWindow,
+            });
         },
 
         getTip: function(index) {

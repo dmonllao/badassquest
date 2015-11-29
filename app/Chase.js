@@ -24,10 +24,6 @@ define(['bs', 'Const', 'InfoWindow', 'fontawesome', 'Router'], function($, Const
             zIndex: 8
         });
 
-        this.infoWindow = InfoWindow.getInstance({
-            content: '<h4>Hey! Where are you going? I will catch you!</h4>'
-        }, false);
-
         this.router = new Router(this.map);
     }
 
@@ -43,7 +39,12 @@ define(['bs', 'Const', 'InfoWindow', 'fontawesome', 'Router'], function($, Const
         infoWindow: null,
         start: function() {
 
-            this.infoWindow.open(this.map, this.marker);
+            this.infoWindow = InfoWindow.openInfoInstance({
+                map: this.map,
+                marker: this.marker,
+                content: 'Hey! Where are you going? I will catch you!',
+                delay: 10000
+            });
 
             // We wait 3 seconds to start chasing the user.
             setTimeout(function() {
@@ -100,6 +101,9 @@ define(['bs', 'Const', 'InfoWindow', 'fontawesome', 'Router'], function($, Const
         },
 
         stop: function() {
+            this.infoWindow.close();
+            this.infoWindow.setMap(null);
+            this.infoWindow = null;
             this.marker.setMap(null);
             this.router.stop();
         },

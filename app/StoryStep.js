@@ -28,8 +28,6 @@ define(['jquery', 'InfoWindow'], function($, InfoWindow) {
             this.process = data.process;
         }
 
-        this.infoWindow = InfoWindow.getInstance();
-
         return this;
     }
 

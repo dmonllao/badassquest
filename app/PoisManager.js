@@ -133,9 +133,8 @@ define(['bs', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/
                         var actions = this.getActions(place.types, place, marker);
 
                         var size = Util.getImageSize();
-                        var content = '<div class="infowindow-content">' +
-                            '<h3>' + data.name + '</h3>' +
-                            '<img src="' + External.getStreetViewImage(data.vicinity, size.width, size.height) + '"' +
+                        var content = '<h3>' + data.name + '</h3>' +
+                            '<img class="poi-img" src="' + External.getStreetViewImage(data.vicinity, size.width, size.height) + '"' +
                                 ' width="' + size.width + '" height="' + size.height + '"/>';
 
                         if (actions.length > 0) {
@@ -149,48 +148,55 @@ define(['bs', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/
                             content = content + '</div>';
                         }
 
-                        content = content + '</div>';
+                        InfoWindow.open({
+                            map: this.map,
+                            marker: marker,
+                            content: content,
+                            infoWindow: this.infoWindow,
+                        });
 
-                        this.infoWindow.setContent(content);
-                        InfoWindow.open(this.infoWindow, this.map, marker);
+                        // Clear remaining listeners as we don't want them queued.
+                        google.maps.event.clearListeners(this.infoWindow, 'domready');
+                        google.maps.event.addListener(this.infoWindow, 'domready', function() {
+                            // On click we render the selected action.
+                            $('.start-action').click(function(ev) {
+                                ev.preventDefault();
 
-                        // On click we render the selected action.
-                        $('.start-action').click(function(ev) {
+                                this.infoWindow.close();
 
-                            this.infoWindow.close();
+                                // Get the selected action.
+                                var action = actions[ev.target.id.substr(10)];
 
-                            // Get the selected action.
-                            var action = actions[ev.target.id.substr(10)];
+                                // Get whether the action is text based or a game.
+                                var actionType = action.getActionType();
 
-                            // Get whether the action is text based or a game.
-                            var actionType = action.getActionType();
+                                if (actionType === "game-action") {
+                                    action.start();
 
-                            if (actionType === "game-action") {
-                                action.start();
+                                } else if (actionType === "text-action") {
+                                    // Render the selected action.
 
-                            } else if (actionType === "text-action") {
-                                // Render the selected action.
+                                    this.showLoading();
 
-                                this.showLoading();
+                                    // Actions may include async calls.
+                                    promise = action.render();
+                                    promise.done(function(html) {
 
-                                // Actions may include async calls.
-                                promise = action.render();
-                                promise.done(function(html) {
+                                        if (!html) {
+                                            $('#text-action').modal('hide');
+                                            return;
+                                        }
 
-                                    if (!html) {
-                                        $('#text-action').modal('hide');
-                                        return;
-                                    }
+                                        // Promises returned by action's render methods should just return an HTML string.
+                                        document.getElementById('text-action-content').innerHTML = html;
 
-                                    // Promises returned by action's render methods should just return an HTML string.
-                                    document.getElementById('text-action-content').innerHTML = html;
-
-                                    // Notify the action that html has been rendered.
-                                    if (typeof action.rendered === 'function') {
-                                        action.rendered();
-                                    }
-                                }.bind(this));
-                            }
+                                        // Notify the action that html has been rendered.
+                                        if (typeof action.rendered === 'function') {
+                                            action.rendered();
+                                        }
+                                    }.bind(this));
+                                }
+                            }.bind(this));
                         }.bind(this));
                     }
                 }.bind(this));
