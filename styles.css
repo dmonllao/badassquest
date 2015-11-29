@@ -72,9 +72,39 @@ pre.control span {
     }
 }
 
+.infobox-wrapper {
+    display:none;
+}
+
+.infoBox {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+/** Includes .infowindow-content margin-top. */
+.infoBox>img {
+    top: 18px;
+    right: 10px;
+}
+
+.infoBox .pissed-text {
+    margin: 5px;
+    white-space: nowrap;
+}
+
 .infowindow-content {
+    margin-top: 8px;
+    background: #333;
+    overflow: visible;
+    border:2px solid black;
+    -webkit-box-shadow: 0 0 8px #000;
+    box-shadow: 0 0 8px #000;
     color: #f5f5f5;
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.infowindow-content img {
+    margin-top: -8px;
 }
 
 .infowindow-content h3 {
@@ -103,14 +133,19 @@ pre.control span {
     margin: 3px 10px;
 }
 
-@media only screen and (max-width : 767px) {
+/** Avoid multiple lines action buttons. */
+@media only screen and (max-width : 855px) {
     .action-buttons button {
         margin: 3px;
     }
+}
+
+@media only screen and (max-width : 767px) {
     .infowindow-content .action-buttons {
-        bottom: -20px;
+        bottom: -10px;
     }
 }
+
 
 
 .info-box {

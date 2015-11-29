@@ -1,8 +1,5 @@
 define(['jquery'], function($) {
 
-    var maxWidth = 654;
-    var maxHeight = 740;
-
     return {
 
         /**
@@ -18,13 +15,6 @@ define(['jquery'], function($) {
                 height: Math.floor(window.innerHeight * heightProportion)
             };
 
-            // Limited by InfoWindow max-height and max-width.
-            if (size.width > maxWidth) {
-                size.width = maxWidth;
-            }
-            if (size.height > maxHeight) {
-                size.height = maxHeight;
-            }
             return size;
         },
 

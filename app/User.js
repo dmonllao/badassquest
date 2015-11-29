@@ -106,7 +106,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'InfoWindow'], functio
                     InfoWindow.openPissedInstance(
                         this.map,
                         pissed.marker,
-                        '<h4>Look what you have done! You will burn in hell</h4>',
+                        'Look what you have done! You will burn in hell',
                         function() {
                             // Reset it to shout again in a while.
                             pissed.shouting = false;

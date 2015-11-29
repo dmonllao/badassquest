@@ -2,6 +2,26 @@ define(function() {
 
     var instances = [];
 
+    var infoBoxStyles = {
+         disableAutoPan: false,
+         pixelOffset: new google.maps.Size(-123, 0),
+         boxStyle: {
+            background: "url('http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/examples/tipbox.gif') no-repeat",
+            opacity: 1
+        },
+        closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif"
+    };
+
+    var pissedBoxStyles = {
+        disableAutoPan: false,
+        pixelOffset: new google.maps.Size(-123, 0),
+        boxStyle: {
+            background: "rgb(255, 255, 255)",
+            opacity: 0.8
+        },
+        closeBoxURL: ""
+    };
+
     return {
         getInstance: function(options, addToList) {
 
@@ -9,7 +29,7 @@ define(function() {
                 addToList = true;
             }
 
-            var infoWindow = new google.maps.InfoWindow(options);
+            var infoWindow = new InfoBox(infoBoxStyles);
 
             if (addToList) {
                 instances.push(infoWindow);
@@ -23,9 +43,8 @@ define(function() {
                 delay = 2000;
             }
 
-            var infoWindow = new google.maps.InfoWindow({
-                content: content
-            });
+            var infoWindow = new InfoBox(pissedBoxStyles);
+            infoWindow.setContent('<h4 class="pissed-text">' + content + '</h4>');
             infoWindow.open(map, marker);
 
             // Close it in delay seconds.
