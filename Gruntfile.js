@@ -3,6 +3,17 @@ module.exports = function(grunt) {
     grunt.initConfig({
 
         pkg: grunt.file.readJSON("package.json"),
+
+        watch: {
+            styles: {
+                files: ['**/*.css'],
+                tasks: ['cssmin'],
+                options: {
+                  spawn: false,
+                },
+            },
+        },
+
         cssmin: {
             options: {
                 sourceMap: true,
@@ -34,6 +45,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask("default", ["cssmin", "requirejs"]);
 
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks('grunt-contrib-requirejs');
 };
