@@ -4,6 +4,8 @@ define(['MapOptions', 'InfoWindow', 'epoly', 'infobox'], function(MapOptions, In
 
     var placesService = null;
 
+    var geocoder = null;
+
     return {
 
         init: function() {
@@ -23,6 +25,12 @@ define(['MapOptions', 'InfoWindow', 'epoly', 'infobox'], function(MapOptions, In
             }
             placesService = new google.maps.places.PlacesService(map);
             return placesService;
+        },
+
+        getGeocoder: function() {
+            geocoder = new google.maps.Geocoder();
+            return geocoder;
+
         }
     }
 });
