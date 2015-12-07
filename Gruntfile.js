@@ -43,7 +43,7 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask("default", ["cssmin", "requirejs"]);
+    grunt.registerTask("default", ["watch"]);
 
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks("grunt-contrib-cssmin");
