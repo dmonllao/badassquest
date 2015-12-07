@@ -17,6 +17,10 @@ define(['jquery', 'story/Base', 'UI', 'Icon', 'InfoWindow', 'StoryStep', 'Foe'],
                 name: 'Random witness',
                 placeid: 'ChIJL_U8syG7MioRJxobWh5So7k',
                 position: new google.maps.LatLng(-31.94822952, 115.84812641),
+                hint: {
+                    from: 'Waiter',
+                    message: 'The witness waits for you there'
+                },
                 icon: Icon.getByType('idea'),
                 cleanStep: true,
                 info: 'I haven\'t really seen anything, just someone running. Probably worth going to the police station.'
@@ -106,7 +110,7 @@ define(['jquery', 'story/Base', 'UI', 'Icon', 'InfoWindow', 'StoryStep', 'Foe'],
     }
 
     PerthUnderground.prototype.getIntro = function() {
-        return 'Someone kidnapped your daugther Bubitz while paying for meatballs. Someone tells you that a wintess is waiting for you a few streets East.';
+        return 'Someone kidnapped your daugther Bubitz while paying lunch. The waiter tells you that a wintess is waiting for you a few streets East.';
     };
 
     PerthUnderground.prototype.getTheEnd = function() {

@@ -20,8 +20,7 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'story/PerthUnderground', 'story
         // Show intro text, attaching start up instructions.
         var content = '<h1 class="story-name">' + this.story.title + '</h1>' +
             '<p>' + this.story.getIntro() + '</p>' +
-            '<img src="' + this.user.photo + '" class="step-img img-responsive img-circle"/>' +
-            this.getTip(0);
+            '<img src="' + this.user.photo + '" class="step-img img-responsive img-circle"/>';
 
         $('#text-action-content').html(content);
         $('#text-action').modal('show');
@@ -117,6 +116,14 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'story/PerthUnderground', 'story
             });
             marker.setAnimation(google.maps.Animation.BOUNCE);
 
+            // Steps may specify hints.
+            if (step.hint) {
+                this.addStepHint(step);
+            }
+
+            // Add a game tip if there is one.
+            this.addGameTip();
+
             // Click listener.
             marker.addListener('click', function(e) {
 
@@ -175,46 +182,63 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'story/PerthUnderground', 'story
         },
 
         openInfoWindow: function(marker, step, contents) {
-            var content = '<h3>' + step.name + '</h3>' +
-                '<div class="infowindow-content">' + contents;
-
-            // Add a tip if there is one.
-            var tip = this.getTip();
-            if (tip) {
-                content = content + tip;
-            }
-
-            content = content + '</div>';
-
-            // Add some wikipedia info if available.
-            //var promise = External.getWikipediaInfo(step.name);
-            //promise.done(function(article) {
-            //    step.infoWindow.setContent(infoWindow.getContent() + '<br/>' + article);
-            //});
 
             // Initialise it if required.
             if (!step.infoWindow) {
                 step.infoWindow = InfoWindow.getInstance();
             }
-            InfoWindow.open({
-                map: this.map,
-                marker: marker,
-                content: content,
-                infoWindow: step.infoWindow,
-            });
+
+            var content = '<h3>' + step.name + '</h3>' +
+                '<div class="infowindow-content">' + contents + '</div>';
+
+            // Add some wikipedia info if available.
+            //var promise = External.getWikipediaInfo(step.name);
+            //promise.done(function(article) {
+                //content += '<br/>' + article;
+            //}).always(function() {
+                InfoWindow.open({
+                    map: this.map,
+                    marker: marker,
+                    content: content,
+                    infoWindow: step.infoWindow,
+                });
+            //}.bind(this));
         },
 
-        getTip: function(index) {
+        addStepHint: function(step) {
+            // Bit of timeout to make it look real.
+            setTimeout(function() {
+                $('#map').trigger('notification:add', {
+                    from: step.hint.from,
+                    message: step.hint.message,
+                    callback: function() {
+                        if (this.map.getCenter().distanceFrom(step.position) > 100) {
+                            // Show both current location and next step.
+                            var bounds = new google.maps.LatLngBounds(this.map.getCenter().toJSON(), step.position.toJSON());
+                            this.map.fitBounds(bounds);
+                        } else {
+                            this.map.panTo(step.position);
+                        }
+                    }.bind(this)
+                });
+            }.bind(this), 500);
+        },
 
-            if (typeof index === "undefined") {
-                // +1 because we displayed the first tip (index 0) in the intro.
-                index = this.story.currentStep + 1;
-            }
+        addGameTip: function() {
+
+            index = this.story.currentStep;
 
             if (typeof instructions[index] === "undefined") {
-                return '';
+                return;
             }
-            return '<div class="game-tip">(' + instructions[index] + ')</div>';
+
+            // Bit of timeout to make it look real.
+            setTimeout(function() {
+                $('#map').trigger('notification:add', {
+                    from: 'Game tip',
+                    message: instructions[index]
+                });
+            }, 1000);
         }
     };
 

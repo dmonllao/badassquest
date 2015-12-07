@@ -14,6 +14,9 @@ define(['jquery', 'InfoWindow'], function($, InfoWindow) {
         if (data.placeid) {
             this.placeid = data.placeid;
         }
+        if (data.hint) {
+            this.hint = data.hint;
+        }
 
         // Info to be displayed, might change during the step life.
         if (data.info) {
@@ -42,6 +45,7 @@ define(['jquery', 'InfoWindow'], function($, InfoWindow) {
         name: null,
         icon: null,
         placeid: null,
+        hint: null,
 
         // Step process, a single function to manage everything, on complex workflows
         // would probably need to set new attributes.

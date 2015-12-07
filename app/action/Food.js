@@ -1,4 +1,4 @@
-define(['bs', 'UI', 'action/Base', 'Generator'], function($, UI, ActionBase, Generator) {
+define(['bs', 'Util', 'UI', 'action/Base', 'Generator'], function($, Util, UI, ActionBase, Generator) {
 
     // More or less, Health = price / 2 and Energy = price * 20.
     var randomFood = [
@@ -38,7 +38,7 @@ define(['bs', 'UI', 'action/Base', 'Generator'], function($, UI, ActionBase, Gen
     function ActionFood(user, game, marker, poiData) {
         ActionBase.call(this, user, game, marker, poiData);
 
-        this.food = this.getRandomElement(randomFood);
+        this.food = Util.getRandomElement(randomFood);
 
         return this;
     }

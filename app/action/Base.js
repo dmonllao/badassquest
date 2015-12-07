@@ -21,11 +21,6 @@ define(['bs', 'External'], function($, External) {
             return '';
         },
 
-        getRandomElement: function(elements) {
-            var randomIndex = Math.floor(Math.random() * elements.length);
-            return elements[randomIndex];
-        },
-
         /**
          * The action type.
          *

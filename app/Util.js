@@ -2,6 +2,11 @@ define(['jquery'], function($) {
 
     return {
 
+        getRandomElement: function(elements) {
+            var randomIndex = Math.floor(Math.random() * elements.length);
+            return elements[randomIndex];
+        },
+
         /**
          * Depends on the window size.
          */

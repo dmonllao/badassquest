@@ -42,6 +42,8 @@ define(['bs', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/
         }.bind(this));
 
         $('#map').on('pois:get', this.getNearbyPois.bind(this));
+
+        return this;
     }
 
     PoisManager.prototype = {

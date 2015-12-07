@@ -1,6 +1,4 @@
-define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'InfoWindow'], function($, Const, Generator, Router, Controls, InfoWindow) {
-
-    var levels = [0, 50, 100, 300, 700, 1500, 3000, 5000, 8000, 10000];
+define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'InfoWindow', 'Notifier'], function($, Const, Generator, Router, Controls, InfoWindow, Notifier) {
 
     function User(map, playerName, playerPhoto) {
 
@@ -32,6 +30,9 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'InfoWindow'], functio
         this.controls = new Controls(this.map);
         this.controls.init(this);
 
+        // Notifications service.
+        this.notifier = new Notifier(this.map, this.controls);
+
         // TODO A pause feature should stop this timer.
         this.foodTimeTimer = setInterval(this.breathDropFood.bind(this), Const.breathDropInterval);
     }
@@ -58,6 +59,9 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'InfoWindow'], functio
 
         // @type {Router}
         router: null,
+
+        // @type {Notifier}
+        notifier: null,
 
         foodTimeTimer: null,
 
@@ -167,9 +171,9 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'InfoWindow'], functio
 
             // Update level if required.
             var leveledUp = false;
-            for (var i = 0; i < levels.length; i++) {
+            for (var i = 0; i < Const.levels.length; i++) {
 
-                if (this.state.experience < levels[i]) {
+                if (this.state.experience < Const.levels[i]) {
 
                     if (this.state.level === i) {
                         // No level change.
@@ -217,6 +221,8 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'InfoWindow'], functio
             this.attrs.speed = this.attrs.speed * Const.levelIncrement;
             this.attrs.attack = this.attrs.attack * Const.levelIncrement;
             this.attrs.defense = this.attrs.defense * Const.levelIncrement;
+
+            $('#map').trigger('user:levelup', [level]);
         },
 
         updateState: function(params) {

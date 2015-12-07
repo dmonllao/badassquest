@@ -17,6 +17,7 @@ define(['bs'], function($) {
             this.initZoom();
             this.initCenter(user);
             this.initRadar();
+            this.initNotifications();
         },
 
         update: function(state, attrs) {
@@ -24,6 +25,19 @@ define(['bs'], function($) {
             $('#wealth pre span').html(this.round(state.cWealth));
             $('#food pre span').html(this.round(state.cFood) + ' / ' + this.round(attrs.tFood));
             $('#level pre span').html('Level ' + this.round(state.level));
+        },
+
+        updateNotifications: function(num) {
+
+            var current = $('#notifications-num');
+            if (current.length > 0 && num === 0) {
+                current.remove();
+            } else if (current.length > 0 && current.text() != num) {
+                current.text(num);
+            } else if (current.length === 0 && num !== 0) {
+                $('#notifications pre').append('<span id="notifications-num" class="badge">' + num + '</span>');
+            }
+
         },
 
         round: function(value) {
@@ -62,16 +76,16 @@ define(['bs'], function($) {
 
             var zoomDiv = document.createElement('div');
             zoomDiv.setAttribute('id', 'zoom');
-            zoomDiv.setAttribute('class', 'control actionable-control zoom');
+            zoomDiv.setAttribute('class', 'zoom');
 
-            var zoomPlus = document.createElement('div');
-            zoomPlus.setAttribute('id', 'zoom-plus');
-            zoomPlus.innerHTML = '<i class="fa fa-plus"></i>';
+            var zoomPlus = document.createElement('pre');
+            zoomPlus.setAttribute('class', 'control-combo-top control actionable-control');
+            zoomPlus.innerHTML = '<i class="fa fa-fw fa-plus"></i>';
             zoomDiv.appendChild(zoomPlus);
 
-            var zoomMinus = document.createElement('div');
-            zoomMinus.setAttribute('id', 'zoom-minus');
-            zoomMinus.innerHTML = '<i class="fa fa-minus"></i>';
+            var zoomMinus = document.createElement('pre');
+            zoomMinus.setAttribute('class', 'control-combo-bottom control actionable-control');
+            zoomMinus.innerHTML = '<i class="fa fa-fw fa-minus"></i>';
             zoomDiv.appendChild(zoomMinus);
 
             google.maps.event.addDomListener(zoomPlus, 'click', function() {
@@ -85,10 +99,22 @@ define(['bs'], function($) {
             map.controls[google.maps.ControlPosition.RIGHT_TOP].push(zoomDiv);
         },
 
+        initCenter: function(user) {
+            var centerDiv = document.createElement('div');
+            centerDiv.setAttribute('id', 'center');
+            centerDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-arrows"></i></pre>';
+
+            google.maps.event.addDomListener(centerDiv, 'click', function() {
+                map.panTo(user.marker.getPosition());
+            });
+
+            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(centerDiv);
+        },
+
         initRadar: function() {
             var radarDiv = document.createElement('div');
             radarDiv.setAttribute('id', 'radar');
-            radarDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-eye"></i></pre>';
+            radarDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-eye"></i></pre>';
 
             google.maps.event.addDomListener(radarDiv, 'click', function() {
                 $('#map').trigger('pois:get');
@@ -97,18 +123,17 @@ define(['bs'], function($) {
             map.controls[google.maps.ControlPosition.RIGHT_TOP].push(radarDiv);
         },
 
-        initCenter: function(user) {
-            var centerDiv = document.createElement('div');
-            centerDiv.setAttribute('id', 'center');
-            centerDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-arrows"></i></pre>';
+        initNotifications: function() {
+            var notificationsDiv = document.createElement('div');
+            notificationsDiv.setAttribute('id', 'notifications');
+            notificationsDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-tablet"></i></pre>';
 
-            google.maps.event.addDomListener(centerDiv, 'click', function() {
-                map.panTo(user.marker.getPosition());
+            google.maps.event.addDomListener(notificationsDiv, 'click', function() {
+                $('#map').trigger('notification:toggle');
             });
 
-            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(centerDiv);
+            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(notificationsDiv);
         }
-
     };
 
     return Controls;
