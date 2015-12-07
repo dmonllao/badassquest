@@ -27,13 +27,13 @@ define(['bs', 'Util'], function($, Util) {
                     var pageKey = Object.keys(data.query.pages)[0];
                     if (pageKey === "-1") {
                         // This page does not have a wikipedia page.
-                        promise.fail();
+                        promise.reject();
                         return;
                     }
 
                     // Skip disambiguations.
                     if (data.query.pages[pageKey].extract.indexOf('may refer to') === -1) {
-                        promise.fail();
+                        promise.reject();
                         return;
                     }
 
