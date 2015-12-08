@@ -1,18 +1,16 @@
-define(['bs', 'Util'], function($, Util) {
+define(['bs', 'Const', 'Util'], function($, Const, Util) {
 
     // Bunch of static methods.
     return {
+
         /**
+         * This returns a promise in case we want to use an external service in future.
          * @return Promise
          */
-        getRandomPersonImage: function(callback) {
+        getRandomPersonImage: function() {
             var promise = new $.Deferred();
-
-            $.getJSON('http://uifaces.com/api/v1/random')
-                .done(function(data) {
-                    promise.resolve(data.image_urls.normal);
-                });
-
+            var index = Util.getRandomIndex(Const.picsNum);
+            promise.resolve('img/people/' + index + '.jpg');
             return promise;
         },
 

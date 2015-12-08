@@ -264,7 +264,6 @@ define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, Ex
         },
 
         finishFight: function() {
-            console.log('Fight marked as finished');
             this.finished = true;
         },
 

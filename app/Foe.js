@@ -2,7 +2,9 @@ define(['jquery', 'Const'], function($, Const) {
 
     // Sprite hardcoded values.
     var bodyScale = 2;
-    var headScale = 1;
+
+    // They are 250x250.
+    var headScale = 0.33;
 
     function Foe(attrs) {
 

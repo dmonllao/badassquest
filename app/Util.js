@@ -2,8 +2,12 @@ define(['jquery'], function($) {
 
     return {
 
+        getRandomIndex: function(max) {
+            return Math.floor(Math.random() * max);
+        },
+
         getRandomElement: function(elements) {
-            var randomIndex = Math.floor(Math.random() * elements.length);
+            var randomIndex = this.getRandomIndex(elements.length);
             return elements[randomIndex];
         },
 

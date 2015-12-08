@@ -12,3 +12,4 @@
 * https://github.com/nathan-muir/fontawesome-markers
 * http://www.geocodezip.com/scripts/v3_epoly.js
 * http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js
+* Characters pictures: http://vis-www.cs.umass.edu/lfw/

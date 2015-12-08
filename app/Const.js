@@ -16,6 +16,7 @@ define(function() {
         maxChaseDuration: 15,
         maxReRouteLimit: 5,
         maxLoot: 2000,
+        picsNum: 100,
         closePosition: 20,
         closePositionPissed: 80,
         politicLevels: {
