@@ -52,6 +52,8 @@ define(['bs', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/
         user: null,
         game: null,
 
+        markers: [],
+
         // Is the loading icon spinning.
         loadingShown: false,
 
@@ -113,96 +115,110 @@ define(['bs', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/
 
         addMarker: function(data) {
 
+            // Check that it is not already on the map.
+            if (typeof this.markers[data.place_id] !== "undefined") {
+                return;
+            }
+
             var marker = new google.maps.Marker({
                 map: this.map,
                 position: data.geometry.location,
                 icon: Icon.get(data.types, this.poiTypes, 0.5),
                 zIndex: 1
             });
+            this.markers[data.place_id] = marker;
 
             // Click listener.
             marker.addListener('click', function(e) {
-
                 this.user.moveTo(e.latLng, enableButtons);
-
-                var request = {placeId: data.place_id};
-                this.placesService.getDetails(request, function(place, status) {
-                    if (status !== google.maps.places.PlacesServiceStatus.OK) {
-                        console.error('PlacesService error: ' + status);
-                    } else {
-
-                        // Get the first valid place type and get the valid actions for that type.
-                        var actions = this.getActions(place.types, place, marker);
-
-                        var size = Util.getImageSize();
-                        var content = '<h3>' + data.name + '</h3>' +
-                            '<img class="poi-img" src="' + External.getStreetViewImage(data.vicinity, size.width, size.height) + '"' +
-                                ' width="' + size.width + '" height="' + size.height + '"/>';
-
-                        if (actions.length > 0) {
-                            content = content + '<div class="action-buttons">';
-                            for(var i = 0; i < actions.length; i++) {
-                                var id = 'id-action-' + i;
-                                var buttonClass = 'start-action btn ' + UI.getActionButtonStyle(i);
-                                content = content + '<button id="' + id + '" class="' + buttonClass + '" disabled="disabled">' +
-                                    actions[i].getVisibleName() + '</button>';
-                            }
-                            content = content + '</div>';
-                        }
-
-                        InfoWindow.open({
-                            map: this.map,
-                            marker: marker,
-                            content: content,
-                            infoWindow: this.infoWindow,
-                        });
-
-                        // Clear remaining listeners as we don't want them queued.
-                        google.maps.event.clearListeners(this.infoWindow, 'domready');
-                        google.maps.event.addListener(this.infoWindow, 'domready', function() {
-                            // On click we render the selected action.
-                            $('.start-action').click(function(ev) {
-                                ev.preventDefault();
-
-                                this.infoWindow.close();
-
-                                // Get the selected action.
-                                var action = actions[ev.target.id.substr(10)];
-
-                                // Get whether the action is text based or a game.
-                                var actionType = action.getActionType();
-
-                                if (actionType === "game-action") {
-                                    action.start();
-
-                                } else if (actionType === "text-action") {
-                                    // Render the selected action.
-
-                                    this.showLoading();
-
-                                    // Actions may include async calls.
-                                    promise = action.render();
-                                    promise.done(function(html) {
-
-                                        if (!html) {
-                                            $('#text-action').modal('hide');
-                                            return;
-                                        }
-
-                                        // Promises returned by action's render methods should just return an HTML string.
-                                        document.getElementById('text-action-content').innerHTML = html;
-
-                                        // Notify the action that html has been rendered.
-                                        if (typeof action.rendered === 'function') {
-                                            action.rendered();
-                                        }
-                                    }.bind(this));
-                                }
-                            }.bind(this));
-                        }.bind(this));
-                    }
-                }.bind(this));
+                this.showPlaceDetails(data, marker);
             }.bind(this));
+        },
+
+        showPlaceDetails: function(data, marker) {
+
+            var request = {placeId: data.place_id};
+
+            // Ok, I don't like this, but I don't want 30 bind(this).
+            var self = this;
+
+            this.placesService.getDetails(request, function(place, status) {
+
+                if (status !== google.maps.places.PlacesServiceStatus.OK) {
+                    console.error('PlacesService error: ' + status);
+                    return;
+                }
+
+                // Get the first valid place type and get the valid actions for that type.
+                var actions = self.getActions(place.types, place, marker);
+
+                var size = Util.getImageSize();
+                var content = '<h3>' + data.name + '</h3>' +
+                    '<img class="poi-img" src="' + External.getStreetViewImage(data.vicinity, size.width, size.height) + '"' +
+                        ' width="' + size.width + '" height="' + size.height + '"/>';
+
+                if (actions.length > 0) {
+                    content = content + '<div class="action-buttons">';
+                    for(var i = 0; i < actions.length; i++) {
+                        var id = 'id-action-' + i;
+                        var buttonClass = 'start-action btn ' + UI.getActionButtonStyle(i);
+                        content = content + '<button id="' + id + '" class="' + buttonClass + '" disabled="disabled">' +
+                            actions[i].getVisibleName() + '</button>';
+                    }
+                    content = content + '</div>';
+                }
+
+                InfoWindow.open({
+                    map: self.map,
+                    marker: marker,
+                    content: content,
+                    infoWindow: self.infoWindow,
+                });
+
+                // Clear remaining listeners as we don't want them queued.
+                google.maps.event.clearListeners(self.infoWindow, 'domready');
+                google.maps.event.addListener(self.infoWindow, 'domready', function() {
+                    // On click we render the selected action.
+                    $('.start-action').click(function(ev) {
+                        ev.preventDefault();
+
+                        self.infoWindow.close();
+
+                        // Get the selected action.
+                        var action = actions[ev.target.id.substr(10)];
+
+                        // Get whether the action is text based or a game.
+                        var actionType = action.getActionType();
+
+                        if (actionType === "game-action") {
+                            action.start();
+
+                        } else if (actionType === "text-action") {
+                            // Render the selected action.
+
+                            self.showLoading();
+
+                            // Actions may include async calls.
+                            promise = action.render();
+                            promise.done(function(html) {
+
+                                if (!html) {
+                                    $('#text-action').modal('hide');
+                                    return;
+                                }
+
+                                // Promises returned by action's render methods should just return an HTML string.
+                                document.getElementById('text-action-content').innerHTML = html;
+
+                                // Notify the action that html has been rendered.
+                                if (typeof action.rendered === 'function') {
+                                    action.rendered();
+                                }
+                            });
+                        }
+                    });
+                });
+            });
 
         },
 
