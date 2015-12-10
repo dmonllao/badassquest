@@ -13,12 +13,12 @@ define(['bs', 'Const', 'InfoWindow', 'fontawesome', 'Router'], function($, Const
             map: this.map,
             title: chaseData.name,
             icon: {
-                path: fontawesome.markers.EXCLAMATION,
+                path: fontawesome.markers.SHIELD,
                 scale: 0.5,
                 strokeWeight: 0.2,
                 strokeColor: 'white',
                 strokeOpacity: 1,
-                fillColor: 'black',
+                fillColor: '#E43D17',
                 fillOpacity: 1,
             },
             zIndex: 8
