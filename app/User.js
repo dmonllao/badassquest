@@ -77,6 +77,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'PissedOff
             }
 
             // Add the user marker to the specified position.
+            var title = 'I\'m ' + this.playerName + '\n(don\'t click on me, click on the map instead)';
             this.marker = new google.maps.Marker({
                 position: position,
                 map: this.map,
@@ -84,7 +85,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'PissedOff
                     url: this.photo,
                     scaledSize: new google.maps.Size(40, 40),
                 },
-                title: this.playerName,
+                title: title,
                 zIndex: 9
             });
         },
@@ -124,7 +125,18 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'PissedOff
         },
 
         moveTo: function(position, destinationCallback) {
-            this.router.route(this.marker, position, this.passingBy.bind(this), destinationCallback, this.attrs.speed);
+
+            var destinationReachedCallback = function(reachedPosition) {
+
+                // Execute the provided callback.
+                if (typeof destinationCallback !== "undefined") {
+                    destinationCallback(reachedPosition);
+                }
+
+                // We trigger the event, PoisManager will decide if nearby points should be fetched or not.
+                $('#map').trigger('pois:get');
+            }
+            this.router.route(this.marker, position, this.passingBy.bind(this), destinationReachedCallback, this.attrs.speed);
         },
 
         addExperience: function(points) {

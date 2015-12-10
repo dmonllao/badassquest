@@ -16,7 +16,6 @@ define(['bs'], function($) {
 
             this.initZoom();
             this.initCenter(user);
-            this.initRadar();
             this.initNotifications();
         },
 
@@ -109,18 +108,6 @@ define(['bs'], function($) {
             });
 
             map.controls[google.maps.ControlPosition.RIGHT_TOP].push(centerDiv);
-        },
-
-        initRadar: function() {
-            var radarDiv = document.createElement('div');
-            radarDiv.setAttribute('id', 'radar');
-            radarDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-eye"></i></pre>';
-
-            google.maps.event.addDomListener(radarDiv, 'click', function() {
-                $('#map').trigger('pois:get');
-            });
-
-            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(radarDiv);
         },
 
         initNotifications: function() {

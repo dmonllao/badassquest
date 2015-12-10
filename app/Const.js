@@ -7,6 +7,7 @@ define(function() {
         initDefense: 5,
         levels: [0, 50, 100, 300, 700, 1500, 3000, 5000, 8000, 10000],
         levelIncrement: 1.1,
+        poisRadius: 400,
         breathDropInterval: 3000,
         breathDropAmount: 10,
         userAttackTime: 2000,

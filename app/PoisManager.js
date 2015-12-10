@@ -1,4 +1,4 @@
-define(['bs', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/Steal', 'action/Hack', 'action/Fight', 'External', 'Icon'], function($, UI, Util, InfoWindow, ActionCure, ActionFood, ActionSteal, ActionHack, ActionFight, External, Icon) {
+define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/Steal', 'action/Hack', 'action/Fight', 'External', 'Icon'], function($, Const, UI, Util, InfoWindow, ActionCure, ActionFood, ActionSteal, ActionHack, ActionFight, External, Icon) {
 
     var enableButtons = function(position) {
         $('.start-action').attr('disabled', false);
@@ -54,6 +54,8 @@ define(['bs', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/
 
         markers: [],
 
+        lastAddPoisPosition: null,
+
         // Is the loading icon spinning.
         loadingShown: false,
 
@@ -68,7 +70,30 @@ define(['bs', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/
 
         // Bypass for addNearbyPois.
         getNearbyPois: function(ev) {
-            this.addNearbyPois(this.user.marker.getPosition());
+
+            var userPosition = this.user.marker.getPosition();
+
+            // We want to compare the last position where we added points of interest with the destination.
+            // This is not ideal, imagine a user walking in circles, we will always look for new POIs but
+            // it would not be needed, as we already added them.
+            // TODO This could be improved by storing a list of all reached positions and compare distances
+            // between position var and each of them.
+
+            // Add new POIs if the current position and the previous one are far enough.
+            if (this.lastAddPoisPosition === null) {
+                // This default value is only used the first time we call this function as app/main calls this.addNearbyPois instead.
+                this.lastAddPoisPosition = userPosition;
+            } else {
+                var distance = google.maps.geometry.spherical.computeDistanceBetween(this.lastAddPoisPosition, userPosition).toFixed();
+                console.log('Moved ' + distance + ' meters to ' + userPosition.toString() + '.');
+            }
+
+            // Better to update it more frequently than what we should strictly do.
+            if (distance > Const.poisRadius / 2) {
+                this.addNearbyPois(userPosition);
+                this.lastAddPoisPosition = userPosition;
+            }
+
         },
 
         addNearbyPois: function(position) {
@@ -77,7 +102,7 @@ define(['bs', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/
 
             this.placesService.nearbySearch({
                 location: position,
-                radius: 300,
+                radius: Const.poisRadius,
                 types: this.getTypesList()
             }, this.addPois.bind(this));
         },
