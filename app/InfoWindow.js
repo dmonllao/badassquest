@@ -43,7 +43,7 @@ define(function() {
         openInfoInstance: function(options) {
 
             if (typeof options.delay === "undefined") {
-                options.delay = 2000;
+                options.delay = 3000;
             }
 
             if (typeof options.closedCallback === "undefined") {

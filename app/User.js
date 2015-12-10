@@ -1,12 +1,10 @@
-define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'InfoWindow', 'Notifier'], function($, Const, Generator, Router, Controls, InfoWindow, Notifier) {
+define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'PissedOffPeople'], function($, Const, Generator, Router, Controls, Notifier, PissedOffPeople) {
 
     function User(map, playerName, playerPhoto) {
 
         this.map = map;
         this.playerName = playerName;
         this.photo = playerPhoto;
-
-        this.pissedOff = [];
 
         this.state = {
             cHealth: 80,
@@ -32,6 +30,9 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'InfoWindow', 'Notifie
 
         // Notifications service.
         this.notifier = new Notifier(this.map, this.controls);
+
+        // People you piss off while playing.
+        this.pissedOff = new PissedOffPeople(this.map, this);
 
         // TODO A pause feature should stop this timer.
         this.foodTimeTimer = setInterval(this.breathDropFood.bind(this), Const.breathDropInterval);
@@ -62,6 +63,9 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'InfoWindow', 'Notifie
 
         // @type {Notifier}
         notifier: null,
+
+        // @type {PissedOffPeople}
+        pissedOff: null,
 
         foodTimeTimer: null,
 
@@ -99,49 +103,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'InfoWindow', 'Notifie
             });
 
             // People shouts at you where you annoyed them.
-            for (var i in this.pissedOff) {
-
-                var pissed = this.pissedOff[i];
-                if (this.pissedComplains(pissed)) {
-
-                    // Tag it as shouting to prevent duplicates.
-                    pissed.shouting = true;
-
-                    InfoWindow.openInfoInstance({
-                        map: this.map,
-                        marker: pissed.marker,
-                        content: 'Look what you have done! You will burn in hell',
-                        closedCallback: function() {
-                            // Reset it to shout again in a while.
-                            pissed.shouting = false;
-                            pissed.time = Math.floor(Date.now() / 1000) + Const.pissedEvery;
-                        }.bind(this)
-                    });
-                }
-            }
-        },
-
-        /**
-         * This should be as quick as possible.
-         */
-        pissedComplains: function(pissed) {
-
-            var currentPos = this.marker.getPosition();
-
-            // We check that they are not already complaining.
-            if (!pissed.shouting && pissed.time < (Math.floor(Date.now() / 1000)) &&
-                    currentPos.distanceFrom(pissed.marker.getPosition()) <= Const.closePositionPissed) {
-                return true;
-            }
-
-            return false;
-        },
-
-        addPissedOff: function(pissed) {
-
-            // + something to avoid shouting immediatelly.
-            pissed.time = Math.floor(Date.now() / 1000) + Const.pissedAfter;
-            this.pissedOff.push(pissed);
+            this.pissedOff.shout();
         },
 
         attackTurn: function(game, callback) {

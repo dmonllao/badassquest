@@ -57,12 +57,12 @@ define(['bs', 'Foe', 'Icon', 'action/Base'], function($, Foe, Icon, ActionBase) 
                 wonCallback: function() {
 
                     // Clear the marker.
-                    this.marker.setIcon(Icon.getByType('sad', 0.5));
+                    this.marker.setIcon(Icon.getByFont('FLAG', '#54D94F', 0.5));
                     this.marker.setClickable(false);
                     google.maps.event.clearInstanceListeners(this.marker);
 
                     // Add to pissed off markers.
-                    this.user.addPissedOff({
+                    this.user.pissedOff.add({
                         marker: this.marker
                     });
 

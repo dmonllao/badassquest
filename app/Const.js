@@ -26,7 +26,7 @@ define(function() {
             administrative_area_level_1: 6,
             country: 7
         },
-        pissedEvery: 0,
-        pissedAfter: 0
+        passingByLapse: 5,
+        passingByRampUp: 2
     };
 });
