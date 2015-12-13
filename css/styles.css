@@ -41,15 +41,25 @@ html, body {
 .control {
     margin: 10px;
     font-weight: bolder;
-    font-size: 150%;
+    font-size: large;
     color: #f5f5f5;
     background-color: #474747;
     border: 1px solid #f5f5f5;
 }
 
+@media screen and (max-width : 480px) {
+    .control {
+        font-size: small;
+    }
+}
+
 /* For icon with text */
 pre.control span {
     margin-left: 10px;
+}
+
+pre.control span.badge {
+    margin: 0;
 }
 
 .actionable-control {
@@ -62,13 +72,6 @@ pre.control span {
 
 .control-combo-bottom {
     margin-top: 0;
-}
-
-.zoom
-@media screen and (max-width : 480px) {
-    .control {
-        font-size: 100%;
-    }
 }
 
 .infobox-wrapper {
@@ -112,6 +115,15 @@ pre.control span {
     margin-right: 20px;
 }
 
+@media only screen and (max-width : 480px) {
+    .infowindow-wrapper h3 {
+        font-size: large;
+        /* It may cover the close button on small window sizes.*/
+        margin-left: 10px;
+        margin-right: 30px;
+    }
+}
+
 .infowindow-content {
     margin: 70px 10px 15px 20px;
     font-size: larger;
@@ -121,12 +133,35 @@ pre.control span {
     position: absolute;
     bottom: 0;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%);
+}
+
+@media only screen and (max-width : 767px) {
+    .infowindow-wrapper .action-buttons {
+        bottom: 20px;
+    }
 }
 
 .infowindow-wrapper .action-buttons button {
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
     font-size: 150%;
+}
+
+@media only screen and (max-width : 480px) {
+    .infowindow-wrapper .action-buttons button {
+        font-size: initial;
+        left: 50%;
+        position: relative;
+        transform: translate(-50%);
+        margin: 7px 0;
+    }
+}
+
+/* We don't display the player pic if using the responsive layout */
+@media only screen and (max-width : 767px) {
+    .action-header .action-player-pic {
+        display: none;
+    }
 }
 
 .action-header img {
@@ -142,12 +177,6 @@ pre.control span {
 @media only screen and (max-width : 855px) {
     .action-buttons button {
         margin: 3px;
-    }
-}
-
-@media only screen and (max-width : 767px) {
-    .infowindow-wrapper .action-buttons {
-        bottom: -10px;
     }
 }
 
@@ -177,8 +206,8 @@ a.notification {
 .badge {
     margin: 0;
     position: absolute;
-    top: 0;
-    right: 4px;
+    bottom: 0;
+    left: 0;
     min-width: 10px;
     padding: 3px 7px;
     font-weight: 700;
