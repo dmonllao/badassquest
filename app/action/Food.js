@@ -56,7 +56,7 @@ define(['bs', 'Util', 'UI', 'action/Base', 'Generator'], function($, Util, UI, A
 
         // Depending on the price it is more likely that the guy runs after you.
         // Converts from a food price scale to a value from 0 to 10.
-        var will = this.getItemImportance(this.food.price);
+        var will = this.getFoodImportance(this.food.price);
 
         if (Math.random() * 10 > will) {
             return false;
@@ -65,7 +65,7 @@ define(['bs', 'Util', 'UI', 'action/Base', 'Generator'], function($, Util, UI, A
         return true;
     };
 
-    ActionFood.prototype.getItemImportance = function(price) {
+    ActionFood.prototype.getFoodImportance = function(price) {
         if (price < 15) {
             return 2;
         } else if (price < 40) {
@@ -114,7 +114,7 @@ define(['bs', 'Util', 'UI', 'action/Base', 'Generator'], function($, Util, UI, A
     ActionFood.prototype.rendered = function() {
 
         // We will need it later to assign experience or possible chase against it.
-        var foodImportance = this.getItemImportance(this.food.price);
+        var foodImportance = this.getFoodImportance(this.food.price);
 
         $('#pay').on('click', function(ev) {
 

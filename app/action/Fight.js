@@ -27,6 +27,9 @@ define(['bs', 'Foe', 'Icon', 'action/Base'], function($, Foe, Icon, ActionBase) 
             })
         ];
 
+        // Thumbs down and red. green: '#54D94F'
+        this.doneIcon = Icon.getByFont('THUMBS_DOWN', '#d9534f', 0.5);
+
         return this;
     }
 
@@ -54,19 +57,7 @@ define(['bs', 'Foe', 'Icon', 'action/Base'], function($, Foe, Icon, ActionBase) 
                 user: this.user,
                 foes: this.foes,
                 location: this.poiData.vicinity,
-                wonCallback: function() {
-
-                    // Clear the marker.
-                    this.marker.setIcon(Icon.getByFont('FLAG', '#54D94F', 0.5));
-                    this.marker.setClickable(false);
-                    google.maps.event.clearInstanceListeners(this.marker);
-
-                    // Add to pissed off markers.
-                    this.user.pissedOff.add({
-                        marker: this.marker
-                    });
-
-                }.bind(this)
+                wonCallback: this.markAsDone.bind(this)
             };
             this.game.state.start('Fight', true, false, args);
 

@@ -151,25 +151,29 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
 
             this.state.experience = this.state.experience + points;
 
-            // Update level if required.
+            // Fibonacci level up using 50 as Const.firstLevelUpExp.
+            // 0 50 50 100 150 250 400 650 1050 1700...
+            var prev = 0;
+            var next = Const.firstLevelUpExp;
+            var tmp;
+            for (var i = 1; i < this.state.level; i++) {
+                tmp = next;
+                next = tmp + prev;
+                prev = next;
+            }
+            var nextLevelUp = prev + next;
+
             var leveledUp = false;
-            for (var i = 0; i < Const.levels.length; i++) {
+            if (this.state.experience >= nextLevelUp) {
+                console.log('Level up at ' + this.state.experience + ' experience');
+                leveledUp = true;
 
-                if (this.state.experience < Const.levels[i]) {
+                // Bump level, just one at a time, if someone gets enough experience
+                // to jump 2 levels they still have to pass through addExperience twice.
+                this.levelUp(this.state.level + 1);
 
-                    if (this.state.level === i) {
-                        // No level change.
-                        break;
-                    }
-
-                    // Bump level.
-                    leveledUp = true;
-                    this.levelUp(i);
-
-                    // Update the controls.
-                    this.controls.update(this.state, this.attrs);
-                    break;
-                }
+                // Update the controls.
+                this.controls.update(this.state, this.attrs);
             }
 
             // Popover depends on whether the user leveled up or not.
@@ -198,11 +202,11 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
 
             // Update user attrs. Here we multiply and allow floats,
             // but should be rounded when showing it.
-            this.attrs.tHealth = this.attrs.tHealth * Const.levelIncrement;
-            this.attrs.tFood = this.attrs.tFood * Const.levelIncrement;
-            this.attrs.speed = this.attrs.speed * Const.levelIncrement;
-            this.attrs.attack = this.attrs.attack * Const.levelIncrement;
-            this.attrs.defense = this.attrs.defense * Const.levelIncrement;
+            this.attrs.tHealth = this.attrs.tHealth * Const.levelUpAttrsIncrement;
+            this.attrs.tFood = this.attrs.tFood * Const.levelUpAttrsIncrement;
+            this.attrs.speed = this.attrs.speed * Const.levelUpAttrsIncrement;
+            this.attrs.attack = this.attrs.attack * Const.levelUpAttrsIncrement;
+            this.attrs.defense = this.attrs.defense * Const.levelUpAttrsIncrement;
 
             $('#map').trigger('user:levelup', [level]);
         },

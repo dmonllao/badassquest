@@ -43,7 +43,7 @@ define(['Const'], function(Const) {
 
             // Get the max health a user can get. Levels should be infinite, so
             // we only have a reasonable max level.
-            var maxHealth = Math.floor(Const.initHealth * Math.pow(Const.levelIncrement, Const.maxReasonableLevel));
+            var maxHealth = Math.floor(Const.initHealth * Math.pow(Const.levelUpAttrsIncrement, Const.maxReasonableLevel));
 
             // How much is a unit.
             var unit = maxHealth / 10;
@@ -59,7 +59,7 @@ define(['Const'], function(Const) {
 
             // Get the max attack a user can get. Levels should be infinite, so
             // we only have a reasonable max level.
-            var maxAttack = Math.floor(Const.initAttack * Math.pow(Const.levelIncrement, Const.maxReasonableLevel));
+            var maxAttack = Math.floor(Const.initAttack * Math.pow(Const.levelUpAttrsIncrement, Const.maxReasonableLevel));
 
             // How much is a unit.
             var unit = maxAttack / 10;
@@ -75,7 +75,7 @@ define(['Const'], function(Const) {
 
             // Get the max defense a user can get. Levels should be infinite, so
             // we only have a reasonable max level.
-            var maxDefense = Math.floor(Const.initDefense * Math.pow(Const.levelIncrement, Const.maxReasonableLevel));
+            var maxDefense = Math.floor(Const.initDefense * Math.pow(Const.levelUpAttrsIncrement, Const.maxReasonableLevel));
 
             // How much is a unit.
             var unit = maxDefense / 10;
@@ -91,7 +91,7 @@ define(['Const'], function(Const) {
 
             // Get the max speed a user can get. Levels should be infinite, so
             // we only have a reasonable max level.
-            var maxSpeed = Math.floor(Const.initSpeed * Math.pow(Const.levelIncrement, Const.maxReasonableLevel));
+            var maxSpeed = Math.floor(Const.initSpeed * Math.pow(Const.levelUpAttrsIncrement, Const.maxReasonableLevel));
 
             // How much is a unit.
             var unit = maxSpeed / 10;

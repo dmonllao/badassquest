@@ -1,4 +1,4 @@
-define(['bs', 'Util', 'UI', 'Generator', 'Foe', 'action/Steal'], function($, Util, UI, Generator, Foe, ActionSteal) {
+define(['bs', 'Util', 'UI', 'Foe', 'action/Steal'], function($, Util, UI, Foe, ActionSteal) {
 
     // Difficulty is only there to make things easy later.
     var randomScenarios = [

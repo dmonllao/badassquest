@@ -212,7 +212,7 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'story/PerthUnderground', 'story
                     from: step.hint.from,
                     message: step.hint.message,
                     callback: function() {
-                        if (this.map.getCenter().distanceFrom(step.position) > 100) {
+                        if (this.map.getCenter().distanceFrom(step.position) > 300) {
                             // Show both current location and next step.
                             var bounds = new google.maps.LatLngBounds(this.map.getCenter().toJSON(), step.position.toJSON());
                             this.map.fitBounds(bounds);

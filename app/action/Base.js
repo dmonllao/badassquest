@@ -1,4 +1,4 @@
-define(['bs', 'External'], function($, External) {
+define(['bs', 'External', 'Icon'], function($, External, Icon) {
 
     function ActionBase(user, game, marker, poiData) {
         this.user = user;
@@ -15,6 +15,11 @@ define(['bs', 'External'], function($, External) {
         poiData: null,
 
         shopKeeperImage: null,
+
+        /**
+         * Default icon when marking as done.
+         */
+        doneIcon: Icon.getByFont('THUMBS_DOWN', '#54D94F', 0.5),
 
         getVisibleName: function() {
             console.error('Base class should be extended');
@@ -64,6 +69,25 @@ define(['bs', 'External'], function($, External) {
             }.bind(this));
 
             return promise;
+        },
+
+        /**
+         * Marks a poi as done.
+         *
+         * Replaces the marker icon by a done icon which can be overwriten
+         * by doneIcon.
+         */
+        markAsDone: function() {
+
+            // Clear the marker.
+            this.marker.setIcon(this.doneIcon);
+            this.marker.setClickable(false);
+            google.maps.event.clearInstanceListeners(this.marker);
+
+            // Add to pissed off markers.
+            this.user.pissedOff.add({
+                marker: this.marker
+            });
         },
 
         closeAction: function(ev) {
