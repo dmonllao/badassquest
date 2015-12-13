@@ -58,7 +58,7 @@ define(['bs', 'External'], function($, External) {
                     '<div class="action-header row">' +
                         '<div class="col-sm-2"><img src="' + this.shopKeeperImage + '" class="img-responsive img-circle"/></div>' +
                         '<div class="col-sm-8"><h4>Welcome to ' + this.poiData.name + '</h4></div>' +
-                        '<div class="col-sm-2"><img width="48" height="48" src="' + this.user.photo + '" class="img-responsive img-circle"/></div>' +
+                        '<div class="action-player-pic col-sm-2"><img width="48" height="48" src="' + this.user.photo + '" class="img-responsive img-circle"/></div>' +
                     '</div>'
                 );
             }.bind(this));

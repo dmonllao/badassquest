@@ -73,21 +73,16 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
 
             var userPosition = this.user.marker.getPosition();
 
-            // We want to compare the last position where we added points of interest with the destination.
-            // This is not ideal, imagine a user walking in circles, we will always look for new POIs but
+            // We want to compare how far the destination is comparing with the last position where we added points of interest.
+            // This process is not ideal, imagine a user walking in circles, we will always look for new POIs but
             // it would not be needed, as we already added them.
             // TODO This could be improved by storing a list of all reached positions and compare distances
             // between position var and each of them.
 
-            // Add new POIs if the current position and the previous one are far enough.
-            if (this.lastAddPoisPosition === null) {
-                // This default value is only used the first time we call this function as app/main calls this.addNearbyPois instead.
-                this.lastAddPoisPosition = userPosition;
-            } else {
-                var distance = google.maps.geometry.spherical.computeDistanceBetween(this.lastAddPoisPosition, userPosition).toFixed();
-                console.log('Moved ' + distance + ' meters to ' + userPosition.toString() + '.');
-            }
+            var distance = google.maps.geometry.spherical.computeDistanceBetween(this.lastAddPoisPosition, userPosition).toFixed();
+            console.log('Moved ' + distance + ' meters to ' + userPosition.toString() + '.');
 
+            // Add new POIs if the current position and the previous one are far enough.
             // Better to update it more frequently than what we should strictly do.
             if (distance > Const.poisRadius / 2) {
                 this.addNearbyPois(userPosition);
@@ -97,6 +92,8 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
         },
 
         addNearbyPois: function(position) {
+
+            this.lastAddPoisPosition = this.user.marker.getPosition();
 
             this.showLoading();
 
@@ -110,20 +107,8 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
         addPois: function(results, status) {
 
             if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
-                $('#radar').popover({
-                    content: 'No results',
-                    delay: {show: 1000, hide: 1000},
-                    placement: 'left',
-                    trigger: 'manual'
-                });
-                $('#radar').popover('show');
-                setTimeout(function() {
-                    $('#radar').popover('destroy');
-                }, 5000);
-
                 this.hideLoading();
                 return;
-
             } else if (status !== google.maps.places.PlacesServiceStatus.OK) {
                 console.error('PlacesService error: ' + status);
                 return;

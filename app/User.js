@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'PissedOffPeople'], function($, Const, Generator, Router, Controls, Notifier, PissedOffPeople) {
+define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindow', 'PissedOffPeople'], function($, Const, Generator, Router, Controls, Notifier, InfoWindow, PissedOffPeople) {
 
     function User(map, playerName, playerPhoto) {
 
@@ -77,7 +77,6 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'PissedOff
             }
 
             // Add the user marker to the specified position.
-            var title = 'I\'m ' + this.playerName + '\n(don\'t click on me, click on the map instead)';
             this.marker = new google.maps.Marker({
                 position: position,
                 map: this.map,
@@ -85,9 +84,18 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'PissedOff
                     url: this.photo,
                     scaledSize: new google.maps.Size(40, 40),
                 },
-                title: title,
+                title: 'I\'m ' + this.playerName,
                 zIndex: 9
             });
+            google.maps.event.addListener(this.marker, 'click', function() {
+
+                InfoWindow.openInfoInstance({
+                    map: this.map,
+                    marker: this.marker,
+                    content: 'Hey! Click on the map, don\'t bug me!',
+                    delay: 5000
+                });
+            }.bind(this));
         },
 
         breathDropFood: function() {
