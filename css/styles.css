@@ -131,15 +131,9 @@ pre.control span.badge {
 
 .infowindow-wrapper .action-buttons {
     position: absolute;
-    bottom: 0;
+    bottom: 20px;
     left: 50%;
     transform: translate(-50%);
-}
-
-@media only screen and (max-width : 767px) {
-    .infowindow-wrapper .action-buttons {
-        bottom: 20px;
-    }
 }
 
 .infowindow-wrapper .action-buttons button {
@@ -151,6 +145,7 @@ pre.control span.badge {
     .infowindow-wrapper .action-buttons button {
         font-size: initial;
         left: 50%;
+        bottom: 0;
         position: relative;
         transform: translate(-50%);
         margin: 7px 0;
