@@ -35,10 +35,13 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         this.pissedOff = new PissedOffPeople(this.map, this);
 
         // TODO A pause feature should stop this timer.
-        this.foodTimeTimer = setInterval(this.breathDropFood.bind(this), Const.breathDropInterval);
+        this.timers.dropFood = setInterval(this.breathDropFood.bind(this), Const.breathDropInterval);
 
         // TODO A pause feature should stop this timer.
-        this.revenuesTimer = setInterval(this.collectRevenues.bind(this), Const.revenuesInterval);
+        this.timers.revenues = setInterval(this.collectRevenues.bind(this), Const.revenuesInterval);
+
+        // TODO A pause feature should stop this timer.
+        this.timers.taxes = setInterval(this.collectTaxes.bind(this), Const.taxesInterval);
     }
 
     User.prototype = {
@@ -71,8 +74,9 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         pissedOff: null,
 
         properties: {},
+        taxes: {},
 
-        foodTimeTimer: null,
+        timers: {},
 
         setInitialPosition: function(position) {
 
@@ -244,6 +248,31 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
             }
         },
 
+        addExtortion: function(extortion) {
+            // Actionbase.markAsDone already updated the marker icon.
+            this.taxes[extortion.poiData.place_id] = extortion;
+        },
+
+        collectTaxes: function() {
+            var total = 0;
+            for (var i in this.taxes) {
+                if (this.taxes.hasOwnProperty(i)) {
+                    total += this.taxes[i].amount;
+                }
+            }
+
+            if (total > 0) {
+                this.updateState({
+                    cWealth: this.state.cWealth + total
+                });
+            }
+        },
+
+        canIntimidate: function(poiData) {
+            // TODO
+            return false;
+        },
+
         updateState: function(params) {
             // This updates the current values.
 
@@ -295,7 +324,13 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
 
         dead: function() {
             this.router.clearRoute();
-            clearInterval(this.foodTimeTimer);
+
+            for (var i in this.timers) {
+                if (this.timers.hasOwnProperty(i)) {
+                    clearInterval(this.timers[i]);
+                }
+            }
+
             $('#status-title').html('Game over');
             $('#status-content').html('You died! Try again loser.');
             $('#status').modal('show');

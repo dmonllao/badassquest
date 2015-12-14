@@ -8,7 +8,9 @@ define(function() {
         firstLevelUpExp: 50,
         levelUpAttrsIncrement: 1.1,
         poisRadius: 400,
-        revenuesInterval: 5000,
+        // Different intervals to make it more real.
+        taxesInterval: 5000,
+        revenuesInterval: 10000,
         breathDropInterval: 3000,
         breathDropAmount: 10,
         userAttackTime: 2000,

@@ -5,6 +5,10 @@ define(['fontawesome'], function(fontawesome) {
             icon: fontawesome.markers.FLAG,
             color: '#95c355'
         },
+        angry: {
+            icon: fontawesome.markers.CLOUD,
+            color: '#FF2821'
+        },
         idea: {
             icon: fontawesome.markers.LIGHTBULB_O,
             color: '#dfff98'

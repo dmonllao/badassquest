@@ -19,7 +19,7 @@ define(['bs', 'External', 'Icon'], function($, External, Icon) {
         /**
          * Default icon when marking as done.
          */
-        doneIcon: Icon.getByFont('THUMBS_DOWN', '#54D94F', 0.5),
+        doneIcon: Icon.getByType('angry', 0.5),
 
         getVisibleName: function() {
             console.error('Base class should be extended');

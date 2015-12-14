@@ -44,7 +44,6 @@ define(['bs', 'Const', 'Util', 'Generator', 'UI', 'action/Base'], function($, Co
                     id: 'cancel',
                     text: 'I don\'t want it'
                 }
-
             ]);
             rendererPromise.resolve(html);
         }.bind(this));
@@ -81,8 +80,6 @@ define(['bs', 'Const', 'Util', 'Generator', 'UI', 'action/Base'], function($, Co
         $('#cancel').on('click', function(ev) {
             this.closeAction(ev);
         }.bind(this));
-
-
     };
 
     return ActionBuy;

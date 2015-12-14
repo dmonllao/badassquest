@@ -64,7 +64,7 @@ define(['Const'], function(Const) {
             }
 
             // Should be redeemed after 20 mins.
-            // poiPrice ---------- 20 seconds
+            // poiPrice ---------- 20 mins
             //    x     ---------- Const.revenuesInterval.
             //
             // TODO This could be improved basing it on the user level and guessing how much
@@ -78,6 +78,20 @@ define(['Const'], function(Const) {
             }
 
             return Math.round(revenues);
+        },
+
+        poiExtortionTax: function(poiData, poiPrice) {
+
+            if (typeof poiPrice === "undefined") {
+                poiPrice = this.poiPrice(poiData);
+            }
+
+            var tax = poiPrice / 10000;
+
+            // Limit it a bit 3 < x < 100.
+            tax = Math.min(Math.max(tax, 100), 3);
+
+            return Math.round(tax);
         },
 
         /**
