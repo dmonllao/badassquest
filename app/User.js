@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindow', 'PissedOffPeople'], function($, Const, Generator, Router, Controls, Notifier, InfoWindow, PissedOffPeople) {
+define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindow', 'PissedOffPeople', 'Icon'], function($, Const, Generator, Router, Controls, Notifier, InfoWindow, PissedOffPeople, Icon) {
 
     function User(map, playerName, playerPhoto) {
 
@@ -36,6 +36,9 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
 
         // TODO A pause feature should stop this timer.
         this.foodTimeTimer = setInterval(this.breathDropFood.bind(this), Const.breathDropInterval);
+
+        // TODO A pause feature should stop this timer.
+        this.revenuesTimer = setInterval(this.collectRevenues.bind(this), Const.revenuesInterval);
     }
 
     User.prototype = {
@@ -66,6 +69,8 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
 
         // @type {PissedOffPeople}
         pissedOff: null,
+
+        properties: {},
 
         foodTimeTimer: null,
 
@@ -149,6 +154,10 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
 
         addExperience: function(points) {
 
+            if (points <= 0) {
+                return;
+            }
+
             this.state.experience = this.state.experience + points;
 
             // Fibonacci level up using 50 as Const.firstLevelUpExp.
@@ -209,6 +218,30 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
             this.attrs.defense = this.attrs.defense * Const.levelUpAttrsIncrement;
 
             $('#map').trigger('user:levelup', [level]);
+        },
+
+        addProperty: function(property) {
+            property.marker.setIcon(Icon.getByType('bought', 0.5));
+            this.properties[property.poiData.place_id] = property;
+        },
+
+        getProperties: function() {
+            return this.properties;
+        },
+
+        collectRevenues: function() {
+            var total = 0;
+            for (var i in this.properties) {
+                if (this.properties.hasOwnProperty(i)) {
+                    total += this.properties[i].revenue;
+                }
+            }
+
+            if (total > 0) {
+                this.updateState({
+                    cWealth: this.state.cWealth + total
+                });
+            }
         },
 
         updateState: function(params) {

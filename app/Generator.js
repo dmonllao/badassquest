@@ -11,6 +11,75 @@ define(['Const'], function(Const) {
             return Math.round(value + Math.random() * variation * 2);
         },
 
+        poiPrice: function(poiData) {
+            //TODO Testing
+            return 20;
+            // Some base.
+            var price = 1000;
+
+            // More weight to the fact that the poi got a review than to the rating itself.
+            if (poiData.reviews) {
+
+                // poiData.reviews has a max of 5.
+                if (poiData.user_ratings_total) {
+                    price += poiData.user_ratings_total * 100;
+                } else {
+                    price += poiData.reviews.length * 100;
+                }
+
+                // poidata.rating is not always available.
+                if (poiData.rating) {
+                    price = price * poiData.rating;
+                } else {
+                    var rating = 0;
+                    for (var i in poiData.reviews) {
+                        rating += poiData.reviews[i].rating;
+                    }
+                    // Average rating.
+                    rating = Math.round(rating / poiData.reviews.length);
+                    price = price * rating;
+                }
+            }
+
+            // Goes from 0 to 4
+            if (poiData.price_level) {
+                price = price * (poiData.price_level + 1);
+            }
+
+            if (poiData.website) {
+                price *= 1.3;
+            }
+
+            return Math.round(price);
+        },
+
+        /**
+         * @param {Object} poiData
+         * @param {?poiPrice} poiPrice Speeds up the process.
+         */
+        poiRevenues: function(poiData, poiPrice) {
+
+            if (typeof poiPrice === "undefined") {
+                poiPrice = this.poiPrice(poiData);
+            }
+
+            // Should be redeemed after 20 mins.
+            // poiPrice ---------- 20 seconds
+            //    x     ---------- Const.revenuesInterval.
+            //
+            // TODO This could be improved basing it on the user level and guessing how much
+            // time they could need to gather poiPrice.
+            var revenues = Const.revenuesInterval * poiPrice / (20 * 60 * 1000);
+
+            // Goes from 0 to 4
+            if (poiData.price_level) {
+                // Not +1 as level 0 means 'free'.
+                revenues = revenues * poiData.price_level;
+            }
+
+            return Math.round(revenues);
+        },
+
         /**
          * Returns partly randomized data for a chase based on importance.
          *

@@ -1,6 +1,10 @@
 define(['fontawesome'], function(fontawesome) {
 
     var typeIcons = {
+        bought: {
+            icon: fontawesome.markers.FLAG,
+            color: '#95c355'
+        },
         idea: {
             icon: fontawesome.markers.LIGHTBULB_O,
             color: '#dfff98'

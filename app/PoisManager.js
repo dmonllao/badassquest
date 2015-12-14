@@ -1,8 +1,14 @@
-define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/Steal', 'action/Hack', 'action/Fight', 'External', 'Icon'], function($, Const, UI, Util, InfoWindow, ActionCure, ActionFood, ActionSteal, ActionHack, ActionFight, External, Icon) {
+define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/Steal', 'action/Hack', 'action/Fight', 'action/Extort', 'action/Buy', 'External', 'Icon'], function($, Const, UI, Util, InfoWindow, ActionCure, ActionFood, ActionSteal, ActionHack, ActionFight, ActionExtort, ActionBuy, External, Icon) {
 
     var enableButtons = function(position) {
         $('.start-action').attr('disabled', false);
     };
+
+    /**
+     * Actions available even after you bought them.
+     * @type {Array}
+     */
+    var propertyActions = ["ActionCure", "ActionFood"];
 
     function PoisManager(placesService, map, game, user) {
         this.placesService = placesService;
@@ -15,10 +21,10 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
 
         this.typeActions = {
             health: [ActionCure],
-            shop: [ActionSteal],
+            shop: [ActionSteal, ActionExtort, ActionBuy],
             wealth: [ActionSteal, ActionFight],
             hackable: [ActionHack],
-            food: [ActionFood],
+            food: [ActionFood, ActionExtort, ActionBuy],
         };
 
         this.poiTypes = {
@@ -136,7 +142,9 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
                 icon: Icon.get(data.types, this.poiTypes, 0.5),
                 zIndex: 1
             });
-            this.markers[data.place_id] = marker;
+            this.markers[data.place_id] = {
+                marker: marker
+            };
 
             // Click listener.
             marker.addListener('click', function(e) {
@@ -167,13 +175,24 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
                     '<img class="poi-img" src="' + External.getStreetViewImage(data.vicinity, size.width, size.height) + '"' +
                         ' width="' + size.width + '" height="' + size.height + '"/>';
 
+                // Does the user own the place?
+                var owned = false;
+                if (self.user.getProperties()[data.place_id]) {
+                    owned = true;
+                }
+
                 if (actions.length > 0) {
                     content = content + '<div class="action-buttons">';
                     for(var i = 0; i < actions.length; i++) {
-                        var id = 'id-action-' + i;
-                        var buttonClass = 'start-action btn ' + UI.getActionButtonStyle(i);
-                        content = content + '<button id="' + id + '" class="' + buttonClass + '" disabled="disabled">' +
-                            actions[i].getVisibleName() + '</button>';
+
+                        // Only some actions are available once the property was bought.
+                        // In future there might be actions available only once the property is bought.
+                        if (!owned || propertyActions.indexOf(actions[i].constructor.name) !== -1) {
+                            var id = 'id-action-' + i;
+                            var buttonClass = 'start-action btn ' + UI.getActionButtonStyle(i);
+                            content = content + '<button id="' + id + '" class="' + buttonClass + '" disabled="disabled">' +
+                                actions[i].getVisibleName() + '</button>';
+                        }
                     }
                     content = content + '</div>';
                 }
