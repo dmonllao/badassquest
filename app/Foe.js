@@ -1,4 +1,4 @@
-define(['jquery', 'Const'], function($, Const) {
+define(['jquery', 'Const', 'Generator'], function($, Const, Generator) {
 
     // Sprite hardcoded values.
     var bodyScale = 2;
@@ -69,19 +69,23 @@ define(['jquery', 'Const'], function($, Const) {
         },
 
         attackTurn: function(game, callback) {
+
+            var damage = Generator.foeDamage(this.attrs.attack, this.user);
+
             setTimeout(function() {
-                // Hurt the user.
                 this.user.updateState({
-                    cHealth: this.user.state.cHealth - this.attrs.attack
+                    cHealth: this.user.state.cHealth - damage
                 })
                 callback();
             }.bind(this), Const.foeAttackTime);
+
+            return damage;
         },
 
         preloadAssets: function(game) {
             game.load.image('face' + this.id, this.image);
 
-            // TODO This should be an foe constructor attribute.
+            // TODO This should be a foe constructor attribute.
             // Include the foe id as it should be unique.
             game.load.spritesheet('body' + this.id, 'img/foe1_f_40_30.png', 40, 30, 2);
         },

@@ -1,11 +1,4 @@
-define(['bs', 'Const', 'Util', 'InfoWindow'], function($, Const, Util, InfoWindow) {
-
-    var pissedOffSentences = [
-        'Look what you have done! You will burn in hell',
-        'Hey hey look at him! You should be ashamed!',
-        'I will tell your mother you like to destroy people\'s lives',
-        'He who laughs last laughs best, we will see you dead!'
-    ];
+define(['bs', 'Const', 'Generator', 'InfoWindow'], function($, Const, Generator, InfoWindow) {
 
     function PissedOffPeople(map, user) {
         this.map = map;
@@ -36,7 +29,7 @@ define(['bs', 'Const', 'Util', 'InfoWindow'], function($, Const, Util, InfoWindo
                     InfoWindow.openInfoInstance({
                         map: this.map,
                         marker: pissedOff.marker,
-                        content: Util.getRandomElement(pissedOffSentences),
+                        content: Generator.getRandomBadMoodLine(),
                         closedCallback: function() {
                             // Reset it to shout again in a while.
                             pissedOff.shouting = false;

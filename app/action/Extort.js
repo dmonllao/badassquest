@@ -1,4 +1,4 @@
-define(['bs', 'Util', 'Generator', 'UI', 'Foe', 'action/Base'], function($, Util, Generator, UI, Foe, ActionBase) {
+define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base'], function($, Util, Generator, Foe, UI, ActionBase) {
 
     ActionExtort.prototype = Object.create(ActionBase.prototype);
 
@@ -56,20 +56,15 @@ define(['bs', 'Util', 'Generator', 'UI', 'Foe', 'action/Base'], function($, Util
 
         $('#fight').on('click', function(ev) {
 
-            var foe = new Foe({
-                name: this.poiData.name,
-                tHealth: 100,
-                speed: 3,
-                attack: 2,
-                defense: 8,
-                duration: 10000,
-                reRouteLimit: 3
-            });
-            foe.setFaceImage(this.shopKeeperImage);
+            var foes = Generator.foes(this.poiData);
+            for (var i in foes) {
+                foes[i] = new Foe(foes[i]);
+                foes[i].setFaceImage(this.shopKeeperImage);
+            }
 
             var args = {
                 user: this.user,
-                foes: [foe],
+                foes: foes,
                 wonCallback: function() {
                     $('#extort-info').html(this.getIntimidatedText());
                     this.extorted();
@@ -77,6 +72,7 @@ define(['bs', 'Util', 'Generator', 'UI', 'Foe', 'action/Base'], function($, Util
                 }.bind(this)
             };
             this.game.state.start('Fight', true, false, args);
+            $('#text-action').modal('hide');
             $('#game-action').modal('show');
 
         }.bind(this));
@@ -92,6 +88,7 @@ define(['bs', 'Util', 'Generator', 'UI', 'Foe', 'action/Base'], function($, Util
     };
 
     ActionExtort.prototype.extorted = function() {
+        this.user.addExperience(this.tax * 2);
         this.markAsDone();
         this.user.addExtortion({
             poiData: this.poiData,

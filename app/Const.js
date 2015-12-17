@@ -3,7 +3,7 @@ define(function() {
         initFood: 2000,
         initHealth: 100,
         initSpeed: 4,
-        initAttack: 300,
+        initAttack: 4,
         initDefense: 5,
         firstLevelUpExp: 50,
         levelUpAttrsIncrement: 1.1,
@@ -31,7 +31,7 @@ define(function() {
             administrative_area_level_1: 6,
             country: 7
         },
-        passingByLapse: 5,
+        passingByLapse: 10,
         passingByRampUp: 2
     };
 });

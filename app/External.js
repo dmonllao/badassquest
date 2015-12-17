@@ -4,17 +4,6 @@ define(['bs', 'Const', 'Util'], function($, Const, Util) {
     return {
 
         /**
-         * This returns a promise in case we want to use an external service in future.
-         * @return Promise
-         */
-        getRandomPersonImage: function() {
-            var promise = new $.Deferred();
-            var index = Util.getRandomIndex(Const.picsNum);
-            promise.resolve('img/people/' + index + '.jpg');
-            return promise;
-        },
-
-        /**
          * @return Promise
          */
         getWikipediaInfo: function(name) {

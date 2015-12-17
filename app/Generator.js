@@ -1,5 +1,26 @@
 define(['Const'], function(Const) {
 
+    var names = [
+        'Zada Zhu', 'Shonda Sponaugle', 'Leon Limbaugh', 'Lemuel Loso', 'Ernest Elliff', 'Madaline Montagna', 'Cayla Crusoe',
+        'Mireya Maria', 'Adena Alverson', 'Dong Driver', 'Jefferey Jen', 'Al Ammon', 'Sharen Schwandt', 'Clelia Clagon',
+        'Pok Piersall', 'Nadia Newcombe', 'Verena Valenzuela', 'Paige Parchman', 'Lonna Lyall', 'Refugio Racine', 'Brenton Bednarz',
+        'Shantay Schaal', 'Ashanti Antunez', 'Louie Lally', 'Brittny Brinks', 'Erminia Eyman', 'Hollie Herlihy', 'Demetrius Dearth',
+        'Vanna Vanfossen', 'Galina Grindstaff', 'Irena Isler', 'Phylicia Paulin', 'Katy Krauss', 'Carman Cassinelli', 'Lessie Lamy',
+        'Tama Tinney', 'Elke Entrekin', 'Casandra Cruzado', 'Chris Cantrell', 'Bettye Bradish', 'Else Endicott', 'Haley Henshaw',
+        'Jerome Jumper', 'Tonette Troop', 'Tandra Toohey', 'Alica Armstead', 'Aide Angert', 'Myong Monte', 'Nakisha Negron',
+        'Vivian Vernon'
+    ];
+
+    /**
+     * Keep them short, should fit in 1 line even in mobile window size.
+     */
+    var badMoodLines = [
+        'Look what you have done! You will burn in hell',
+        'Hey hey look at him! You should be ashamed!',
+        'I will tell your mother you like to destroy people\'s lives',
+        'He who laughs last laughs best, we will see you dead!'
+    ];
+
     return {
 
         randomInteger: function(value, variation) {
@@ -11,9 +32,36 @@ define(['Const'], function(Const) {
             return Math.round(value + Math.random() * variation * 2);
         },
 
+        getRandomIndex: function(max) {
+            return Math.floor(Math.random() * max);
+        },
+
+        getRandomElement: function(elements) {
+            var randomIndex = this.getRandomIndex(elements.length);
+            return elements[randomIndex];
+        },
+
+        /**
+         * This returns a promise in case we want to use an external service in future.
+         * @return Promise
+         */
+        getRandomPersonImage: function() {
+            var promise = new $.Deferred();
+            var index = this.getRandomIndex(Const.picsNum);
+            promise.resolve('img/people/' + index + '.jpg');
+            return promise;
+        },
+
+        getRandomName: function() {
+            return this.getRandomElement(names);
+        },
+
+        getRandomBadMoodLine: function() {
+            return this.getRandomElement(badMoodLines)
+        },
+
         poiPrice: function(poiData) {
-            //TODO Testing
-            return 20;
+
             // Some base.
             var price = 1000;
 
@@ -89,7 +137,7 @@ define(['Const'], function(Const) {
             var tax = poiPrice / 10000;
 
             // Limit it a bit 3 < x < 100.
-            tax = Math.min(Math.max(tax, 100), 3);
+            tax = Math.min(Math.max(tax, 100), 5);
 
             return Math.round(tax);
         },
@@ -99,30 +147,81 @@ define(['Const'], function(Const) {
          *
          * @param {!Number} From 1 to 10
          */
-        chaseData: function(importance, name, position) {
+        chaseData: function(importance, user, name, position) {
 
             // Random speed, duration and reRouteLimit, but all based on importance.
             return {
                 start: position,
                 name: name,
-                speed: this.getRandomSpeed(importance),
-                duration: this.getRandomDuration(importance),
-                reRouteLimit: this.getRandomReRouteLimit(importance)
+                speed: this.getRandomFoeSpeed(importance, user),
+                duration: this.getRandomFoeDuration(importance),
+                reRouteLimit: this.getRandomFoeReRouteLimit(importance)
             };
         },
 
-        foe: function(importance, name) {
+        /**
+         * Generates an N number of foes based on the poi data.
+         */
+        foes: function(poiData, user) {
+
+            // By default things are not that important.
+            var importance = 3;
+
+            // 1 by default.
+            var foesN = 1;
+
+            for (var i in poiData.types) {
+                var type = poiData.types[i];
+
+                // Banks can't be intimidated.
+                if (type === "bank" || type === 'atm') {
+                    foesN = this.randomInteger(3, 1);
+                    importance = 10;
+                }
+
+                // Not likely that doctors or hospitals get intimidated.
+                if (type === 'doctor' || type === "hospital") {
+                    foesN = 1;
+                    importance = 4;
+                }
+
+                if (type === 'shopping_mall') {
+                    foesN = this.randomInteger(3, 1);
+                    importance = 6;
+                }
+            }
+
+            // Generate foes.
+            var foes = [];
+            for (var i = 0; i < foesN; i++) {
+                foes[i] = this.foe(importance, user);
+            };
+            return foes;
+        },
+
+        foe: function(importance, user) {
 
             return {
-                name: name,
-                tHealth: this.getRandomHealth(importance),
-                attack: this.getRandomAttack(importance),
-                defense: this.getRandomDefense(importance),
-                speed: this.getRandomSpeed(importance),
+                name: this.getRandomName(),
+                tHealth: this.getRandomFoeHealth(importance, user),
+                speed: this.getRandomFoeSpeed(importance, user),
+                attack: this.getRandomFoeAttack(importance, user),
+                defense: this.getRandomFoeDefense(importance, user),
+                duration: this.getRandomFoeDuration(importance),
+                reRouteLimit: this.getRandomFoeReRouteLimit(importance),
             }
         },
 
-        getRandomHealth: function(importance) {
+        foeDamage: function(attack, user) {
+
+            // Limited to attack / 2.
+            var variation = Math.round(user.attrs.tHealth / 20);
+            variation = Math.min(variation, Math.round(attack / 2));
+
+            return this.randomInteger(attack, variation);
+        },
+
+        getRandomFoeHealth: function(importance, user) {
 
             // Get the max health a user can get. Levels should be infinite, so
             // we only have a reasonable max level.
@@ -138,7 +237,7 @@ define(['Const'], function(Const) {
             return this.randomInteger(health, 4);
         },
 
-        getRandomAttack: function(importance) {
+        getRandomFoeAttack: function(importance, user) {
 
             // Get the max attack a user can get. Levels should be infinite, so
             // we only have a reasonable max level.
@@ -154,7 +253,7 @@ define(['Const'], function(Const) {
             return this.randomInteger(attack, 4);
         },
 
-        getRandomDefense: function(importance) {
+        getRandomFoeDefense: function(importance, user) {
 
             // Get the max defense a user can get. Levels should be infinite, so
             // we only have a reasonable max level.
@@ -170,7 +269,7 @@ define(['Const'], function(Const) {
             return this.randomInteger(defense, 4);
         },
 
-        getRandomSpeed: function(importance) {
+        getRandomFoeSpeed: function(importance, user) {
 
             // Get the max speed a user can get. Levels should be infinite, so
             // we only have a reasonable max level.
@@ -187,7 +286,7 @@ define(['Const'], function(Const) {
             return this.randomInteger(speed, 1) + 2
         },
 
-        getRandomDuration: function(importance) {
+        getRandomFoeDuration: function(importance) {
 
             var unit = Const.maxChaseDuration / 10;
             var duration = importance * unit;
@@ -199,7 +298,7 @@ define(['Const'], function(Const) {
             return Math.max(8, randomized) + Const.chaseStartDelay;
         },
 
-        getRandomReRouteLimit: function(importance) {
+        getRandomFoeReRouteLimit: function(importance) {
 
             var unit = Const.maxReRouteLimit / 10;
             var reRoute = importance * unit;

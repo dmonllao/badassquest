@@ -1,4 +1,4 @@
-define(['bs', 'Util', 'UI', 'action/Base', 'Generator'], function($, Util, UI, ActionBase, Generator) {
+define(['bs', 'UI', 'action/Base', 'Generator'], function($, UI, ActionBase, Generator) {
 
     // More or less, Health = price / 2 and Energy = price * 20.
     var randomFood = [
@@ -38,7 +38,7 @@ define(['bs', 'Util', 'UI', 'action/Base', 'Generator'], function($, Util, UI, A
     function ActionFood(user, game, marker, poiData) {
         ActionBase.call(this, user, game, marker, poiData);
 
-        this.food = Util.getRandomElement(randomFood);
+        this.food = Generator.getRandomElement(randomFood);
 
         return this;
     }
@@ -158,6 +158,7 @@ define(['bs', 'Util', 'UI', 'action/Base', 'Generator'], function($, Util, UI, A
             // Start a chase, the insistence depends on the item price.
             var chaseData = Generator.chaseData(
                 foodImportance,
+                this.user,
                 this.poiData.name,
                 this.poiData.geometry.location
             );

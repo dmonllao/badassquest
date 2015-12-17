@@ -1,4 +1,4 @@
-define(['bs', 'Util', 'UI', 'Foe', 'action/Steal'], function($, Util, UI, Foe, ActionSteal) {
+define(['bs', 'Generator', 'UI', 'Foe', 'action/Steal'], function($, Generator, UI, Foe, ActionSteal) {
 
     // Difficulty is only there to make things easy later.
     var randomScenarios = [
@@ -21,7 +21,7 @@ define(['bs', 'Util', 'UI', 'Foe', 'action/Steal'], function($, Util, UI, Foe, A
     function ActionHack(user, game, marker, poiData) {
         ActionSteal.call(this, user, game, marker, poiData);
 
-        this.scenario = Util.getRandomElement(randomScenarios);
+        this.scenario = Generator.getRandomElement(randomScenarios);
 
         return this;
     }

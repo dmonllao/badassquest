@@ -183,6 +183,10 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
 
                 // Bump level, just one at a time, if someone gets enough experience
                 // to jump 2 levels they still have to pass through addExperience twice.
+                var prevAttack = this.attrs.attack;
+                var prevDefense = this.attrs.defense;
+                var prevSpeed = this.attrs.speed;
+
                 this.levelUp(this.state.level + 1);
 
                 // Update the controls.
@@ -192,7 +196,24 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
             // Popover depends on whether the user leveled up or not.
             var popoverContent = null;
             if (leveledUp === true) {
-                popoverContent = "<h4>Level up!</h4>"
+                popoverContent = '<h4>Level up!</h4>';
+
+                var extras = [];
+                // Using ceil as in app/Controls.
+                if (Math.ceil(prevAttack) !== Math.ceil(this.attrs.attack)) {
+                    extras.push('Attack +' + (Math.ceil(this.attrs.attack) - Math.ceil(prevAttack)));
+                }
+                if (Math.ceil(prevDefense) !== Math.ceil(this.attrs.defense)) {
+                    extras.push('Defense +' + (Math.ceil(this.attrs.defense) - Math.ceil(prevDefense)));
+                }
+                if (Math.ceil(prevSpeed) !== Math.ceil(this.attrs.speed)) {
+                    extras.push('Speed +' + (Math.ceil(this.attrs.speed) - Math.ceil(prevSpeed)));
+                }
+                if (extras.length > 0) {
+                    for (var i in extras) {
+                        popoverContent += '<div class="levelup-attr">' + extras[i] + '</div>';
+                    }
+                }
             } else {
                 popoverContent = "+ " + points + " experience points"
             }
@@ -217,9 +238,9 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
             // but should be rounded when showing it.
             this.attrs.tHealth = this.attrs.tHealth * Const.levelUpAttrsIncrement;
             this.attrs.tFood = this.attrs.tFood * Const.levelUpAttrsIncrement;
-            this.attrs.speed = this.attrs.speed * Const.levelUpAttrsIncrement;
             this.attrs.attack = this.attrs.attack * Const.levelUpAttrsIncrement;
             this.attrs.defense = this.attrs.defense * Const.levelUpAttrsIncrement;
+            this.attrs.speed = this.attrs.speed * Const.levelUpAttrsIncrement;
 
             $('#map').trigger('user:levelup', [level]);
         },
@@ -269,8 +290,28 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         },
 
         canIntimidate: function(poiData) {
-            // TODO
-            return false;
+            // TODO Should consider user level and attrs ideally, that
+            // is why this is in User.
+            for (var i in poiData.types) {
+                var type = poiData.types[i];
+
+                // Banks can't be intimidated.
+                if (type === "bank" || type === 'atm') {
+                    return false;
+                }
+
+                // Not likely that doctors or hospitals get intimidated.
+                if (type === 'doctor' || type === "hospital") {
+                    return (Math.random() > 0.8);
+                }
+
+                if (type === 'shopping_mall') {
+                    return (Math.random() > 0.5);
+                }
+            }
+
+            // TODO Other types depend on the number of reviews or something like that.
+            return (Math.random() > 0.4);
         },
 
         updateState: function(params) {
@@ -334,6 +375,9 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
             $('#status-title').html('Game over');
             $('#status-content').html('You died! Try again loser.');
             $('#status').modal('show');
+
+            $('text-action').modal('hide');
+            $('game-action').modal('hide');
         }
 
     };

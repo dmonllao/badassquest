@@ -1,34 +1,11 @@
-define(['bs', 'Foe', 'Icon', 'action/Base'], function($, Foe, Icon, ActionBase) {
+define(['bs', 'Generator', 'Icon', 'Foe', 'action/Base'], function($, Generator, Icon, Foe, ActionBase) {
 
     ActionFight.prototype = Object.create(ActionBase.prototype);
 
     function ActionFight(user, game, marker, poiData) {
         ActionBase.call(this, user, game, marker, poiData);
 
-        // TODO This should depend on poiData.
-        this.foes = [
-            new Foe({
-                name: 'Josefino',
-                tHealth: 100,
-                speed: 3,
-                attack: 2,
-                defense: 8,
-                duration: 10000,
-                reRouteLimit: 3
-            }),
-            new Foe({
-                name: 'Rodolfo',
-                tHealth: 70,
-                speed: 5,
-                attack: 7,
-                defense: 5,
-                duration: 20000,
-                reRouteLimit: 2
-            })
-        ];
-
-        // Thumbs down and red. green: '#54D94F'
-        this.doneIcon = Icon.getByFont('THUMBS_DOWN', '#d9534f', 0.5);
+        this.foes = Generator.foes(this.poiData);
 
         return this;
     }
@@ -49,6 +26,7 @@ define(['bs', 'Foe', 'Icon', 'action/Base'], function($, Foe, Icon, ActionBase) 
 
             // All foes using the same image.
             for (var i in this.foes) {
+                this.foes[i] = new Foe(this.foes[i]);
                 this.foes[i].setFaceImage(this.shopKeeperImage);
             }
 

@@ -1,4 +1,4 @@
-define(['bs', 'Util', 'Generator', 'Foe', 'action/Base'], function($, Util, Generator, Foe, ActionBase) {
+define(['bs', 'Generator', 'Foe', 'action/Base'], function($, Generator, Foe, ActionBase) {
 
     // Difficulty is only there to make things easy later.
     var randomScenarios = [
@@ -21,7 +21,7 @@ define(['bs', 'Util', 'Generator', 'Foe', 'action/Base'], function($, Util, Gene
     function ActionSteal(user, game, marker, poiData) {
         ActionBase.call(this, user, game, marker, poiData);
 
-        this.scenario = Util.getRandomElement(randomScenarios);
+        this.scenario = Generator.getRandomElement(randomScenarios);
 
         return this;
     }
@@ -70,6 +70,7 @@ define(['bs', 'Util', 'Generator', 'Foe', 'action/Base'], function($, Util, Gene
 
                 var chaseData = Generator.chaseData(
                     lootImportance,
+                    this.user,
                     this.scenario.guards[i],
                     this.poiData.geometry.location
                 );

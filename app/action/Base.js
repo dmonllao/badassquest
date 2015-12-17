@@ -1,4 +1,4 @@
-define(['bs', 'External', 'Icon'], function($, External, Icon) {
+define(['bs', 'Generator', 'Icon'], function($, Generator, Icon) {
 
     function ActionBase(user, game, marker, poiData) {
         this.user = user;
@@ -56,7 +56,7 @@ define(['bs', 'External', 'Icon'], function($, External, Icon) {
             var promise = $.Deferred();
 
             // Will hold the random person to use.
-            var personPromise = External.getRandomPersonImage();
+            var personPromise = Generator.getRandomPersonImage();
             personPromise.done(function(randomImageUrl) {
                 this.shopKeeperImage = randomImageUrl;
                 promise.resolve(
@@ -80,7 +80,10 @@ define(['bs', 'External', 'Icon'], function($, External, Icon) {
         markAsDone: function() {
 
             // Clear the marker.
-            this.marker.setIcon(this.doneIcon);
+            this.marker.setIcon({
+                url: this.shopKeeperImage,
+                scaledSize: new google.maps.Size(40, 40)
+            });
             this.marker.setClickable(false);
             google.maps.event.clearInstanceListeners(this.marker);
 

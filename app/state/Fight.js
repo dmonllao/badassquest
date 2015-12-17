@@ -1,9 +1,10 @@
-define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, External) {
+define(['Phaser', 'Const', 'Generator', 'Util', 'External'], function(Phaser, Const, Generator, Util, External) {
 
     var game = null;
 
     var particlesManager = null;
-    var emitter = null;
+    var foesEmitter = null;
+    var userEmitter = null;
 
     function StateFight(appGame) {
         game = appGame;
@@ -94,9 +95,12 @@ define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, Ex
 
             // Hit particles stuff.
             game.physics.startSystem(Phaser.Physics.ARCADE);
-            emitter = game.add.emitter(0, 0, 100);
-            emitter.makeParticles('particle');
-            emitter.gravity = 200;
+            foesEmitter = game.add.emitter(0, 0, 100);
+            foesEmitter.makeParticles('particle');
+            foesEmitter.gravity = 200;
+            userEmitter = game.add.emitter(0, 0, 100);
+            userEmitter.makeParticles('particle');
+            userEmitter.gravity = 200;
 
             // Depends on the number of foes we have.
             var foeSpacing = game.world.width / this.foes.length;
@@ -131,6 +135,7 @@ define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, Ex
 
             // Finish if the player is dead.
             if (this.user.isDead()) {
+                this.killed();
                 return;
             }
 
@@ -174,14 +179,19 @@ define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, Ex
 
             // Execute the character-type specific stuff and init the turn.
             this.characters[nextIndex].prepareTurn();
-            this.characters[nextIndex].attackTurn(game, this.getNextTurn.bind(this));
+            var damage = this.characters[nextIndex].attackTurn(game, this.getNextTurn.bind(this));
+
+            // Only foes return the damage done.
+            if (damage) {
+                this.userHit(damage);
+            }
         },
 
         enableFoesHits: function() {
             for (var i in this.foeSprites) {
                 if (this.foeSprites.hasOwnProperty(i)) {
                     // We attach the foe index.
-                    this.foeSprites[i].events.onInputDown.add(this.hit.bind(this), this, 0, i);
+                    this.foeSprites[i].events.onInputDown.add(this.foeHit.bind(this), this, 0, i);
                 }
             }
 
@@ -213,14 +223,37 @@ define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, Ex
             }
         },
 
-        hit: function(foeSprite, pointer, foeIndex) {
+        userHit: function(damage) {
+
+            var x = Generator.randomInteger(10, 10) + game.world.centerX;
+            var y = Generator.randomInteger(10, 10) + game.world.centerY;
+            var timeout = Generator.randomInteger(500, 500);
+
+            // Blood.
+            foesEmitter.x = x;
+            foesEmitter.y = y;
+            foesEmitter.start(true, 2000, null, 50);
+
+            // Notify the damage points.
+            var text = game.add.text(x, y, damage);
+            this.formatText(text, Util.getGameFontSize());
+            text.fill = '#FF2821';
+
+            // Show it while the user can attack.
+            setTimeout(function() {
+                text.destroy();
+            }, 500);
+
+        },
+
+        foeHit: function(foeSprite, pointer, foeIndex) {
 
             var damagePoints = this.user.damageFoe(this.foes[foeIndex]);
 
             // Blood.
-            emitter.x = pointer.x;
-            emitter.y = pointer.y;
-            emitter.start(true, 3000, null, 20);
+            foesEmitter.x = pointer.x;
+            foesEmitter.y = pointer.y;
+            foesEmitter.start(true, 3000, null, 20);
 
             // Notify the damage points.
             var text = game.add.text(pointer.x, pointer.y, damagePoints);
@@ -277,12 +310,12 @@ define(['Phaser', 'Const', 'Util', 'External'], function(Phaser, Const, Util, Ex
             text.anchor.set(0.5);
             text.align = 'center';
 
-            //	Font style
+            // Font style
             text.font = 'Arial Black';
             text.fontSize = size;
             text.fontWeight = 'bold';
 
-            //	Stroke color and thickness
+            // Stroke color and thickness
             text.stroke = '#000000';
             text.strokeThickness = 6;
             text.fill = '#43d637';

@@ -175,8 +175,6 @@ pre.control span.badge {
     }
 }
 
-
-
 .info-box {
     text-align: center;
     margin: 20px auto 10px auto;
@@ -213,4 +211,8 @@ a.notification {
     vertical-align: middle;
     background-color: #d9534f;
     border-radius: 10px;
+}
+
+.levelup-attr {
+    font-style: italic;
 }
