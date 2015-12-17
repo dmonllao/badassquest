@@ -11,6 +11,11 @@ html, body {
 
 .modal {
     text-align: center;
+    z-index: 20;
+}
+
+.modal-backdrop {
+    z-index: 10;
 }
 
 .gm-style-iw {
@@ -182,6 +187,11 @@ pre.control span.badge {
 
 .story-name {
     margin-bottom: 20px;
+}
+
+.story-intro>div {
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 .step-img {

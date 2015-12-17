@@ -1,20 +1,12 @@
-define(['bs', 'Map', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManager'], function($, Map, User, Game, StoryManager, ChaseTracker, PoisManager) {
-
-    // @param {ChaseTracker}
-    var chaseTracker;
-
-    // @type {PoisManager}
-    var poisManager;
+define(['bs', 'Map', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManager', 'PoliticsManager'], function($, Map, User, Game, StoryManager, ChaseTracker, PoisManager, PoliticsManager) {
 
     // @param {Controls}
     var controls = null;
 
-    // @type {StoryManager}
-    var storyManager = null;
-
     // @param {google.maps.Map}
     var map = Map.init();
 
+    // @param {google.maps.PlacesService}
     var placesService = Map.getPlacesService();
 
     // @type {User} The current user.
@@ -26,18 +18,31 @@ define(['bs', 'Map', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManage
     // @param {Phaser}
     var game = appGame.getInstance();
 
-    storyManager = new StoryManager(placesService, map, game, user);
+    // @type {StoryManager}
+    var storyManager = new StoryManager(placesService, map, game, user);
+    var getPosition = storyManager.getInitialPosition();
 
-    chaseTracker = new ChaseTracker(map, user);
+    // @param {ChaseTracker}
+    var chaseTracker = new ChaseTracker(map, user);
 
-    poisManager = new PoisManager(placesService, map, game, user);
+    // @type {PoisManager}
+    var poisManager = new PoisManager(placesService, map, game, user);
 
-    // Search near by pois.
-    poisManager.addNearbyPois(storyManager.story.initialPosition);
+    // @type {PoliticsManager}
+    var politicsManager = new PoliticsManager(placesService, map, user);
 
-    // Move the user to a new position.
-    map.addListener('click', function(e) {
-        console.log('Move to ' + e.latLng);
-        user.moveTo(e.latLng);
+    // Once we get user input we start filling the map
+    getPosition.done(function(initialPosition) {
+
+        // Search nearby pois and display them on map.
+        poisManager.addNearbyPois(initialPosition);
+
+        // Add listeners to user actions for politic-related events.
+        politicsManager.setPolitics(initialPosition);
+
+        // Move the user to a new position.
+        map.addListener('click', function(e) {
+            user.moveTo(e.latLng);
+        });
     });
 });

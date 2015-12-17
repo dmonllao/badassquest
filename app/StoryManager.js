@@ -1,11 +1,12 @@
-define(['bs', 'External', 'Icon', 'InfoWindow', 'story/PerthUnderground', 'story/ModernAlchemist'], function($, External, Icon, InfoWindow, StoryPerthUnderground, StoryModernAlchemist) {
+define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function($, Const, External, Icon, InfoWindow, StoryFree) {
 
     // This contains the game instructions, they are attached to the first steps of the game.
     var instructions = [
-        'Find your next destination looking at the map, zoom out if you can\'t see any specially big marker',
-        'You can use <i class="fa fa-eye"></i> button to see nearby places, you can visit them to recover yourself or to get money',
-        'Note that you can see your energy <i style="color: #8397D2;" class="fa fa-cutlery"></i> in the top left screen corner, it decreases over time, if it reaches 0 your life will start decreasing, you can recover ryouself eating',
+        'Zoom out to see more points of interest',
+        'You can see your energy <i style="color: #8397D2;" class="fa fa-cutlery"></i> in the top left screen corner, it decreases over time, don\'t starve'
     ];
+
+    var initialPositionPromise = $.Deferred();
 
     function StoryManager(placesService, map, game, user) {
         this.map = map;
@@ -15,23 +16,30 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'story/PerthUnderground', 'story
 
         // TODO Hardcoded as this is supposed to cover all StoryStep API.
         //this.story = new StoryModernAlchemist(this.user, this.game);
-        this.story = new StoryPerthUnderground(this.user, this.game);
+        //this.story = new StoryPerthUnderground(this.user, this.game);
+        this.story = new StoryFree(this.user, this.game);
 
         // Show intro text, attaching start up instructions.
         var content = '<h1 class="story-name">' + this.story.title + '</h1>' +
-            '<p>' + this.story.getIntro() + '</p>' +
+            '<div class="story-intro">' + this.story.getIntro() + '</div>' +
             '<img src="' + this.user.photo + '" class="step-img img-responsive img-circle"/>';
 
         $('#text-action-content').html(content);
         $('#text-action').modal('show');
 
         // Set the story initial position.
-        this.user.setInitialPosition(this.story.initialPosition);
-        this.map.setCenter(this.story.initialPosition);
-
+        if (this.story.initialPosition) {
+            this.setPosition(this.story.initialPosition);
+        } else {
+            // Set a position that look nice in the map while there is no position selected.
+            this.map.setCenter(Const.defaultMapCenterBackground);
+            this.story.getPosition(this.map, initialPositionPromise, this.setPosition.bind(this));
+        }
         this.map.setZoom(this.story.zoom);
 
-        this.setStepLocation(this.story.getNextStep());
+        if (this.story.steps.length > 0) {
+            this.setStepLocation(this.story.getNextStep());
+        }
 
         return this;
     }
@@ -46,6 +54,20 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'story/PerthUnderground', 'story
         story: null,
 
         stepsGarbage: [],
+
+        getInitialPosition: function() {
+            return initialPositionPromise;
+        },
+
+        setPosition: function(position) {
+
+            // Set the user position and center there the map.
+            this.user.setInitialPosition(position);
+            this.map.setCenter(position);
+
+            // Let other components know that we already have the position.
+            initialPositionPromise.resolve(position);
+        },
 
         setStepLocation: function(step) {
 
