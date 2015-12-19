@@ -17,6 +17,8 @@ define(['bs'], function($) {
             this.initZoom();
             this.initCenter(user);
             this.initNotifications();
+
+            this.initStatics();
         },
 
         update: function(state, attrs) {
@@ -120,6 +122,44 @@ define(['bs'], function($) {
             });
 
             map.controls[google.maps.ControlPosition.RIGHT_TOP].push(notificationsDiv);
+        },
+
+        initStatics: function() {
+
+            // Github.
+            var githubDiv = document.createElement('div');
+            githubDiv.setAttribute('id', 'github');
+
+            githubDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-github-alt"></i></pre>';
+
+            google.maps.event.addDomListener(githubDiv, 'click', function() {
+                 var form = document.createElement("form");
+                 form.method = "GET";
+                 form.action = "https://github.com/badassquest/badassquest";
+                 form.target = "_blank";
+                 document.body.appendChild(form);
+                 form.submit();
+            });
+
+            map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(githubDiv);
+
+            // Twitter.
+            var twitterDiv = document.createElement('div');
+            twitterDiv.setAttribute('id', 'twitter');
+
+            twitterDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-twitter"></i></pre>';
+
+            google.maps.event.addDomListener(twitterDiv, 'click', function() {
+                 var form = document.createElement("form");
+                 form.method = "GET";
+                 form.action = "https://twitter.com/DavidMonllao";
+                 form.target = "_blank";
+                 document.body.appendChild(form);
+                 form.submit();
+            });
+
+            map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(twitterDiv);
+
         }
     };
 
