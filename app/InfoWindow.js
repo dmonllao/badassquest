@@ -52,7 +52,7 @@ define(function() {
 
             var infoWindow = new InfoBox(this.justTextStyles);
             infoWindow.setContent('<h4 class="just-text">' + options.content + '</h4>');
-            infoWindow.open(options.map, options.marker);
+            infoWindow.open(this.getTarget(options.map), options.marker);
 
             // Close it in delay seconds.
             setTimeout(function() {
@@ -72,7 +72,20 @@ define(function() {
             this.closeAll();
 
             options.infoWindow.setContent('<div class="infowindow-wrapper">' + options.content + '</div>');
-            options.infoWindow.open(options.map, options.marker);
+
+            // Two reasons to stop bouncing:
+            // - The functional one: There is no need to draw attention
+            // - The obscure / technical one: Street view triggers an error if bouncing.
+            options.marker.setAnimation(null);
+
+            options.infoWindow.open(this.getTarget(options.map), options.marker);
+        },
+
+        getTarget: function(map) {
+            if (map.getStreetView().getVisible()) {
+                return map.getStreetView();
+            }
+            return map;
         },
 
         closeAll: function() {

@@ -1,21 +1,25 @@
 define(['bs'], function($) {
 
-    var map;
+    var user = null;
+    var panorama = null;
 
-    function Controls(appMap) {
-        map = appMap;
+    function Controls() {
     }
 
     Controls.prototype = {
 
-        init: function(user) {
+        init: function(userObj) {
+
+            user = userObj;
+
             this.initHealth(user.state, user.attrs);
             this.initFood(user.state, user.attrs);
             this.initWealth(user.state, user.attrs);
             this.initLevel(user.state, user.attrs);
 
             this.initZoom();
-            this.initCenter(user);
+            this.initCenter();
+            this.initMapView();
             this.initNotifications();
 
             this.initStatics();
@@ -49,28 +53,28 @@ define(['bs'], function($) {
             var healthDiv = document.createElement('div');
             healthDiv.setAttribute('id', 'health');
             healthDiv.innerHTML = '<pre class="control"><i style="color: red;" class="fa fa-heart"></i><span>' + this.round(state.cHealth) + ' / ' + this.round(attrs.tHealth) + '</span></pre>';
-            map.controls[google.maps.ControlPosition.LEFT_TOP].push(healthDiv);
+            user.map.controls[google.maps.ControlPosition.LEFT_TOP].push(healthDiv);
         },
 
         initFood: function(state, attrs) {
             var foodDiv = document.createElement('div');
             foodDiv.setAttribute('id', 'food');
             foodDiv.innerHTML = '<pre class="control"><i style="color: #8397D2;" class="fa fa-cutlery"></i><span>' + this.round(state.cFood) + ' / ' + this.round(attrs.tFood) + '</span></pre>';
-            map.controls[google.maps.ControlPosition.LEFT_TOP].push(foodDiv);
+            user.map.controls[google.maps.ControlPosition.LEFT_TOP].push(foodDiv);
         },
 
         initWealth: function(state, attrs) {
             var wealthDiv = document.createElement('div');
             wealthDiv.setAttribute('id', 'wealth');
             wealthDiv.innerHTML = '<pre class="control"><i style="color: green;" class="fa fa-usd"></i><span>' + this.round(state.cWealth) + '</span></pre>';
-            map.controls[google.maps.ControlPosition.LEFT_TOP].push(wealthDiv);
+            user.map.controls[google.maps.ControlPosition.LEFT_TOP].push(wealthDiv);
         },
 
         initLevel: function(state, attrs) {
             var levelDiv = document.createElement('div');
             levelDiv.setAttribute('id', 'level');
             levelDiv.innerHTML = '<pre class="control"><i style="color: #FFCC00;" class="fa fa-trophy"></i><span id="level-text">Level ' + state.level + '</span></pre>';
-            map.controls[google.maps.ControlPosition.LEFT_TOP].push(levelDiv);
+            user.map.controls[google.maps.ControlPosition.LEFT_TOP].push(levelDiv);
         },
 
         initZoom: function() {
@@ -90,26 +94,77 @@ define(['bs'], function($) {
             zoomDiv.appendChild(zoomMinus);
 
             google.maps.event.addDomListener(zoomPlus, 'click', function() {
-                map.setZoom(map.getZoom() + 1);
+                user.map.setZoom(user.map.getZoom() + 1);
             });
 
             google.maps.event.addDomListener(zoomMinus, 'click', function() {
-                map.setZoom(map.getZoom() - 1);
+                user.map.setZoom(user.map.getZoom() - 1);
             });
 
-            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(zoomDiv);
+            user.map.controls[google.maps.ControlPosition.RIGHT_TOP].push(zoomDiv);
         },
 
-        initCenter: function(user) {
+        initCenter: function() {
             var centerDiv = document.createElement('div');
             centerDiv.setAttribute('id', 'center');
             centerDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-arrows"></i></pre>';
 
             google.maps.event.addDomListener(centerDiv, 'click', function() {
-                map.panTo(user.marker.getPosition());
+                user.map.panTo(user.marker.getPosition());
             });
 
-            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(centerDiv);
+            user.map.controls[google.maps.ControlPosition.RIGHT_TOP].push(centerDiv);
+        },
+
+        initMapView: function() {
+            var mapViewDiv = document.createElement('div');
+            mapViewDiv.setAttribute('id', 'mapView');
+
+            var mapViewSatelliteHtml = '<i class="fa fa-fw fa-map"></i>';
+            var mapViewStreetHtml = '<i class="fa fa-fw fa-street-view"></i>';
+            var mapViewRoadHtml = '<i class="fa fa-fw fa-road"></i>';
+
+            // Satellite by default.
+            var mapView = 'satellite';
+            mapViewDiv.innerHTML = '<pre class="control actionable-control">' + mapViewStreetHtml + '</pre>';
+
+            // Rotate between the 3 formats.
+            google.maps.event.addDomListener(mapViewDiv, 'click', function() {
+
+                if (panorama === null) {
+                    // Just once.
+                    panorama = user.map.getStreetView();
+                    panorama.addListener('visible_changed', function(visibility) {
+                        if (panorama.getVisible() === false) {
+
+                            // Update the user position with the current panorama position.
+                            user.marker.setPosition(panorama.getPosition());
+                            user.marker.setVisible(true);
+                            mapView = 'road';
+                            user.map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+                            $('#mapView pre').html(mapViewSatelliteHtml);
+                        }
+                    }.bind(this));
+                }
+
+                if (mapView === 'satellite') {
+
+                    // Set the panorama to the user position.
+                    panorama.setPosition(user.marker.getPosition());
+                    user.marker.setVisible(false);
+                    panorama.setVisible(true);
+                    mapView = 'street';
+                    $('#mapView pre').html(mapViewRoadHtml);
+                } else if (mapView === 'street') {
+                    // Managed above.
+                } else {
+                    mapView = 'satellite';
+                    user.map.setMapTypeId(google.maps.MapTypeId.HYBRID);
+                    $('#mapView pre').html(mapViewStreetHtml);
+                }
+            }.bind(this));
+
+            user.map.controls[google.maps.ControlPosition.RIGHT_TOP].push(mapViewDiv);
         },
 
         initNotifications: function() {
@@ -121,7 +176,7 @@ define(['bs'], function($) {
                 $('#map').trigger('notification:toggle');
             });
 
-            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(notificationsDiv);
+            user.map.controls[google.maps.ControlPosition.RIGHT_TOP].push(notificationsDiv);
         },
 
         initStatics: function() {
@@ -141,7 +196,7 @@ define(['bs'], function($) {
                  form.submit();
             });
 
-            map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(githubDiv);
+            user.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(githubDiv);
 
             // Twitter.
             var twitterDiv = document.createElement('div');
@@ -158,8 +213,7 @@ define(['bs'], function($) {
                  form.submit();
             });
 
-            map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(twitterDiv);
-
+            user.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(twitterDiv);
         }
     };
 

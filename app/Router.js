@@ -138,6 +138,9 @@ define(function() {
 
         startAnimation: function() {
 
+            // Refreshing the map because it gets lost after street view.
+            this.marker.setMap(this.map);
+
             // Make the icon bounce.
             this.marker.setAnimation(google.maps.Animation.BOUNCE);
 

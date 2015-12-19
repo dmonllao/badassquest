@@ -25,7 +25,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         this.router = new Router(this.map);
 
         // Custom controls.
-        this.controls = new Controls(this.map);
+        this.controls = new Controls();
         this.controls.init(this);
 
         // Notifications service.

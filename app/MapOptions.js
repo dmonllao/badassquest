@@ -31,7 +31,7 @@ define(function() {
             "elementType": "labels",
             "stylers": [
                 {
-                    "visibility": "simplified"
+                    "visibility": "on"
                 }
             ]
         }, {
@@ -48,6 +48,13 @@ define(function() {
             "stylers": [
                 {
                     "visibility": "simplified"
+                }
+            ]
+        }, {
+            "featureType": "administrative.land_parcel",
+            "stylers": [
+                {
+                    "visibility": "off"
                 }
             ]
         }, {
@@ -109,12 +116,11 @@ define(function() {
 
     function MapOptions() {
         // We want this here as we need google.maps to be available when this is called.
-        //this.mapTypeId = google.maps.MapTypeId.ROADMAP;
-        this.mapTypeId = google.maps.MapTypeId.SATELLITE;
+        this.mapTypeId = google.maps.MapTypeId.HYBRID;
     }
 
     MapOptions.prototype = {
-        zoom: 18,
+        zoom: 17,
         mapTypeControl: false,
         styles: mapStyles,
         mapTypeId: null, 

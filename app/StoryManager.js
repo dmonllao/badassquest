@@ -35,6 +35,7 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
         } else {
             // Set a nice background while the user selects a position.
             this.map.setCenter(Const.defaultMapCenterBackground);
+            this.user.setInitialPosition(Const.defaultMapCenterBackground);
             this.story.getPosition(this.map, initPromise, this.setPosition.bind(this));
         }
 
@@ -71,6 +72,7 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
             // Set the user position and center there the map.
             this.user.setInitialPosition(position);
             this.map.setCenter(position);
+            this.map.getStreetView().setPosition(position);
 
             // After zoom and center is set.
             var text = 'Hey, first time I see you around, welcome! Explore the city but take care, there is some dodgy people here.';
@@ -90,7 +92,7 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
             var distance = Math.round(google.maps.geometry.spherical.computeDistanceBetween(userPosition, bounds.getNorthEast()).toFixed() * 0.5);
             var chuckPosition = google.maps.geometry.spherical.computeOffset(userPosition, distance, 45);
 
-            var html = '<div>' + message + '</div><img class="step-img img-responsive img-circle" src="img/chuck.jpg"/>';
+            var html = '<img class="step-img img-responsive img-circle" src="img/chuck.jpg"/><div>' + message + '</div>';
             // Chuck Norris will give you some info.
             var name = 'Chuck Norris';
             var marker = new google.maps.Marker({
@@ -106,14 +108,15 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
             marker.setAnimation(google.maps.Animation.BOUNCE);
             marker.addListener('click', function() {
                 this.user.moveTo(marker.getPosition(), function() {
-                    // Show info, stop animation and remove the marker after 10 secs.
+                    // Show info, stop animation and remove the marker after
+                    // 15 secs, considering 15 secs enough for the user to see the message.
                     this.openInfoWindow(marker, name, html, this.infoPersonWindow);
                     marker.setAnimation(null);
                     this.markersGarbage.push(marker);
                     setTimeout(function() {
                         this.cleanGarbage();
                         this.infoPersonWindow.setMap(null);
-                    }.bind(this), 10000);
+                    }.bind(this), 15000);
                 }.bind(this));
             }.bind(this));
         },
