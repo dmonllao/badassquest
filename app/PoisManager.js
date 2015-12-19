@@ -37,6 +37,12 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
             bar: 'food'
         };
 
+        // This list should be slow as there is 1 place API query for each element.
+        this.searchGroups = [
+            ['hospital', 'doctor', 'bank', 'atm'],
+            ['restaurant', 'bar']
+        ];
+
         $('#game-action').on('hidden.bs.modal', function (e) {
 
             // Cleanup the current state.
@@ -103,11 +109,13 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
 
             this.showLoading();
 
-            this.placesService.nearbySearch({
-                location: position,
-                radius: Const.poisRadius,
-                types: this.getTypesList()
-            }, this.addPois.bind(this));
+            for (var i in this.searchGroups) {
+                this.placesService.nearbySearch({
+                    location: position,
+                    radius: Const.poisRadius,
+                    types: this.searchGroups[i],
+                }, this.addPois.bind(this));
+            }
         },
 
         addPois: function(results, status) {
@@ -125,7 +133,7 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
                 this.addMarker(results[i]);
             }
 
-            // Once done hide the spinning icon.
+            // Once one of the calls is done (see this.addNearbyPois) we hide the loading.
             this.hideLoading();
         },
 

@@ -8,7 +8,7 @@ define(function() {
         initDefense: 5,
         firstLevelUpExp: 50,
         levelUpAttrsIncrement: 1.1,
-        poisRadius: 400,
+        poisRadius: 750,
         // Different intervals to make it more real.
         taxesInterval: 5000,
         revenuesInterval: 10000,
