@@ -192,6 +192,7 @@ pre.control span.badge {
 .story-intro>div {
     margin-top: 15px;
     margin-bottom: 15px;
+    font-weight: bold;
 }
 
 .step-img {

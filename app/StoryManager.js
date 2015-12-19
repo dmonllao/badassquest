@@ -6,13 +6,14 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
         'You can see your energy <i style="color: #8397D2;" class="fa fa-cutlery"></i> in the top left screen corner, it decreases over time, don\'t starve'
     ];
 
-    var initialPositionPromise = $.Deferred();
+    var initPromise = $.Deferred();
 
     function StoryManager(placesService, map, game, user) {
         this.map = map;
         this.game = game;
         this.user = user;
         this.placesService = placesService;
+        this.infoPersonWindow = InfoWindow.getInstance();
 
         // TODO Hardcoded as this is supposed to cover all StoryStep API.
         //this.story = new StoryModernAlchemist(this.user, this.game);
@@ -28,14 +29,14 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
         $('#text-action').modal('show');
 
         // Set the story initial position.
+        this.map.setZoom(this.story.zoom);
         if (this.story.initialPosition) {
             this.setPosition(this.story.initialPosition);
         } else {
-            // Set a position that look nice in the map while there is no position selected.
+            // Set a nice background while the user selects a position.
             this.map.setCenter(Const.defaultMapCenterBackground);
-            this.story.getPosition(this.map, initialPositionPromise, this.setPosition.bind(this));
+            this.story.getPosition(this.map, initPromise, this.setPosition.bind(this));
         }
-        this.map.setZoom(this.story.zoom);
 
         if (this.story.steps.length > 0) {
             this.setStepLocation(this.story.getNextStep());
@@ -53,10 +54,16 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
 
         story: null,
 
-        stepsGarbage: [],
+        markersGarbage: [],
 
-        getInitialPosition: function() {
-            return initialPositionPromise;
+        infoPersonWindow: null,
+
+        init: function() {
+
+            // Delegate to the story if it has any specific action to perform.
+            this.story.init();
+
+            return initPromise;
         },
 
         setPosition: function(position) {
@@ -65,8 +72,50 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
             this.user.setInitialPosition(position);
             this.map.setCenter(position);
 
+            // After zoom and center is set.
+            var text = 'Hey, first time I see you around, welcome! Explore the city but take care, there is some dodgy people here.';
+            this.addInfoPerson(position, text);
+
             // Let other components know that we already have the position.
-            initialPositionPromise.resolve(position);
+            initPromise.resolve(position);
+        },
+
+        addInfoPerson: function(userPosition, message) {
+
+            // The info guy should appear close enough to the user and inside the map bounds.
+            var bounds = this.map.getBounds();
+
+            // Reducing the distance as the the corner is out of the map. It does not matter if chuck is not in
+            // a road, the user will get that they should click there
+            var distance = Math.round(google.maps.geometry.spherical.computeDistanceBetween(userPosition, bounds.getNorthEast()).toFixed() * 0.5);
+            var chuckPosition = google.maps.geometry.spherical.computeOffset(userPosition, distance, 45);
+
+            var html = '<div>' + message + '</div><img class="step-img img-responsive img-circle" src="img/chuck.jpg"/>';
+            // Chuck Norris will give you some info.
+            var name = 'Chuck Norris';
+            var marker = new google.maps.Marker({
+                map: this.map,
+                title: name,
+                position: chuckPosition,
+                icon: {
+                    url: 'img/chuck.jpg',
+                    scaledSize: new google.maps.Size(40, 40),
+                },
+                zIndex: 7
+            });
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+            marker.addListener('click', function() {
+                this.user.moveTo(marker.getPosition(), function() {
+                    // Show info, stop animation and remove the marker after 10 secs.
+                    this.openInfoWindow(marker, name, html, this.infoPersonWindow);
+                    marker.setAnimation(null);
+                    this.markersGarbage.push(marker);
+                    setTimeout(function() {
+                        this.cleanGarbage();
+                        this.infoPersonWindow.setMap(null);
+                    }.bind(this), 10000);
+                }.bind(this));
+            }.bind(this));
         },
 
         setStepLocation: function(step) {
@@ -158,7 +207,7 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
                     // info during the step process.
                     var contents = step.getInfo();
                     if (contents) {
-                        this.openInfoWindow(marker, step, contents);
+                        this.openInfoWindow(marker, step.name, contents, step.infoWindow);
                     }
 
                     // It only makes sense when the step is uncompleted, the step must control what should be shown
@@ -174,7 +223,7 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
                         if (step.cleanIt()) {
                             // We will clean it after next point is reached as otherwise we would
                             // have to deal with onClose infoWindow.
-                            this.stepsGarbage.push(marker);
+                            this.markersGarbage.push(marker);
                         }
                     }
                 }.bind(this));
@@ -182,9 +231,9 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
         },
 
         cleanGarbage: function() {
-            for (var i in this.stepsGarbage) {
+            for (var i in this.markersGarbage) {
                 // TODO We might want to clean step data too if garbage remains there.
-                this.stepsGarbage[i].setMap(null);
+                this.markersGarbage[i].setMap(null);
             }
         },
 
@@ -203,14 +252,14 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
             }
         },
 
-        openInfoWindow: function(marker, step, contents) {
+        openInfoWindow: function(marker, name, contents, infoWindow) {
 
             // Initialise it if required.
-            if (!step.infoWindow) {
-                step.infoWindow = InfoWindow.getInstance();
+            if (!infoWindow) {
+                infoWindow = InfoWindow.getInstance();
             }
 
-            var content = '<h3>' + step.name + '</h3>' +
+            var content = '<h3>' + name + '</h3>' +
                 '<div class="infowindow-content">' + contents + '</div>';
 
             // Add some wikipedia info if available.
@@ -222,9 +271,11 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
                     map: this.map,
                     marker: marker,
                     content: content,
-                    infoWindow: step.infoWindow,
+                    infoWindow: infoWindow,
                 });
             //}.bind(this));
+
+            return infoWindow;
         },
 
         addStepHint: function(step) {

@@ -20,7 +20,7 @@ define(['bs', 'Map', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManage
 
     // @type {StoryManager}
     var storyManager = new StoryManager(placesService, map, game, user);
-    var getPosition = storyManager.getInitialPosition();
+    var storyInit = storyManager.init();
 
     // @param {ChaseTracker}
     var chaseTracker = new ChaseTracker(map, user);
@@ -32,13 +32,13 @@ define(['bs', 'Map', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManage
     var politicsManager = new PoliticsManager(placesService, map, user);
 
     // Once we get user input we start filling the map
-    getPosition.done(function(initialPosition) {
+    storyInit.done(function(position) {
 
         // Search nearby pois and display them on map.
-        poisManager.addNearbyPois(initialPosition);
+        poisManager.addNearbyPois(position);
 
         // Add listeners to user actions for politic-related events.
-        politicsManager.setPolitics(initialPosition);
+        politicsManager.setPolitics(position);
 
         // Move the user to a new position.
         map.addListener('click', function(e) {

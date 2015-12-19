@@ -29,6 +29,10 @@ define(['jquery', 'Icon', 'StoryStep'], function($, Icon, StoryStep) {
             return '';
         },
 
+        init: function() {
+            // No default implementation, this is called when the story is ready to start.
+        },
+
         getTheEnd: function() {
             console.error('getTheEnd should be overwriten');
             return '';
