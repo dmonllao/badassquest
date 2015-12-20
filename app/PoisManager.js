@@ -90,9 +90,14 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
             // it would not be needed, as we already added them.
             // TODO This could be improved by storing a list of all reached positions and compare distances
             // between position var and each of them.
-
-            var distance = google.maps.geometry.spherical.computeDistanceBetween(this.lastAddPoisPosition, userPosition).toFixed();
-            console.log('Moved ' + distance + ' meters to ' + userPosition.toString() + '.');
+            var distance;
+            if (this.lastAddPoisPosition) {
+                distance = google.maps.geometry.spherical.computeDistanceBetween(this.lastAddPoisPosition, userPosition).toFixed();
+                console.log('Moved ' + distance + ' meters to ' + userPosition.toString() + '.');
+            } else {
+                // More than Const.poisRadius for sure.
+                distance = 1000000;
+            }
 
             // Add new POIs if the current position and the previous one are far enough.
             // Better to update it more frequently than what we should strictly do.
