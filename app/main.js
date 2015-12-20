@@ -31,6 +31,11 @@ define(['bs', 'Map', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManage
     // @type {PoliticsManager}
     var politicsManager = new PoliticsManager(placesService, map, user);
 
+    // Move the user to a new position.
+    map.addListener('click', function(e) {
+        user.moveTo(e.latLng);
+    });
+
     // Once we get user input we start filling the map
     storyInit.done(function(position) {
 
@@ -39,10 +44,5 @@ define(['bs', 'Map', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManage
 
         // Add listeners to user actions for politic-related events.
         politicsManager.setPolitics(position);
-
-        // Move the user to a new position.
-        map.addListener('click', function(e) {
-            user.moveTo(e.latLng);
-        });
     });
 });

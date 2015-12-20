@@ -9,22 +9,16 @@ define(function() {
         }, {
             "featureType": "poi.park",
             "stylers": [
-                { "visibility": "on" }
+                {
+                    "visibility": "on"
+                }
             ]
         }, {
-            "featureType": "transit.station.bus",
+            "featureType": "transit.station",
             "stylers": [
-                { "visibility": "off" }
-            ]
-        }, {
-            "featureType": "transit.station.rail",
-            "stylers": [
-                { "visibility": "off" }
-            ]
-        }, {
-            "featureType": "transit.station.airport",
-            "stylers": [
-                { "visibility": "off" }
+                {
+                    "visibility": "off"
+                }
             ]
         }, {
             "featureType": "road",

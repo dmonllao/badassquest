@@ -35,7 +35,7 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
         } else {
             // Set a nice background while the user selects a position.
             this.map.setCenter(Const.defaultMapCenterBackground);
-            this.user.setInitialPosition(Const.defaultMapCenterBackground);
+            this.user.setPosition(Const.defaultMapCenterBackground);
             this.story.getPosition(this.map, initPromise, this.setPosition.bind(this));
         }
 
@@ -70,7 +70,7 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
         setPosition: function(position) {
 
             // Set the user position and center there the map.
-            this.user.setInitialPosition(position);
+            this.user.setPosition(position);
             this.map.setCenter(position);
             this.map.getStreetView().setPosition(position);
 

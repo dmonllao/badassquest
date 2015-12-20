@@ -78,14 +78,17 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
 
         timers: {},
 
-        setInitialPosition: function(position) {
-
-            if (!position) {
-                console.error('The selected story is not defining a initialPosition');
+        setPosition: function(position) {
+            if (this.marker === null) {
+                // This already sets the position.
+                this.createMarker(position);
                 return;
             }
+            this.marker.setPosition(position);
+        },
 
-            // Add the user marker to the specified position.
+        createMarker: function(position) {
+            // Create the user marker on the specified position.
             this.marker = new google.maps.Marker({
                 position: position,
                 map: this.map,
