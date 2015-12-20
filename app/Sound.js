@@ -19,10 +19,10 @@ define(['bs'], function($) {
 
             // Dependant on soundcloud availability. We don't want the whole game
             // to break if SC is not available.
-            require(['no-sound-during-dev'], function() {
+            require(['https://connect.soundcloud.com/sdk/sdk-3.1.2.js'], function() {
                 if (typeof SC !== 'undefined') {
                     SC.initialize({
-                      client_id: ''
+                      client_id: '7dLneEFGzGPeEvdJfSB1fczNS9Sd5W3Y'
                     });
 
                     SC.stream('/tracks/253089256').then(function(player){

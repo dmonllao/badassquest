@@ -70,7 +70,8 @@ define(['bs', 'Const', 'Util', 'Map'], function($, Const, Util, Map) {
                 }
             }
 
-            return 'https://maps.googleapis.com/maps/api/streetview?size=' + width + 'x' + height + '&location=' + position + '&pitch=10'
+            return 'https://maps.googleapis.com/maps/api/streetview?size=' + width + 'x' + height + '&location=' + position + '&pitch=10' +
+                '&key=AIzaSyCPp5yVSIGbV54-tumH4Zay61o9xpy_1qw'
         }
     }
 });
