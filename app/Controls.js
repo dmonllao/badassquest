@@ -241,6 +241,10 @@ define(['bs'], function($) {
             // It is already structured by its position.
             for (var side in this.controls) {
                 if (this.controls.hasOwnProperty(side)) {
+
+                    // We need to clean them all first.
+                    mapRef.controls[side].clear();
+
                     for (var i in this.controls[side]) {
                         mapRef.controls[side].push(this.controls[side][i]);
                     }
