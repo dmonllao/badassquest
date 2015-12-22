@@ -16,7 +16,9 @@ define(['MapOptions', 'InfoWindow', 'epoly', 'infobox'], function(MapOptions, In
             panorama.set('addressControl', false);
             panorama.set('zoomControl', false);
             panorama.set('fullscreenControl', false);
-            panorama.set('enableCloseButton', true);
+            panorama.set('enableCloseButton', false);
+            panorama.set('linksControl', true);
+            panorama.set('panControl', false);
 
             // We init them after google object is available.
             InfoWindow.initStyles();

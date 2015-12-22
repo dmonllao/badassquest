@@ -8,9 +8,16 @@ define(['bs'], function($) {
 
     Controls.prototype = {
 
+        controls: {},
+
         init: function(userObj) {
 
             user = userObj;
+
+            this.controls[google.maps.ControlPosition.LEFT_TOP] = [];
+            this.controls[google.maps.ControlPosition.RIGHT_TOP] = [];
+            this.controls[google.maps.ControlPosition.LEFT_BOTTOM] = [];
+            this.controls[google.maps.ControlPosition.RIGHT_BOTTOM] = [];
 
             this.initHealth(user.state, user.attrs);
             this.initFood(user.state, user.attrs);
@@ -23,6 +30,9 @@ define(['bs'], function($) {
             this.initNotifications();
 
             this.initStatics();
+
+            // My default to the hybrid view.
+            this.setControls(user.map);
         },
 
         update: function(state, attrs) {
@@ -37,10 +47,14 @@ define(['bs'], function($) {
             var current = $('#notifications-num');
             if (current.length > 0 && num === 0) {
                 current.remove();
-            } else if (current.length > 0 && current.text() != num) {
+            } else if (current.length > 0 && current.text() != String(num)) {
+                if (parseInt(current.text()) < num) {
+                    $('#notifications').shake();
+                }
                 current.text(num);
             } else if (current.length === 0 && num !== 0) {
                 $('#notifications pre').append('<span id="notifications-num" class="badge">' + num + '</span>');
+                $('#notifications').shake();
             }
 
         },
@@ -53,28 +67,29 @@ define(['bs'], function($) {
             var healthDiv = document.createElement('div');
             healthDiv.setAttribute('id', 'health');
             healthDiv.innerHTML = '<pre class="control"><i style="color: red;" class="fa fa-heart"></i><span>' + this.round(state.cHealth) + ' / ' + this.round(attrs.tHealth) + '</span></pre>';
-            user.map.controls[google.maps.ControlPosition.LEFT_TOP].push(healthDiv);
+
+            this.controls[google.maps.ControlPosition.LEFT_TOP].push(healthDiv);
         },
 
         initFood: function(state, attrs) {
             var foodDiv = document.createElement('div');
             foodDiv.setAttribute('id', 'food');
             foodDiv.innerHTML = '<pre class="control"><i style="color: #8397D2;" class="fa fa-cutlery"></i><span>' + this.round(state.cFood) + ' / ' + this.round(attrs.tFood) + '</span></pre>';
-            user.map.controls[google.maps.ControlPosition.LEFT_TOP].push(foodDiv);
+            this.controls[google.maps.ControlPosition.LEFT_TOP].push(foodDiv);
         },
 
         initWealth: function(state, attrs) {
             var wealthDiv = document.createElement('div');
             wealthDiv.setAttribute('id', 'wealth');
             wealthDiv.innerHTML = '<pre class="control"><i style="color: green;" class="fa fa-usd"></i><span>' + this.round(state.cWealth) + '</span></pre>';
-            user.map.controls[google.maps.ControlPosition.LEFT_TOP].push(wealthDiv);
+            this.controls[google.maps.ControlPosition.LEFT_TOP].push(wealthDiv);
         },
 
         initLevel: function(state, attrs) {
             var levelDiv = document.createElement('div');
             levelDiv.setAttribute('id', 'level');
             levelDiv.innerHTML = '<pre class="control"><i style="color: #FFCC00;" class="fa fa-trophy"></i><span id="level-text">Level ' + state.level + '</span></pre>';
-            user.map.controls[google.maps.ControlPosition.LEFT_TOP].push(levelDiv);
+            this.controls[google.maps.ControlPosition.LEFT_TOP].push(levelDiv);
         },
 
         initZoom: function() {
@@ -101,7 +116,7 @@ define(['bs'], function($) {
                 user.map.setZoom(user.map.getZoom() - 1);
             });
 
-            user.map.controls[google.maps.ControlPosition.RIGHT_TOP].push(zoomDiv);
+            this.controls[google.maps.ControlPosition.RIGHT_TOP].push(zoomDiv);
         },
 
         initCenter: function() {
@@ -113,58 +128,60 @@ define(['bs'], function($) {
                 user.map.panTo(user.marker.getPosition());
             });
 
-            user.map.controls[google.maps.ControlPosition.RIGHT_TOP].push(centerDiv);
+            this.controls[google.maps.ControlPosition.RIGHT_TOP].push(centerDiv);
         },
 
         initMapView: function() {
             var mapViewDiv = document.createElement('div');
             mapViewDiv.setAttribute('id', 'mapView');
 
-            var mapViewSatelliteHtml = '<i class="fa fa-fw fa-map"></i>';
+            var mapViewHybridHtml = '<i class="fa fa-fw fa-map"></i>';
             var mapViewStreetHtml = '<i class="fa fa-fw fa-street-view"></i>';
             var mapViewRoadHtml = '<i class="fa fa-fw fa-road"></i>';
 
-            // Satellite by default.
-            var mapView = 'satellite';
+            // Hybrid by default.
+            var mapView = 'hybrid';
             mapViewDiv.innerHTML = '<pre class="control actionable-control">' + mapViewStreetHtml + '</pre>';
 
             // Rotate between the 3 formats.
             google.maps.event.addDomListener(mapViewDiv, 'click', function() {
 
                 if (panorama === null) {
-                    // Just once.
                     panorama = user.map.getStreetView();
-                    panorama.addListener('visible_changed', function(visibility) {
-                        if (panorama.getVisible() === false) {
-
-                            // Update the user position with the current panorama position.
-                            user.marker.setPosition(panorama.getPosition());
-                            user.marker.setVisible(true);
-                            mapView = 'road';
-                            user.map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
-                            $('#mapView pre').html(mapViewSatelliteHtml);
-                        }
-                    }.bind(this));
                 }
 
-                if (mapView === 'satellite') {
-
+                if (mapView === 'hybrid') {
                     // Set the panorama to the user position.
+
                     panorama.setPosition(user.marker.getPosition());
                     user.marker.setVisible(false);
                     panorama.setVisible(true);
+
+                    // We need to refresh them. Apparently they get lost.
+                    this.setControls(user.map.getStreetView());
                     mapView = 'street';
                     $('#mapView pre').html(mapViewRoadHtml);
                 } else if (mapView === 'street') {
-                    // Managed above.
+                    // Update the user position with the current panorama position.
+
+                    user.marker.setPosition(panorama.getPosition());
+                    user.marker.setVisible(true);
+                    panorama.setVisible(false);
+
+                    // We need to refresh them. Apparently they get lost.
+                    this.setControls(user.map);
+                    mapView = 'road';
+                    user.map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+                    $('#mapView pre').html(mapViewHybridHtml);
                 } else {
-                    mapView = 'satellite';
+                    // This is from roadmap to hybrid.
+                    mapView = 'hybrid';
                     user.map.setMapTypeId(google.maps.MapTypeId.HYBRID);
                     $('#mapView pre').html(mapViewStreetHtml);
                 }
             }.bind(this));
 
-            user.map.controls[google.maps.ControlPosition.RIGHT_TOP].push(mapViewDiv);
+            this.controls[google.maps.ControlPosition.RIGHT_TOP].push(mapViewDiv);
         },
 
         initNotifications: function() {
@@ -176,7 +193,7 @@ define(['bs'], function($) {
                 $('#map').trigger('notification:toggle');
             });
 
-            user.map.controls[google.maps.ControlPosition.RIGHT_TOP].push(notificationsDiv);
+            this.controls[google.maps.ControlPosition.RIGHT_TOP].push(notificationsDiv);
         },
 
         initStatics: function() {
@@ -196,7 +213,7 @@ define(['bs'], function($) {
                  form.submit();
             });
 
-            user.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(githubDiv);
+            this.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(githubDiv);
 
             // Twitter.
             var twitterDiv = document.createElement('div');
@@ -213,7 +230,22 @@ define(['bs'], function($) {
                  form.submit();
             });
 
-            user.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(twitterDiv);
+            this.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(twitterDiv);
+        },
+
+        /**
+         * Param name is map although it can be a {Map} or a {StreetViewPanorama}
+         */
+        setControls: function(mapRef) {
+
+            // It is already structured by its position.
+            for (var side in this.controls) {
+                if (this.controls.hasOwnProperty(side)) {
+                    for (var i in this.controls[side]) {
+                        mapRef.controls[side].push(this.controls[side][i]);
+                    }
+                }
+            }
         }
     };
 
