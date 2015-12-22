@@ -1,10 +1,16 @@
 define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function($, Const, External, Icon, InfoWindow, StoryFree) {
 
-    // This contains the game instructions, they are attached to the first steps of the game.
+    // This contains the game instructions, ordered by how important they are to understand how the game works.
     var instructions = [
-        'Zoom out to see more points of interest',
-        'You can see your energy <i style="color: #8397D2;" class="fa fa-cutlery"></i> in the top left screen corner, it decreases over time, don\'t starve'
+        'Zoom out to see more nearby places',
+        'Move to new areas to reveal new places',
+        'Your energy <i style="color: #8397D2;" class="fa fa-cutlery"></i> is in the top left corner, it decreases over time, eat regularly or you will die',
+        '<i style="color: red;" class="fa fa-fw fa-heart"></i> is your health. Restaurants or hospitals are good places to recover it',
+        'You can switch to other map views using <i style="color: #f5f5f5;" class="fa fa-fw fa-street-view"></i>',
+        'Center the map to your location with <i style="color: black;" class="fa fa-fw fa-arrows"></i>',
+        'If you are being chased using the street view you will probably get caught and punched'
     ];
+    var instructionsInterval;
 
     var initPromise = $.Deferred();
 
@@ -59,14 +65,19 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
 
         infoPersonWindow: null,
 
+        /**
+         * Returns the initialisation promise.
+         *
+         * It might be already resolved if the story sets a fixed initial
+         * position, otherwise we need to wait until we get user input.
+         */
         init: function() {
-
-            // Delegate to the story if it has any specific action to perform.
-            this.story.init();
-
             return initPromise;
         },
 
+        /**
+         * Sets the inital game position. This is when the game really starts.
+         */
         setPosition: function(position) {
 
             // Set the user position and center there the map.
@@ -75,14 +86,21 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
             this.map.getStreetView().setPosition(position);
 
             // After zoom and center is set.
-            var text = 'Hey, first time I see you around, welcome! Explore the city but take care, there is some dodgy people here.';
-            this.addInfoPerson(position, text);
+            var text = 'Hey! You look exactly like my dead son! Are you new in the city? I should adopt you, keep my phone number, I will contact you.';
+            this.addInfoPerson(position, text, function() {
+                $('#map').trigger('notification:add', {
+                    from: 'Chuck Norris',
+                    message: 'Explore the city for a while, I hope you survive... catch you later amigou',
+                });
+            });
+
+            this.addGameTips();
 
             // Let other components know that we already have the position.
             initPromise.resolve(position);
         },
 
-        addInfoPerson: function(userPosition, message) {
+        addInfoPerson: function(userPosition, message, callback) {
 
             // The info guy should appear close enough to the user and inside the map bounds.
             var bounds = this.map.getBounds();
@@ -106,8 +124,14 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
                 zIndex: 7
             });
             marker.setAnimation(google.maps.Animation.BOUNCE);
+
             marker.addListener('click', function() {
                 this.user.moveTo(marker.getPosition(), function() {
+
+                    // Clickable just once.
+                    google.maps.event.clearInstanceListeners(marker);
+                    marker.setClickable(false);
+
                     // Show info, stop animation and remove the marker after
                     // 15 secs, considering 15 secs enough for the user to see the message.
                     this.openInfoWindow(marker, name, html, this.infoPersonWindow);
@@ -116,7 +140,10 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
                     setTimeout(function() {
                         this.cleanGarbage();
                         this.infoPersonWindow.setMap(null);
-                    }.bind(this), 15000);
+                        if (typeof callback !== "undefined") {
+                            callback();
+                        }
+                    }.bind(this), 10000);
                 }.bind(this));
             }.bind(this));
         },
@@ -194,9 +221,6 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
             if (step.hint) {
                 this.addStepHint(step);
             }
-
-            // Add a game tip if there is one.
-            this.addGameTip();
 
             // Click listener.
             marker.addListener('click', function(e) {
@@ -300,21 +324,34 @@ define(['bs', 'Const', 'External', 'Icon', 'InfoWindow', 'story/Free'], function
             }.bind(this), 500);
         },
 
+        addGameTips: function() {
+
+            // A small timeout, would be easier for the user to notice the notification shake if we delay this a bit.
+            setTimeout(function() {
+
+                // The first one should be quick.
+                this.addGameTip();
+
+                // Send game tips every X seconds.
+                var instructionsInterval = setInterval(function() {
+                    // Add a game tip if there is one.
+                    this.addGameTip();
+                }.bind(this), Const.instructionsInterval);
+            }.bind(this), 2000);
+        },
+
         addGameTip: function() {
 
-            index = this.story.currentStep;
-
-            if (typeof instructions[index] === "undefined") {
+            if (instructions.length == 0) {
+                clearInterval(instructionsInterval);
                 return;
             }
 
             // Bit of timeout to make it look real.
-            setTimeout(function() {
-                $('#map').trigger('notification:add', {
-                    from: 'Game tip',
-                    message: instructions[index]
-                });
-            }, 1000);
+            $('#map').trigger('notification:add', {
+                from: 'Game tip',
+                message: instructions.shift()
+            });
         }
     };
 

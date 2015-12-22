@@ -43,8 +43,8 @@ define(['bs'], function($) {
          */
         add: function(ev, notification) {
 
-            // TODO I will improve this if I expect more than 100 notifications :P
-            var uniqid = Math.floor(Math.random() * 1000);
+            // We need them sorted by time added. I would improve this if I would expect many notifications.
+            var uniqid = Date.now() + Math.floor(Math.random() * 1000);
             this.notifications[uniqid] = notification;
 
             // Hide it as it might be opened and show non updated results, the proper
