@@ -17,8 +17,6 @@ define(['jquery', 'Icon', 'StoryStep'], function($, Icon, StoryStep) {
 
         zoom: 18,
 
-        currentStep: null,
-
         user: null,
         game: null,
 
@@ -33,24 +31,6 @@ define(['jquery', 'Icon', 'StoryStep'], function($, Icon, StoryStep) {
             console.error('getTheEnd should be overwriten');
             return '';
         },
-
-        getNextStep: function() {
-            if (this.currentStep === null) {
-                this.currentStep = 0;
-            } else {
-                this.currentStep++;
-            }
-
-            if (typeof this.steps[this.currentStep] === "undefined") {
-                return false;
-            }
-
-            // Provide data to the step.
-            this.steps[this.currentStep].setUser(this.user);
-            this.steps[this.currentStep].setGame(this.game);
-
-            return this.steps[this.currentStep];
-        }
     };
 
     return StoryBase;

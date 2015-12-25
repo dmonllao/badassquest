@@ -25,6 +25,7 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
             wealth: [ActionSteal, ActionFight],
             hackable: [ActionHack],
             food: [ActionFood, ActionExtort, ActionBuy],
+            institution: [ActionCure]
         };
 
         this.poiTypes = {
@@ -34,13 +35,15 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
             bank: 'wealth',
             atm: 'hackable',
             restaurant: 'food',
-            bar: 'food'
+            bar: 'food',
+            point_of_interest: 'institution'
         };
 
         // This list should be slow as there is 1 place API query for each element.
         this.searchGroups = [
             ['hospital', 'doctor', 'bank', 'atm'],
-            ['restaurant', 'bar']
+            ['restaurant', 'bar'],
+            ['establishment']
         ];
 
         $('#game-action').on('hidden.bs.modal', function (e) {

@@ -3,7 +3,7 @@ define(['jquery', 'InfoWindow'], function($, InfoWindow) {
     function StoryStep(data) {
 
         if (data.position) {
-            this.position = data.position;
+            this.position = new google.maps.LatLng(data.position);
         }
         if (data.name) {
             this.name = data.name;

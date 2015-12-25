@@ -16,7 +16,7 @@ define(['jquery', 'story/Base', 'UI', 'Icon', 'InfoWindow', 'StoryStep', 'Foe'],
             new StoryStep({
                 name: 'Random witness',
                 placeid: 'ChIJL_U8syG7MioRJxobWh5So7k',
-                position: new google.maps.LatLng(-31.94822952, 115.84812641),
+                position: {lat: -31.94822952, lng: 115.84812641},
                 hint: {
                     from: 'Waiter',
                     message: 'The witness waits for you there'
@@ -28,20 +28,20 @@ define(['jquery', 'story/Base', 'UI', 'Icon', 'InfoWindow', 'StoryStep', 'Foe'],
             // Just custom data, no need to point to real places.
             new StoryStep({
                 name: 'Perth Police Station',
-                position: new google.maps.LatLng(-31.946606, 115.852482),
+                position: {lat: -31.946606, lng: 115.852482},
                 icon: Icon.getByType('police'),
                 info: 'That sounds bad mate, second case this week. This is the other family address, you can support each other, go see them.'
             }),
             new StoryStep({
                 name: 'The Robinsons house',
-                position: new google.maps.LatLng(-31.935394209989067, 115.86165815591812),
+                position: {lat: -31.935394209989067, lng: 115.86165815591812},
                 icon: Icon.getByType('home'),
                 info: 'Yesterday I received a phone call, don\'t tell anyone, I am too scared to go alone, please come with me; I\'ve marked the position in the map.'
             }),
             // process attr contains the action workflow.
             new StoryStep({
                 name: '???',
-                position: new google.maps.LatLng(-31.94608420088298, 115.88047921657562),
+                position: {lat: -31.94608420088298, lng: 115.88047921657562},
                 icon: Icon.getByFont('EXCLAMATION'),
                 cleanStep: true,
                 info: '<p>Gimme all you have you cunts!</p>' + UI.renderActionButtons([

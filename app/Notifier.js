@@ -10,7 +10,7 @@ define(['bs'], function($) {
         $('#map').on('notification:toggle', this.toggle.bind(this));
 
         // We need the control to be loaded.
-        google.maps.event.addListener(this.map, 'idle', function() {
+        google.maps.event.addListenerOnce(this.map, 'idle', function() {
             $('#notifications').popover({
                 delay: {show: 500, hide: 100},
                 html: true,

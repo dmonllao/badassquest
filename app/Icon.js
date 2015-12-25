@@ -44,7 +44,12 @@ define(['fontawesome'], function(fontawesome) {
         food: {
             icon: fontawesome.markers.CUTLERY,
             color: 'grey'
+        },
+        interest: {
+            icon: fontawesome.markers.UNIVERSITY,
+            color: 'blue'
         }
+
     };
 
     return {
