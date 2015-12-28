@@ -35,14 +35,13 @@ define(['bs', 'UI', 'action/Base', 'Generator'], function($, UI, ActionBase, Gen
         }
     ];
 
-    function ActionFood(user, game, marker, poiData) {
-        ActionBase.call(this, user, game, marker, poiData);
+    function ActionFood(user, game, poiData, marker) {
+        ActionBase.call(this, user, game, poiData, marker);
 
         this.food = Generator.getRandomElement(randomFood);
 
         return this;
     }
-
     ActionFood.prototype = Object.create(ActionBase.prototype);
     ActionFood.prototype.constructor = ActionFood;
 
@@ -133,6 +132,7 @@ define(['bs', 'UI', 'action/Base', 'Generator'], function($, UI, ActionBase, Gen
 
             // Just paying is not "awesome".
             this.user.addExperience(foodImportance * 4);
+            this.doneCallback();
 
         }.bind(this));
 
@@ -146,6 +146,7 @@ define(['bs', 'UI', 'action/Base', 'Generator'], function($, UI, ActionBase, Gen
             });
 
             this.user.addExperience(foodImportance * 10);
+            this.doneCallback();
 
             if (!this.isUserFollowed()) {
                 $('#food-info').html("<p>You escaped and nobody followed you!</p>");

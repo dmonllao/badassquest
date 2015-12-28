@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'InfoWindow', 'StepsChain', 'story/Free', 'story/PerthUnderground'], function($, Const, InfoWindow, StepsChain, StoryFree, StoryPerthUnderground) {
+define(['bs', 'Const', 'Map', 'InfoWindow', 'StepsChain', 'story/Free', 'story/PerthUnderground'], function($, Const, Map, InfoWindow, StepsChain, StoryFree, StoryPerthUnderground) {
 
     // This contains the game instructions, ordered by how important they are to understand how the game works.
     var instructions = [
@@ -14,8 +14,7 @@ define(['bs', 'Const', 'InfoWindow', 'StepsChain', 'story/Free', 'story/PerthUnd
 
     var initPromise = $.Deferred();
 
-    function StoryManager(placesService, map, game, user) {
-        this.placesService = placesService;
+    function StoryManager(map, game, user) {
         this.map = map;
         this.game = game;
         this.user = user;
@@ -46,9 +45,9 @@ define(['bs', 'Const', 'InfoWindow', 'StepsChain', 'story/Free', 'story/PerthUnd
         }
 
         if (this.story.steps.length > 0) {
-            this.stepsChain = new StepsChain(this.placesService, this.map, this.game, this.user,
+            var stepsChain = new StepsChain(this.map, this.game, this.user,
                 this.story.steps, this.gameCompleted.bind(this));
-            this.stepsChain.setStepLocation();
+            stepsChain.setStepLocation();
         }
 
         return this;
@@ -59,9 +58,6 @@ define(['bs', 'Const', 'InfoWindow', 'StepsChain', 'story/Free', 'story/PerthUnd
         map: null,
         game: null,
         user: null,
-        placesService: null,
-
-        stepsChain: null,
 
         story: null,
 
@@ -203,8 +199,7 @@ define(['bs', 'Const', 'InfoWindow', 'StepsChain', 'story/Free', 'story/PerthUnd
             // Bit of timeout to make it look real.
             $('#map').trigger('notification:add', {
                 from: 'Game tip',
-                message: instructions.shift(),
-                notimportant: true
+                message: instructions.shift()
             });
         },
 

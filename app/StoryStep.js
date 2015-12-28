@@ -14,13 +14,20 @@ define(['jquery', 'InfoWindow'], function($, InfoWindow) {
         if (data.placeid) {
             this.placeid = data.placeid;
         }
-        if (data.hint) {
-            this.hint = data.hint;
+
+        if (data.infoMessage) {
+            this.infoMessage = data.infoMessage;
+        }
+        if (data.doneMessage) {
+            this.doneMessage = data.doneMessage;
+        }
+        if (data.reward) {
+            this.reward = data.reward;
         }
 
         // Info to be displayed, might change during the step life.
-        if (data.info) {
-            this.info = data.info;
+        if (data.content) {
+            this.content = data.content;
         }
 
         if (data.cleanStep) {
@@ -45,7 +52,10 @@ define(['jquery', 'InfoWindow'], function($, InfoWindow) {
         name: null,
         icon: null,
         placeid: null,
-        hint: null,
+
+        infoMessage: null,
+        doneMessage: null,
+        reward: null,
 
         // Step process, a single function to manage everything, on complex workflows
         // would probably need to set new attributes.
@@ -61,8 +71,8 @@ define(['jquery', 'InfoWindow'], function($, InfoWindow) {
         completedCallback: null,
 
         // Info to display when the user clicks on the marker, this might change during
-        // the step depending on its needs. Unset if no info should be displayed.
-        info: null,
+        // the step depending on its needs. Unset if no content should be displayed.
+        content: null,
 
         setCompletedCallback: function(callback) {
             this.completedCallback = callback;
@@ -76,15 +86,15 @@ define(['jquery', 'InfoWindow'], function($, InfoWindow) {
             this.game = game;
         },
 
-        getInfo: function() {
-            return this.info;
+        getContents: function() {
+            return this.content;
         },
 
         execute: function() {
             if (this.process !== null) {
-                return this.process();
+                return this.process(this.complete.bind(this));
             }
-            // If the step does not pass any execute function we just mark as completed.
+            // If the step does not pass any execute function just mark as completed.
             this.complete();
         },
 
@@ -94,7 +104,14 @@ define(['jquery', 'InfoWindow'], function($, InfoWindow) {
 
         complete: function() {
             this.completed = true;
-            this.completedCallback();
+
+            if (this.reward) {
+                this.user.updateState({
+                    cWealth: this.user.state.cWealth + parseInt(this.reward)
+                });
+            }
+
+            this.completedCallback(this);
         },
 
         isCompleted: function() {

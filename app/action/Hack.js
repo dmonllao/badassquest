@@ -16,15 +16,15 @@ define(['bs', 'Generator', 'UI', 'Foe', 'action/Steal'], function($, Generator, 
         }
     ];
 
-    ActionHack.prototype = Object.create(ActionSteal.prototype);
-
-    function ActionHack(user, game, marker, poiData) {
-        ActionSteal.call(this, user, game, marker, poiData);
+    function ActionHack(user, game, poiData, marker) {
+        ActionSteal.call(this, user, game, poiData, marker);
 
         this.scenario = Generator.getRandomElement(randomScenarios);
 
         return this;
     }
+    ActionHack.prototype = Object.create(ActionSteal.prototype);
+    ActionHack.prototype.constructor = ActionHack;
 
     // This holds the randomly selected scenario.
     ActionHack.prototype.scenario = null;

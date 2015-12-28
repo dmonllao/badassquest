@@ -18,8 +18,59 @@ define(['Const'], function(Const) {
         'Look what you have done! You will burn in hell',
         'Hey hey look at him! You should be ashamed!',
         'I will tell your mother you like to destroy people\'s lives',
-        'He who laughs last laughs best, we will see you dead!'
+        'He who laughs last laughs best, we will see you dead!',
+        'You bad ass',
     ];
+
+    /**
+     * Mission titles should be unique! We are using array map to retrieve an index from the mission title.
+     */
+    var missions = {
+        ActionSteal: [
+            {
+                title: 'Pink underwear',
+                infoMessage: 'I need underwear for...a friend! Go and steal it for me, I will pay you.',
+                doneMessage: 'So naughty... this is exactly what I wanted.',
+            }, {
+                title: 'Monkey crane',
+                infoMessage: 'I saw in the news that they got a monkey crane, I want it for my private collection!',
+                doneMessage: 'hehehe, thanks. There it is, your reward.'
+            }
+        ],
+        ActionFight: [
+            {
+                title: 'Burn cockburn burn',
+                infoMessage: 'Mr Cockburn owes me a lot of money and they don\'t want to pay, I want them dead.',
+                doneMessage: 'Another one bites the dust. You are a good bad ass mate, thanks.',
+            }, {
+                title: 'Defense',
+                infoMessage: 'I\'ve heard that Joselito the owner wants to kill me, I need you to kill him before me',
+                doneMessage: 'Yeah, that was close...'
+            }
+        ],
+        ActionExtort: [
+            {
+                title: 'Just extortion',
+                infoMessage: 'Check out this place, I need you to get my money back.',
+                doneMessage: 'Well done mate, take some money for you. You will get more money next time.',
+            }, {
+                title: 'Protection',
+                infoMessage: 'I offered them protection and they refused, I think that we should be more persuasive, do you understand me?...',
+                doneMessage: 'This is what I meant :)'
+            }
+        ],
+        ActionBuy: [
+            {
+                title: 'Just a house',
+                infoMessage: 'Police is after me, I need you to buy it and register it at your name.',
+                doneMessage: 'That was good, I will see you there.',
+            }, {
+                title: 'Expanding the area',
+                infoMessage: 'I want to expand my influence in this area, go and buy this for me.',
+                doneMessage: 'Good good good, see you around.'
+            }
+        ]
+    };
 
     return {
 
@@ -308,6 +359,31 @@ define(['Const'], function(Const) {
 
             // Minimum 3 reroutes.
             return Math.max(3, randomized);
+        },
+
+        getRandomMission: function(user, actionType) {
+            if (typeof missions[actionType.name] === "undefined") {
+                console.error('No missions available for ' + actionType.name + ' action');
+                return null;
+            }
+
+            if (missions[actionType.name].length === 0) {
+                return null;
+            }
+
+            var actionMissions = missions[actionType.name];
+            var mission = this.getRandomElement(actionMissions);
+
+            // Remove the mission from the list of available missions.
+            var index = actionMissions.map(function(e) { return e.title; }).indexOf(mission.title);
+            actionMissions.splice(index, 1);
+
+            return mission;
+        },
+
+        getRandomReward: function(user) {
+            // TODO Too lazy to think about this now :P
+            return user.state.level * 10;
         }
     };
 });

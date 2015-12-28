@@ -1,18 +1,14 @@
 define(['bs', 'Generator', 'Icon', 'Foe', 'action/Base'], function($, Generator, Icon, Foe, ActionBase) {
 
-    ActionFight.prototype = Object.create(ActionBase.prototype);
-
-    function ActionFight(user, game, marker, poiData) {
-        ActionBase.call(this, user, game, marker, poiData);
+    function ActionFight(user, game, poiData, marker) {
+        ActionBase.call(this, user, game, poiData, marker);
 
         this.foes = Generator.foes(this.poiData);
 
         return this;
     }
-
-    ActionFight.prototype.getActionType = function() {
-        return 'game-action';
-    }
+    ActionFight.prototype = Object.create(ActionBase.prototype);
+    ActionFight.prototype.constructor = ActionFight;
 
     ActionFight.prototype.getVisibleName = function() {
         return 'Kill\'em all';
@@ -35,7 +31,10 @@ define(['bs', 'Generator', 'Icon', 'Foe', 'action/Base'], function($, Generator,
                 user: this.user,
                 foes: this.foes,
                 location: this.poiData.vicinity,
-                wonCallback: this.markAsDone.bind(this)
+                wonCallback: function() {
+                    this.markAsDone();
+                    this.doneCallback();
+                }.bind(this)
             };
             this.game.state.start('Fight', true, false, args);
 

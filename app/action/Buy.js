@@ -1,11 +1,11 @@
 define(['bs', 'Const', 'Util', 'Generator', 'UI', 'action/Base'], function($, Const, Util, Generator, UI, ActionBase) {
 
-    ActionBuy.prototype = Object.create(ActionBase.prototype);
-
-    function ActionBuy(user, game, marker, poiData) {
-        ActionBase.call(this, user, game, marker, poiData);
+    function ActionBuy(user, game, poiData, marker) {
+        ActionBase.call(this, user, game, poiData, marker);
         return this;
     }
+    ActionBuy.prototype = Object.create(ActionBase.prototype);
+    ActionBuy.prototype.constructor = ActionBuy;
 
     ActionBuy.prototype.getVisibleName = function() {
         return 'Buy it';
@@ -35,7 +35,7 @@ define(['bs', 'Const', 'Util', 'Generator', 'UI', 'action/Base'], function($, Co
 
         // Once we have the header we concat the body and resolve the renderer promise.
         headerPromise.done(function(html) {
-            html = html + '<div id="buy-info" class="info-box">' + text + '</div>' +
+            html = html + '<div id="buy-info" class="info-box"><p>' + text + '</p>' +
             UI.renderActionButtons([
                 {
                     id: 'buy',
@@ -44,7 +44,7 @@ define(['bs', 'Const', 'Util', 'Generator', 'UI', 'action/Base'], function($, Co
                     id: 'cancel',
                     text: 'I don\'t want it'
                 }
-            ]);
+            ]) + '</div>';
             rendererPromise.resolve(html);
         }.bind(this));
 
@@ -69,11 +69,17 @@ define(['bs', 'Const', 'Util', 'Generator', 'UI', 'action/Base'], function($, Co
             // Some experience based on the price, but not much.
             this.user.addExperience(Math.round(this.poiPrice / 100));
 
-            this.user.addProperty({
-                poiData: this.poiData,
-                marker: this.marker,
-                revenue: this.poiRevenue
-            });
+            // During missions the property there is no marker, the property is
+            // not yours.
+            if (this.marker) {
+                this.user.addProperty({
+                    poiData: this.poiData,
+                    marker: this.marker,
+                    revenue: this.poiRevenue
+                });
+            }
+
+            this.doneCallback();
 
         }.bind(this));
 

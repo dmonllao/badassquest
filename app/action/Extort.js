@@ -1,11 +1,11 @@
 define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base'], function($, Util, Generator, Foe, UI, ActionBase) {
 
-    ActionExtort.prototype = Object.create(ActionBase.prototype);
-
-    function ActionExtort(user, game, marker, poiData) {
-        ActionBase.call(this, user, game, marker, poiData);
+    function ActionExtort(user, game, poiData, marker) {
+        ActionBase.call(this, user, game, poiData, marker);
         return this;
     }
+    ActionExtort.prototype = Object.create(ActionBase.prototype);
+    ActionExtort.prototype.constructor = ActionExtort;
 
     ActionExtort.prototype.tax = null;
 
@@ -90,11 +90,17 @@ define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base'], function($, Util
     ActionExtort.prototype.extorted = function() {
         this.user.addExperience(this.tax * 2);
         this.markAsDone();
-        this.user.addExtortion({
-            poiData: this.poiData,
-            marker: this.marker,
-            amount: this.tax
-        });
+
+        this.doneCallback();
+
+        // Only if there is a marker.
+        if (this.marker) {
+            this.user.addExtortion({
+                poiData: this.poiData,
+                marker: this.marker,
+                amount: this.tax
+            });
+        }
     };
 
     return ActionExtort;

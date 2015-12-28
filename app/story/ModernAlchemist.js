@@ -13,10 +13,10 @@ define(['jquery', 'story/Base', 'Icon', 'StoryStep'], function($, StoryBase, Ico
         // Setting them in here as google.maps will already be available.
         this.steps = [
             new StoryStep({
-                info: 'The dog poes, which makes you happy. Now you can return to the city, one less walk before going to Sarah\'s home'
+                content: 'The dog poes, which makes you happy. Now you can return to the city, one less walk before going to Sarah\'s home'
             }),
             new StoryStep({
-                info: 'Thanks ' + this.user.playerName + '. Spike looks very happy, I\'m sure that he discharged a big one. How are you? I\'ve heard that you are having clients in nearby villages, that is good, but don\'t forget about us. With these $50 I pay you all I owed you. See you soon.',
+                content: 'Thanks ' + this.user.playerName + '. Spike looks very happy, I\'m sure that he discharged a big one. How are you? I\'ve heard that you are having clients in nearby villages, that is good, but don\'t forget about us. With these $50 I pay you all I owed you. See you soon.',
                 process: function() {
                     this.user.updateState({
                         cWealth: this.state.cWealth + 50
@@ -24,7 +24,7 @@ define(['jquery', 'story/Base', 'Icon', 'StoryStep'], function($, StoryBase, Ico
                 }
             }),
             new StoryStep({
-                info: ''
+                content: ''
             }),
         ];
     }

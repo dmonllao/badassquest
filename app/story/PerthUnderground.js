@@ -17,26 +17,26 @@ define(['jquery', 'story/Base', 'UI', 'Icon', 'InfoWindow', 'StoryStep', 'Foe'],
                 name: 'Random witness',
                 placeid: 'ChIJL_U8syG7MioRJxobWh5So7k',
                 position: {lat: -31.94822952, lng: 115.84812641},
-                hint: {
+                preMessage: {
                     from: 'Waiter',
                     message: 'The witness waits for you there'
                 },
                 icon: Icon.getByType('idea'),
                 cleanStep: true,
-                info: 'I haven\'t really seen anything, just someone running. Probably worth going to the police station.'
+                content: 'I haven\'t really seen anything, just someone running. Probably worth going to the police station.'
             }),
             // Just custom data, no need to point to real places.
             new StoryStep({
                 name: 'Perth Police Station',
                 position: {lat: -31.946606, lng: 115.852482},
                 icon: Icon.getByType('police'),
-                info: 'That sounds bad mate, second case this week. This is the other family address, you can support each other, go see them.'
+                content: 'That sounds bad mate, second case this week. This is the other family address, you can support each other, go see them.'
             }),
             new StoryStep({
                 name: 'The Robinsons house',
                 position: {lat: -31.935394209989067, lng: 115.86165815591812},
                 icon: Icon.getByType('home'),
-                info: 'Yesterday I received a phone call, don\'t tell anyone, I am too scared to go alone, please come with me; I\'ve marked the position in the map.'
+                content: 'Yesterday I received a phone call, don\'t tell anyone, I am too scared to go alone, please come with me; I\'ve marked the position in the map.'
             }),
             // process attr contains the action workflow.
             new StoryStep({
@@ -44,7 +44,7 @@ define(['jquery', 'story/Base', 'UI', 'Icon', 'InfoWindow', 'StoryStep', 'Foe'],
                 position: {lat: -31.94608420088298, lng: 115.88047921657562},
                 icon: Icon.getByFont('EXCLAMATION'),
                 cleanStep: true,
-                info: '<p>Gimme all you have you cunts!</p>' + UI.renderActionButtons([
+                content: '<p>Gimme all you have you cunts!</p>' + UI.renderActionButtons([
                         {
                             id: 'pay',
                             text: 'Do as he said'
@@ -85,8 +85,8 @@ define(['jquery', 'story/Base', 'UI', 'Icon', 'InfoWindow', 'StoryStep', 'Foe'],
                             user: this.user,
                             foes: [foe],
                             wonCallback: function() {
-                                this.info = 'Please, don\'t hurt me.'
-                                this.infoWindow.setContent(this.info + ' I have no idea where your children are, I just hear the guys talking in Northbridge.');
+                                this.content = 'Please, don\'t hurt me.'
+                                this.infoWindow.setContent(this.content + ' I have no idea where your children are, I just hear the guys talking in Northbridge.');
                                 this.complete()
                                 $('#game-action').modal('hide');
                             }.bind(this)
@@ -104,7 +104,7 @@ define(['jquery', 'story/Base', 'UI', 'Icon', 'InfoWindow', 'StoryStep', 'Foe'],
             new StoryStep({
                 placeid: 'ChIJI0gEfSm7MioR7yWId2npZcg',
                 icon: Icon.getByType('institution'),
-                info: 'Finished.'
+                content: 'Finished.'
             })
         ];
     }

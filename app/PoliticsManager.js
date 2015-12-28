@@ -1,10 +1,11 @@
-define(['bs', 'Const', 'Generator', 'Map'], function($, Const, Generator, Map) {
+define(['bs', 'Const', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSet'], function($, Const, Icon, Generator, PoiTypes, Map, MissionsSet) {
 
     var adminLevels = ['locality', 'administrative_area_level_3', 'administrative_area_level_2', 'administrative_area_level_1', 'country'];
 
-    function PoliticsManager(placesService, map, user) {
-        this.placesService = placesService;
+    function PoliticsManager(map, game, user) {
+        this.placesService = Map.getPlacesService();
         this.map = map;
+        this.game = game;
         this.user = user;
 
         this.geocoder = Map.getGeocoder();
@@ -18,6 +19,7 @@ define(['bs', 'Const', 'Generator', 'Map'], function($, Const, Generator, Map) {
         placesService: null,
         geocoder: null,
         map: null,
+        game: null,
         user: null,
 
         politics: {},
@@ -28,19 +30,68 @@ define(['bs', 'Const', 'Generator', 'Map'], function($, Const, Generator, Map) {
                 return false;
             }
 
+            // Add all politics at this level.
             for (var i in this.politics[newLevel]) {
+
                 var politic = this.politics[newLevel][i];
+                var iconPromise = Generator.getRandomPersonImage();
+                var completedCallback = function() {
+                    $('#map').trigger('notification:add', {
+                        from: politic.name,
+                        message: 'Hey bad ass, I get retired. I want you to be my successor, you deserve it. See you.'
+                    });
+                };
 
-                $('#map').trigger('notification:add', {
-                    from: politic.name + ' - ' + politic.location + ' capo',
-                    message: 'Hi, how are ya mate?',
-                    callback: function() {
-                        alert('your mother');
-                    }
+                var placesPromise = this.getPlaces(newLevel);
+
+                // Too many binds required.
+                var self = this;
+
+                $.when(iconPromise, placesPromise)
+                .done(function(icon, places) {
+                    $('#map').trigger('notification:add', {
+                        from: politic.name + ' - ' + politic.location + ' capo',
+                        message: 'Hi, I\'ve heard you are a bad ass, you should work for me. Reply as soon as possible.',
+                        callback: function() {
+                            var missions = new MissionsSet(self.map, self.game, self.user, politic.name, icon, completedCallback.bind(this));
+                            missions.create(places);
+                        }
+                    });
+                })
+                .fail(function() {
+                    return;
                 });
-
-                console.log(politic);
             }
+        },
+
+        getPlaces: function(level) {
+            var promise = $.Deferred();
+
+            this.placesService.nearbySearch({
+                location: this.user.marker.getPosition(),
+                radius: 4000,
+                types: PoiTypes.getMissionsTypes()
+            }, function(places, status) {
+                if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+                    console.error('No results getting politics places');
+                    promise.reject();
+                    return;
+                } else if (status !== google.maps.places.PlacesServiceStatus.OK) {
+                    console.log('PlacesService error: ' + status);
+                    promise.reject();
+                    return;
+                }
+
+                // The length depends on the level where the politician contacts you.
+                var limits = PoiTypes.getMissionLimits(level);
+                for (var i in places) {
+                    // TODO Apply limits. 
+                }
+                promise.resolve(places);
+
+            }.bind(this));
+
+            return promise;
         },
 
         setPolitics: function(position) {
@@ -95,6 +146,7 @@ define(['bs', 'Const', 'Generator', 'Map'], function($, Const, Generator, Map) {
          *
          * We decide here, when setPolitics is called, what level
          * would need the user to be contacted by the politic.
+         *
          * @param {String} type Politic area of control.
          * @param {String} location An address (read setPolitics, quite fragile)
          */

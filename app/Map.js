@@ -31,14 +31,23 @@ define(['MapOptions', 'InfoWindow', 'epoly', 'infobox'], function(MapOptions, In
             if (map === null) {
                 console.error('PlacesService can not be initalised, the map is not ready.');
             }
+
+            if (placesService !== null) {
+                return placesService;
+            }
+
             placesService = new google.maps.places.PlacesService(map);
             return placesService;
         },
 
         getGeocoder: function() {
+
+            if (geocoder !== null) {
+                return geocoder;
+            }
+
             geocoder = new google.maps.Geocoder();
             return geocoder;
-
         }
     }
 });

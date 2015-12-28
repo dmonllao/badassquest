@@ -20,7 +20,7 @@ define(['bs'], function($) {
             });
 
             $('#notifications').on('shown.bs.popover', function () {
-                // Who cares about performance.
+                // Who cares about performance :P
                 $('.notification').off('click');
                 $('.notification').on('click', this.clickNotification.bind(this));
             }.bind(this));

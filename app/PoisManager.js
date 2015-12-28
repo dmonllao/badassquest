@@ -1,50 +1,17 @@
-define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food', 'action/Steal', 'action/Hack', 'action/Fight', 'action/Extort', 'action/Buy', 'External', 'Icon'], function($, Const, UI, Util, InfoWindow, ActionCure, ActionFood, ActionSteal, ActionHack, ActionFight, ActionExtort, ActionBuy, External, Icon) {
+define(['bs', 'PoiTypes', 'Map', 'Const', 'UI', 'Util', 'InfoWindow', 'External', 'Icon'], function($, PoiTypes, Map, Const, UI, Util, InfoWindow, External, Icon) {
 
     var enableButtons = function(position) {
         $('.start-action').attr('disabled', false);
     };
 
-    /**
-     * Actions available even after you bought them.
-     * @type {Array}
-     */
-    var propertyActions = ["ActionCure", "ActionFood"];
-
-    function PoisManager(placesService, map, game, user) {
-        this.placesService = placesService;
+    function PoisManager(map, game, user) {
+        this.placesService = Map.getPlacesService();
         this.map = map;
         this.game = game;
         this.user = user;
 
         // Now that google.maps is available.
         this.infoWindow = InfoWindow.getInstance();
-
-        this.typeActions = {
-            health: [ActionCure],
-            shop: [ActionSteal, ActionExtort, ActionBuy],
-            wealth: [ActionSteal, ActionFight],
-            hackable: [ActionHack],
-            food: [ActionFood, ActionExtort, ActionBuy],
-            institution: [ActionCure]
-        };
-
-        this.poiTypes = {
-            hospital: 'health',
-            doctor: 'health',
-            shopping_mall: 'shop',
-            bank: 'wealth',
-            atm: 'hackable',
-            restaurant: 'food',
-            bar: 'food',
-            point_of_interest: 'institution'
-        };
-
-        // This list should be slow as there is 1 place API query for each element.
-        this.searchGroups = [
-            ['hospital', 'doctor', 'bank', 'atm'],
-            ['restaurant', 'bar'],
-            ['establishment']
-        ];
 
         $('#game-action').on('hidden.bs.modal', function (e) {
 
@@ -76,12 +43,6 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
 
         // @type {google.maps.InfoWindow}
         infoWindow: null,
-
-        // Maps our own POI to actions.
-        typeActions: {},
-
-        // Maps POIs types to our own types.
-        poiTypes: {},
 
         // Bypass for addNearbyPois.
         getNearbyPois: function(ev) {
@@ -117,11 +78,12 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
 
             this.showLoading();
 
-            for (var i in this.searchGroups) {
+            var searchGroups = PoiTypes.getSearchGroups();
+            for (var i in searchGroups) {
                 this.placesService.nearbySearch({
                     location: position,
                     radius: Const.poisRadius,
-                    types: this.searchGroups[i],
+                    types: searchGroups[i],
                 }, this.addPois.bind(this));
             }
         },
@@ -155,7 +117,7 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
             var marker = new google.maps.Marker({
                 map: this.map,
                 position: data.geometry.location,
-                icon: Icon.get(data.types, this.poiTypes, 0.5),
+                icon: Icon.get(data.types, PoiTypes.get(), 0.5),
                 zIndex: 1
             });
             this.markers[data.place_id] = {
@@ -172,6 +134,7 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
         showPlaceDetails: function(data, marker) {
 
             var request = {placeId: data.place_id};
+            var propertyActions = PoiTypes.getPropertyActions();
 
             // Ok, I don't like this, but I don't want 30 bind(this).
             var self = this;
@@ -231,36 +194,7 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
 
                         // Get the selected action.
                         var action = actions[ev.target.id.substr(10)];
-
-                        // Get whether the action is text based or a game.
-                        var actionType = action.getActionType();
-
-                        if (actionType === "game-action") {
-                            action.start();
-
-                        } else if (actionType === "text-action") {
-                            // Render the selected action.
-
-                            self.showLoading();
-
-                            // Actions may include async calls.
-                            promise = action.render();
-                            promise.done(function(html) {
-
-                                if (!html) {
-                                    $('#text-action').modal('hide');
-                                    return;
-                                }
-
-                                // Promises returned by action's render methods should just return an HTML string.
-                                document.getElementById('text-action-content').innerHTML = html;
-
-                                // Notify the action that html has been rendered.
-                                if (typeof action.rendered === 'function') {
-                                    action.rendered();
-                                }
-                            });
-                        }
+                        action.start();
                     });
                 });
             });
@@ -272,7 +206,8 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
          */
         getTypesList: function() {
             var list = [];
-            $.each(this.poiTypes, function(index, object) {
+            var poiTypes = PoiTypes.get();
+            $.each(poiTypes, function(index, object) {
                 list.push(index);
             });
             return list;
@@ -280,24 +215,12 @@ define(['bs', 'Const', 'UI', 'Util', 'InfoWindow', 'action/Cure', 'action/Food',
 
         getActions: function(placeTypes, poiData, marker) {
 
-            // Picking the first valid one.
-            var poiType = null;
-            for(var i = 0; i < placeTypes.length; i++) {
-                if (this.poiTypes.hasOwnProperty(placeTypes[i])) {
-                    poiType = this.poiTypes[placeTypes[i]];
-                    break;
-                }
-            }
-
-            if (poiType === null || typeof this.typeActions[poiType] === "undefined") {
-                console.error('No place type found for placetypes ' + placeTypes.join(','));
-                return [];
-            }
+            var typeActions = PoiTypes.getActions(placeTypes);
 
             // We create the instances here.
             var instances = [];
-            for(var i = 0; i < this.typeActions[poiType].length; i++) {
-                var action = new this.typeActions[poiType][i](this.user, this.game, marker, poiData);
+            for(var i = 0; i < typeActions.length; i++) {
+                var action = new typeActions[i](this.user, this.game, poiData, marker);
                 instances.push(action);
             }
             return instances;

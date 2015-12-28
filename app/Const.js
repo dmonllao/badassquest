@@ -27,7 +27,7 @@ define(function() {
         closePosition: 20,
         closePositionPissed: 80,
         politicLevels: {
-            locality: 3,
+            locality: 2,
             administrative_area_level_3: 4,
             administrative_area_level_2: 5,
             administrative_area_level_1: 6,

@@ -1,10 +1,13 @@
 define(['bs', 'Generator', 'Icon'], function($, Generator, Icon) {
 
-    function ActionBase(user, game, marker, poiData) {
+    function ActionBase(user, game, poiData, marker) {
         this.user = user;
         this.game = game;
-        this.marker = marker;
         this.poiData = poiData;
+        this.marker = marker;
+
+        this.doneCallback = function(){};
+
         return this;
     }
 
@@ -13,6 +16,14 @@ define(['bs', 'Generator', 'Icon'], function($, Generator, Icon) {
         user: null,
         game: null,
         poiData: null,
+
+        doneCallback: null,
+
+        /**
+         * The marker is not always available, when the action is part of a
+         * mission the StepChain has control over the marker.
+         */
+        marker: null,
 
         shopKeeperImage: null,
 
@@ -26,14 +37,32 @@ define(['bs', 'Generator', 'Icon'], function($, Generator, Icon) {
             return '';
         },
 
-        /**
-         * The action type.
-         *
-         * It can be text-action or game-action depending on whether a new game
-         * state is defined to complete the action or just html based interactions.
-         */
-        getActionType: function() {
-            return 'text-action';
+        start: function(doneCallback) {
+
+            // It does not necessarily has a value.
+            if (doneCallback) {
+                this.doneCallback = doneCallback;
+            }
+
+            // Actions may include async calls.
+            var promise = this.render();
+            promise.done(function(html) {
+
+                if (!html) {
+                    return;
+                }
+
+                // Promises returned by action's render methods should just return an HTML string.
+                document.getElementById('text-action-content').innerHTML = html;
+
+                $('#text-action').modal('show');
+
+                // Notify the action that html has been rendered.
+                if (typeof this.rendered === 'function') {
+                    this.rendered();
+                }
+            }.bind(this));
+
         },
 
         render: function() {
@@ -78,6 +107,11 @@ define(['bs', 'Generator', 'Icon'], function($, Generator, Icon) {
          * by doneIcon.
          */
         markAsDone: function() {
+
+            // The marker might be null if this action is part of a mission.
+            if (!this.marker) {
+                return;
+            }
 
             // Clear the marker.
             this.marker.setIcon({

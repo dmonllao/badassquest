@@ -6,9 +6,6 @@ define(['bs', 'Map', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManage
     // @param {google.maps.Map}
     var map = Map.init();
 
-    // @param {google.maps.PlacesService}
-    var placesService = Map.getPlacesService();
-
     // @type {User} The current user.
     var user = new User(map, 'Juanito', 'img/mushroom2.png');
 
@@ -19,17 +16,17 @@ define(['bs', 'Map', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManage
     var game = appGame.getInstance();
 
     // @type {StoryManager}
-    var storyManager = new StoryManager(placesService, map, game, user);
+    var storyManager = new StoryManager(map, game, user);
     var storyInit = storyManager.init();
 
     // @param {ChaseTracker}
     var chaseTracker = new ChaseTracker(map, user);
 
     // @type {PoisManager}
-    var poisManager = new PoisManager(placesService, map, game, user);
+    var poisManager = new PoisManager(map, game, user);
 
     // @type {PoliticsManager}
-    var politicsManager = new PoliticsManager(placesService, map, user);
+    var politicsManager = new PoliticsManager(map, game, user);
 
     // Move the user to a new position.
     map.addListener('click', function(e) {

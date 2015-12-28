@@ -16,15 +16,15 @@ define(['bs', 'Generator', 'Foe', 'action/Base'], function($, Generator, Foe, Ac
         }
     ];
 
-    ActionSteal.prototype = Object.create(ActionBase.prototype);
-
-    function ActionSteal(user, game, marker, poiData) {
-        ActionBase.call(this, user, game, marker, poiData);
+    function ActionSteal(user, game, poiData, marker) {
+        ActionBase.call(this, user, game, poiData, marker);
 
         this.scenario = Generator.getRandomElement(randomScenarios);
 
         return this;
     }
+    ActionSteal.prototype = Object.create(ActionBase.prototype);
+    ActionSteal.prototype.constructor = ActionSteal;
 
     // This holds the randomly selected scenario.
     ActionSteal.prototype.scenario = null;
@@ -81,6 +81,7 @@ define(['bs', 'Generator', 'Foe', 'action/Base'], function($, Generator, Foe, Ac
 
             // You get the experience even if they catch you.
             this.user.addExperience(lootImportance * 20);
+            this.doneCallback();
 
         }.bind(this));
     };

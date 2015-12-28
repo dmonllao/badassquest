@@ -1,7 +1,7 @@
-define(['bs', 'External', 'Icon', 'InfoWindow'], function($, External, Icon, InfoWindow) {
+define(['bs', 'External', 'Icon', 'InfoWindow', 'Map'], function($, External, Icon, InfoWindow, Map) {
 
-    function StepsChain(placesService, map, game, user, steps, completedCallback) {
-        this.placesService = placesService;
+    function StepsChain(map, game, user, steps, completedCallback) {
+        this.placesService = Map.getPlacesService();
         this.map = map;
         this.game = game;
         this.user = user;
@@ -105,9 +105,6 @@ define(['bs', 'External', 'Icon', 'InfoWindow'], function($, External, Icon, Inf
                 step.position = placeData.geometry.location;
             }
 
-            // To execute it after the step is completed.
-            step.setCompletedCallback(this.stepCompleted.bind(this));
-
             var marker = new google.maps.Marker({
                 map: this.map,
                 title: step.name,
@@ -118,8 +115,8 @@ define(['bs', 'External', 'Icon', 'InfoWindow'], function($, External, Icon, Inf
             marker.setAnimation(google.maps.Animation.BOUNCE);
 
             // Steps may specify hints.
-            if (step.hint) {
-                this.addStepHint(step);
+            if (step.infoMessage) {
+                this.addNotification(step.infoMessage, step.position);
             }
 
             // Click listener.
@@ -130,20 +127,17 @@ define(['bs', 'External', 'Icon', 'InfoWindow'], function($, External, Icon, Inf
                     // Clean previous steps garbage.
                     this.cleanGarbage();
 
-                    // We show info if required, this might be pre-completed info, post-completed info or any
+                    // We show content if required, this might be pre-completed info, post-completed info or any
                     // info during the step process.
-                    var contents = step.getInfo();
+                    var contents = step.getContents();
                     if (contents) {
                         this.openInfoWindow(marker, step.name, contents, step.infoWindow);
                     }
 
-                    // It only makes sense when the step is uncompleted, the step must control what should be shown
-                    // depending on its internal status.
-                    if (!step.isCompleted()) {
-                        step.execute();
-                    }
+                    // We add this here as a var as we need to access the marker var which
+                    // is not available in the step nor outside this context.
+                    var stepCompleteCallback = function(step) {
 
-                    if (step.isCompleted()) {
                         marker.setAnimation(null);
 
                         // The step can decide whether the marker is removed or not.
@@ -152,7 +146,19 @@ define(['bs', 'External', 'Icon', 'InfoWindow'], function($, External, Icon, Inf
                             // have to deal with onClose infoWindow.
                             this.markersGarbage.push(marker);
                         }
+
+                        this.stepCompleted(step);
+                    }.bind(this);
+
+                    // To execute it after the step is completed.
+                    step.setCompletedCallback(stepCompleteCallback.bind(this));
+
+                    // It only makes sense when the step is uncompleted, the step must control what should be shown
+                    // depending on its internal status.
+                    if (!step.isCompleted()) {
+                        step.execute(stepCompleteCallback);
                     }
+
                 }.bind(this));
             }.bind(this));
         },
@@ -164,7 +170,11 @@ define(['bs', 'External', 'Icon', 'InfoWindow'], function($, External, Icon, Inf
             }
         },
 
-        stepCompleted: function() {
+        stepCompleted: function(step) {
+
+            if (step.doneMessage) {
+                this.addNotification(step.doneMessage);
+            }
 
             var nextStep = this.getNextStep();
             if (nextStep) {
@@ -202,21 +212,28 @@ define(['bs', 'External', 'Icon', 'InfoWindow'], function($, External, Icon, Inf
             return infoWindow;
         },
 
-        addStepHint: function(step) {
+        addNotification: function(msgData, position) {
+
+            var callback = function(){};
+            if (position) {
+                callback = function() {
+                    if (this.map.getCenter().distanceFrom(position) > 300) {
+                        // Show both current location and position
+                        var bounds = new google.maps.LatLngBounds();
+                        bounds.extend(this.map.getCenter());
+                        bounds.extend(position);
+                        this.map.fitBounds(bounds);
+                    } else {
+                        this.map.panTo(position);
+                    }
+                }.bind(this);
+            }
             // Bit of timeout to make it look real.
             setTimeout(function() {
                 $('#map').trigger('notification:add', {
-                    from: step.hint.from,
-                    message: step.hint.message,
-                    callback: function() {
-                        if (this.map.getCenter().distanceFrom(step.position) > 300) {
-                            // Show both current location and next step.
-                            var bounds = new google.maps.LatLngBounds(this.map.getCenter().toJSON(), step.position.toJSON());
-                            this.map.fitBounds(bounds);
-                        } else {
-                            this.map.panTo(step.position);
-                        }
-                    }.bind(this)
+                    from: msgData.from,
+                    message: msgData.message,
+                    callback: callback
                 });
             }.bind(this), 500);
         }

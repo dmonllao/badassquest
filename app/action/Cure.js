@@ -1,11 +1,11 @@
 define(['bs', 'action/Base'], function($, ActionBase) {
 
-    ActionCure.prototype = Object.create(ActionBase.prototype);
-
-    function ActionCure(user, game, marker, poiData) {
-        ActionBase.call(this, user, game, marker, poiData);
+    function ActionCure(user, game, poiData, marker) {
+        ActionBase.call(this, user, game, poiData, marker);
         return this;
     }
+    ActionCure.prototype = Object.create(ActionBase.prototype);
+    ActionCure.prototype.constructor = ActionCure;
 
     ActionCure.prototype.getVisibleName = function() {
         return 'Visit the doctor';
@@ -30,6 +30,8 @@ define(['bs', 'action/Base'], function($, ActionBase) {
             });
 
             this.user.addExperience(5);
+
+            this.doneCallback();
 
         }.bind(this));
 

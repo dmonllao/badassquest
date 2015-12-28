@@ -7,8 +7,8 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         this.photo = playerPhoto;
 
         this.state = {
-            cHealth: 80,
-            cFood: 2000,
+            cHealth: Const.initHealth,
+            cFood: Const.initFood,
             cWealth: 20,
             experience: 10,
             level: 1
@@ -29,7 +29,9 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         this.controls.init(this);
 
         // Notifications service.
-        this.notifier = new Notifier(this.map, this.controls);
+        setTimeout(function() {
+            this.notifier = new Notifier(this.map, this.controls);
+        }.bind(this), 1000);
 
         // People you piss off while playing.
         this.pissedOff = new PissedOffPeople(this.map, this);
@@ -375,12 +377,12 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
                 }
             }
 
+            $('text-action').modal('hide');
+            $('game-action').modal('hide');
+
             $('#status-title').html('Game over');
             $('#status-content').html('You died! <a href="' + window.location.href + '">Try again</a> loser.');
             $('#status').modal('show');
-
-            $('text-action').modal('hide');
-            $('game-action').modal('hide');
         }
 
     };
