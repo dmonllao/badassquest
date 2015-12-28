@@ -65,9 +65,12 @@ define(['bs'], function($) {
                     if (this.notifications.hasOwnProperty(i)) {
                         var id = 'notification-' + i;
                         var text = this.notifications[i].message;
-                        content += '<div>' +
-                            '<b>' + this.notifications[i].from + ': </b>' +
-                            '<a href="#" class="notification" id="' + id + '">' + text + '</a></div>';
+
+                        var from = this.notifications[i].from + ': ';
+                        if (!this.notifications[i].notimportant) {
+                            from = '<strong>' + from + '</strong>';
+                        }
+                        content += '<div>' + from  + '<a href="#" class="notification" id="' + id + '">' + text + '</a></div>';
                     }
                 }
             }

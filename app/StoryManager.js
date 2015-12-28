@@ -6,7 +6,7 @@ define(['bs', 'Const', 'InfoWindow', 'StepsChain', 'story/Free', 'story/PerthUnd
         'Move to new areas to reveal new places',
         'Your energy <i style="color: #8397D2;" class="fa fa-cutlery"></i> is in the top left corner, it decreases over time, eat regularly or you will die',
         '<i style="color: red;" class="fa fa-fw fa-heart"></i> is your health. Restaurants or hospitals are good places to recover it',
-        'You can switch to other map views using <i style="color: #f5f5f5;" class="fa fa-fw fa-street-view"></i>',
+        'You can switch to other map views using <i style="color: black;" class="fa fa-fw fa-street-view"></i>',
         'Center the map to your location with <i style="color: black;" class="fa fa-fw fa-arrows"></i>',
         'If you are being chased using the street view you will probably get caught and punched'
     ];
@@ -203,7 +203,8 @@ define(['bs', 'Const', 'InfoWindow', 'StepsChain', 'story/Free', 'story/PerthUnd
             // Bit of timeout to make it look real.
             $('#map').trigger('notification:add', {
                 from: 'Game tip',
-                message: instructions.shift()
+                message: instructions.shift(),
+                notimportant: true
             });
         },
 
