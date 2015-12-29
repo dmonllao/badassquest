@@ -199,7 +199,8 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'StepsChain', 'story/Free', 'story/P
             // Bit of timeout to make it look real.
             $('#map').trigger('notification:add', {
                 from: 'Game tip',
-                message: instructions.shift()
+                message: instructions.shift(),
+                notimportant: true
             });
         },
 

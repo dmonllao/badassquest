@@ -1,5 +1,7 @@
 define(['bs'], function($) {
 
+    var emptyBoxText = 'Empty box';
+
     function Notifier(map, controls) {
 
         this.map = map;
@@ -8,24 +10,6 @@ define(['bs'], function($) {
         // All events based.
         $('#map').on('notification:add', this.add.bind(this));
         $('#map').on('notification:toggle', this.toggle.bind(this));
-
-        // We need the control to be loaded.
-        google.maps.event.addListenerOnce(this.map, 'idle', function() {
-            $('#notifications').popover({
-                delay: {show: 500, hide: 100},
-                html: true,
-                placement: 'left',
-                title: 'Messages',
-                trigger: 'manual'
-            });
-
-            $('#notifications').on('shown.bs.popover', function () {
-                // Who cares about performance :P
-                $('.notification').off('click');
-                $('.notification').on('click', this.clickNotification.bind(this));
-            }.bind(this));
-
-        }.bind(this));
 
         return this;
     }
@@ -36,6 +20,21 @@ define(['bs'], function($) {
         controls: null,
         notifications: [],
 
+        initPopover: function() {
+            $('#notifications').popover({
+                delay: {show: 500, hide: 100},
+                html: true,
+                placement: 'left',
+                title: 'Messages',
+                content: emptyBoxText,
+                trigger: 'manual'
+            });
+
+            $('#notifications').on('show.bs.popover', function () {
+                this.updateNotificationsContents();
+            }.bind(this));
+        },
+
         /**
          * Adds a new notification.
          *
@@ -43,40 +42,76 @@ define(['bs'], function($) {
          */
         add: function(ev, notification) {
 
+            // Adding it here as #notifications will be available.
+            if (!$('#notifications').data('bs.popover')) {
+                this.initPopover();
+            }
+
             // We need them sorted by time added. I would improve this if I would expect many notifications.
             var uniqid = Date.now() + Math.floor(Math.random() * 1000);
             this.notifications[uniqid] = notification;
 
-            // Hide it as it might be opened and show non updated results, the proper
-            // alternative would be to update the popover contents here.
-            $('#notifications').popover('hide');
+            // If notifications are currently shown we should update the contents.
+            this.updateNotificationsContents();
 
-            // Show popover.
-            this.controls.updateNotifications(this.getNumActiveNotifications());
+            // We need to force show as the popover should reposition itself even if it is already opened.
+            // No need to check this.updateNotificationsContents return as we are adding an item here.
+            $('#notifications').popover('show');
         },
 
         toggle: function() {
 
-            var content = '';
-            if (this.getNumActiveNotifications() === 0) {
-                content = 'Empty box';
-            } else {
-                for (var i in this.notifications) {
-                    if (this.notifications.hasOwnProperty(i)) {
-                        var id = 'notification-' + i;
-                        var text = this.notifications[i].message;
+            // Adding it here as #notifications will be available.
+            if (!$('#notifications').data('bs.popover')) {
+                this.initPopover();
+            }
+            $('#notifications').popover('toggle');
+        },
 
-                        var from = this.notifications[i].from + ': ';
-                        if (!this.notifications[i].notimportant) {
-                            from = '<strong>' + from + '</strong>';
-                        }
-                        content += '<div>' + from  + '<a href="#" class="notification" id="' + id + '">' + text + '</a></div>';
+        updateNotificationsContents: function() {
+
+            var content = '<div id="notifications-list">';
+            if (this.getNumActiveNotifications() === 0) {
+                content = emptyBoxText;
+            } else {
+                for (var uniqid in this.notifications) {
+                    if (this.notifications.hasOwnProperty(uniqid)) {
+                        content += this.getNotificationContents(this.notifications[uniqid], uniqid);
                     }
                 }
             }
+            content += '</div>';
 
             $('#notifications').data('bs.popover').options.content = content;
-            $('#notifications').popover('toggle');
+            $('#notifications').data('bs.popover').setContent();
+
+            this.controls.updateNotifications(this.getNumActiveNotifications());
+
+            // Ok, I'm a naughty boy... .notification items are already there
+            // but we need the new ones we just added in setContent() to be available.
+            // The alternative using shown.bs.popover is not working as shown is being
+            // triggered also during hidden.
+            setTimeout(function() {
+                $('.notification a').off('click');
+                $('.notification a').on('click', this.clickNotification.bind(this));
+            }.bind(this), 500);
+        },
+
+        getNotificationContents: function(notification, uniqid) {
+            var id = 'notification-' + uniqid;
+            var text = notification.message;
+
+            var div = '<div class="notification">';
+            if (!notification.notimportant) {
+                div += '<strong>';
+            }
+            div += notification.from + ': ' + '<a id="' + id + '">' + text + '</a>';
+            if (!notification.notimportant) {
+                div += '</strong>';
+            }
+            div += '</div>';
+
+            return div;
         },
 
         clickNotification: function(ev) {
@@ -95,9 +130,13 @@ define(['bs'], function($) {
             }
 
             delete this.notifications[index];
-            this.controls.updateNotifications(this.getNumActiveNotifications());
 
-            $('#notifications').popover('hide');
+            this.updateNotificationsContents();
+            if (this.getNumActiveNotifications() > 0) {
+                $('#notifications').popover('show');
+            } else {
+                $('#notifications').popover('hide');
+            }
         },
 
         getNumActiveNotifications: function() {

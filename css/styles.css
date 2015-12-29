@@ -204,8 +204,9 @@ pre.control span.badge {
     border-width: thick;
 }
 
-a.notification {
+.notification a {
     text-decoration: none;
+    cursor: pointer;
 }
 
 /** From bootstrap components .badge */
