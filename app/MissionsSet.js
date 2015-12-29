@@ -57,7 +57,7 @@ define(['bs', 'Const', 'StepsChain', 'StoryStep', 'InfoWindow', 'Generator', 'Po
             var reward = Generator.getRandomReward(this.user);
 
             // Add the reward to the info message.
-            missionData.infoMessage += ' Reward: $' + reward + '. Click to see location.';
+            missionData.infoMessage += 'There is a $' + reward + ' reward. Click to see where should you go.';
 
             return new StoryStep({
                 name: missionData.title,

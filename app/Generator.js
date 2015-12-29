@@ -62,7 +62,7 @@ define(['Const'], function(Const) {
         ActionBuy: [
             {
                 title: 'Just a house',
-                infoMessage: 'Police is after me, I need you to buy it and register it at your name.',
+                infoMessage: 'I need you to buy this place, but Police is after me, register it at your name.',
                 doneMessage: 'That was good, I will see you there.',
             }, {
                 title: 'Expanding the area',
