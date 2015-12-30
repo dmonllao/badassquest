@@ -1,11 +1,11 @@
-define(['jquery', 'Icon', 'StoryStep'], function($, Icon, StoryStep) {
+define(['jquery'], function($) {
 
     function StoryBase(user, game) {
         this.user = user;
         this.game = game;
 
         // Setting them in here as google.maps will already be available.
-        this.steps = [
+        this.missions = [
         ];
     }
 
@@ -20,7 +20,7 @@ define(['jquery', 'Icon', 'StoryStep'], function($, Icon, StoryStep) {
         user: null,
         game: null,
 
-        steps: null,
+        missions: null,
 
         getIntro: function() {
             console.error('getIntro should be overwriten');

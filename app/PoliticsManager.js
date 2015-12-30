@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSet'], function($, Const, Icon, Generator, PoiTypes, Map, MissionsSet) {
+define(['bs', 'Const', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSetGenerator'], function($, Const, Icon, Generator, PoiTypes, Map, MissionsSetGenerator) {
 
     var adminLevels = ['locality', 'administrative_area_level_3', 'administrative_area_level_2', 'administrative_area_level_1', 'country'];
 
@@ -53,8 +53,8 @@ define(['bs', 'Const', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSet'], f
                         from: politic.name + ' - ' + politic.location + ' capo',
                         message: 'Hi, I\'ve heard you are a bad ass, you should work for me. Reply as soon as possible.',
                         callback: function() {
-                            var missions = new MissionsSet(self.map, self.game, self.user, politic.name, icon, completedCallback.bind(this));
-                            missions.create(places);
+                            var missionsGenerator = new MissionsSetGenerator(self.map, self.game, self.user, politic.name, icon, completedCallback.bind(this));
+                            missionsGenerator.create(places);
                         }
                     });
                 })

@@ -1,4 +1,4 @@
-define(['jquery', 'story/Base', 'UI', 'Icon', 'InfoWindow', 'StoryStep', 'Foe'], function($, StoryBase, UI, Icon, InfoWindow, StoryStep, Foe) {
+define(['jquery', 'story/Base', 'UI', 'Icon', 'InfoWindow', 'Mission', 'Foe'], function($, StoryBase, UI, Icon, InfoWindow, Mission, Foe) {
 
     PerthUnderground.prototype = Object.create(StoryBase.prototype);
 
@@ -11,9 +11,9 @@ define(['jquery', 'story/Base', 'UI', 'Icon', 'InfoWindow', 'StoryStep', 'Foe'],
         this.initialPosition = {lat: -31.948357, lng: 115.8408308};
 
         // Setting them in here as google.maps will already be available.
-        this.steps = [
+        this.missions = [
             // Specify everything in here; name, position and icon have preference over the place ones.
-            new StoryStep({
+            new Mission({
                 name: 'Random witness',
                 placeid: 'ChIJL_U8syG7MioRJxobWh5So7k',
                 position: {lat: -31.94822952, lng: 115.84812641},
@@ -22,28 +22,28 @@ define(['jquery', 'story/Base', 'UI', 'Icon', 'InfoWindow', 'StoryStep', 'Foe'],
                     message: 'The witness waits for you there'
                 },
                 icon: Icon.getByType('idea'),
-                cleanStep: true,
+                cleanMission: true,
                 content: 'I haven\'t really seen anything, just someone running. Probably worth going to the police station.'
             }),
             // Just custom data, no need to point to real places.
-            new StoryStep({
+            new Mission({
                 name: 'Perth Police Station',
                 position: {lat: -31.946606, lng: 115.852482},
                 icon: Icon.getByType('police'),
                 content: 'That sounds bad mate, second case this week. This is the other family address, you can support each other, go see them.'
             }),
-            new StoryStep({
+            new Mission({
                 name: 'The Robinsons house',
                 position: {lat: -31.935394209989067, lng: 115.86165815591812},
                 icon: Icon.getByType('home'),
                 content: 'Yesterday I received a phone call, don\'t tell anyone, I am too scared to go alone, please come with me; I\'ve marked the position in the map.'
             }),
             // process attr contains the action workflow.
-            new StoryStep({
+            new Mission({
                 name: '???',
                 position: {lat: -31.94608420088298, lng: 115.88047921657562},
                 icon: Icon.getByFont('EXCLAMATION'),
-                cleanStep: true,
+                cleanMission: true,
                 content: '<p>Gimme all you have you cunts!</p>' + UI.renderActionButtons([
                         {
                             id: 'pay',
@@ -101,7 +101,7 @@ define(['jquery', 'story/Base', 'UI', 'Icon', 'InfoWindow', 'StoryStep', 'Foe'],
                 }
             }),
             // All poi data is contained in the place.
-            new StoryStep({
+            new Mission({
                 placeid: 'ChIJI0gEfSm7MioR7yWId2npZcg',
                 icon: Icon.getByType('institution'),
                 content: 'Finished.'

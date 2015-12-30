@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'Map', 'InfoWindow', 'StepsChain', 'story/Free', 'story/PerthUnderground'], function($, Const, Map, InfoWindow, StepsChain, StoryFree, StoryPerthUnderground) {
+define(['bs', 'Const', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'story/PerthUnderground'], function($, Const, Map, InfoWindow, MissionsChain, StoryFree, StoryPerthUnderground) {
 
     // This contains the game instructions, ordered by how important they are to understand how the game works.
     var instructions = [
@@ -20,7 +20,7 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'StepsChain', 'story/Free', 'story/P
         this.user = user;
         this.infoPersonWindow = InfoWindow.getInstance();
 
-        // TODO Hardcoded as this is supposed to cover all StoryStep API.
+        // TODO Hardcoded as this is supposed to cover all Mission API.
         //this.story = new StoryModernAlchemist(this.user, this.game);
         //this.story = new StoryPerthUnderground(this.user, this.game);
         this.story = new StoryFree(this.user, this.game);
@@ -28,7 +28,7 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'StepsChain', 'story/Free', 'story/P
         // Show intro text, attaching start up instructions.
         var content = '<h1 class="story-name">' + this.story.title + '</h1>' +
             '<div class="story-intro">' + this.story.getIntro() + '</div>' +
-            '<img src="' + this.user.photo + '" class="step-img img-responsive img-circle"/>';
+            '<img src="' + this.user.photo + '" class="mission-img img-responsive img-circle"/>';
 
         $('#text-action-content').html(content);
         $('#text-action').modal('show');
@@ -44,10 +44,10 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'StepsChain', 'story/Free', 'story/P
             this.story.getPosition(this.map, initPromise, this.setPosition.bind(this));
         }
 
-        if (this.story.steps.length > 0) {
-            var stepsChain = new StepsChain(this.map, this.game, this.user,
-                this.story.steps, this.gameCompleted.bind(this));
-            stepsChain.setStepLocation();
+        if (this.story.missions.length > 0) {
+            var missionsChain = new MissionsChain(this.map, this.game, this.user,
+                this.story.missions, this.gameCompleted.bind(this));
+            missionsChain.setMissionLocation();
         }
 
         return this;
@@ -111,7 +111,7 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'StepsChain', 'story/Free', 'story/P
             var distance = Math.round(google.maps.geometry.spherical.computeDistanceBetween(userPosition, bounds.getNorthEast()).toFixed() * 0.5);
             var chuckPosition = google.maps.geometry.spherical.computeOffset(userPosition, distance, 45);
 
-            var html = '<img class="step-img img-responsive img-circle" src="img/chuck.jpg"/><div>' + message + '</div>';
+            var html = '<img class="mission-img img-responsive img-circle" src="img/chuck.jpg"/><div>' + message + '</div>';
             // Chuck Norris will give you some info.
             var name = 'Chuck Norris';
             var marker = new google.maps.Marker({
@@ -150,7 +150,7 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'StepsChain', 'story/Free', 'story/P
         },
 
         /**
-         * Copied from the StepsChain.openInfoWindow one, but better to keep them separated
+         * Copied from the MissionsChain.openInfoWindow one, but better to keep them separated
          * we might want to change all the styling.
          */
         openInfo: function(marker, name, contents, infoWindow) {

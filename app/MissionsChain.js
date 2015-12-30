@@ -1,16 +1,16 @@
 define(['bs', 'External', 'Icon', 'InfoWindow', 'Map'], function($, External, Icon, InfoWindow, Map) {
 
-    function StepsChain(map, game, user, steps, completedCallback) {
+    function MissionsChain(map, game, user, missions, completedCallback) {
         this.placesService = Map.getPlacesService();
         this.map = map;
         this.game = game;
         this.user = user;
-        this.steps = steps;
+        this.missions = missions;
         this.completedCallback = completedCallback;
         return this;
     }
 
-    StepsChain.prototype = {
+    MissionsChain.prototype = {
         placesService: null,
         map: null,
         game: null,
@@ -18,22 +18,22 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'Map'], function($, External, Ic
 
         markersGarbage: [],
 
-        steps: [],
+        missions: [],
 
-        currentStep: null,
+        currentMission: null,
 
-        // Will run once the set of steps are completed.
+        // Will run once the set of missions are completed.
         completedCallback: null,
 
-        setStepLocation: function(step) {
+        setMissionLocation: function(mission) {
 
-            if (typeof step === "undefined") {
-                step = this.getNextStep();
+            if (typeof mission === "undefined") {
+                mission = this.getNextMission();
             }
 
             // Placeid is not required.
-            if (step.placeid) {
-                var request = {placeId: step.placeid};
+            if (mission.placeid) {
+                var request = {placeId: mission.placeid};
                 this.placesService.getDetails(request, function(placeData, status) {
 
                     if (status !== google.maps.places.PlacesServiceStatus.OK) {
@@ -41,33 +41,33 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'Map'], function($, External, Ic
                         return;
                     }
 
-                    this.addStepLocation(step, placeData);
+                    this.addMissionLocation(mission, placeData);
                 }.bind(this));
 
             } else {
-                this.addStepLocation(step);
+                this.addMissionLocation(mission);
             }
         },
 
-        getNextStep: function() {
-            if (this.currentStep === null) {
-                this.currentStep = 0;
+        getNextMission: function() {
+            if (this.currentMission === null) {
+                this.currentMission = 0;
             } else {
-                this.currentStep++;
+                this.currentMission++;
             }
 
-            if (typeof this.steps[this.currentStep] === "undefined") {
+            if (typeof this.missions[this.currentMission] === "undefined") {
                 return false;
             }
 
-            // Provide data to the step.
-            this.steps[this.currentStep].setUser(this.user);
-            this.steps[this.currentStep].setGame(this.game);
+            // Provide data to the mission.
+            this.missions[this.currentMission].setUser(this.user);
+            this.missions[this.currentMission].setGame(this.game);
 
-            return this.steps[this.currentStep];
+            return this.missions[this.currentMission];
         },
 
-        addStepLocation: function(step, placeData) {
+        addMissionLocation: function(mission, placeData) {
 
             // Just an "unideal" default.
             if (typeof placeData === "undefined") {
@@ -79,44 +79,44 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'Map'], function($, External, Ic
             }
 
             // Fallback to the poi marker.
-            if (step.icon === null) {
+            if (mission.icon === null) {
                 // Fallback again to the default icon.
-                step.icon = placeData.icon;
+                mission.icon = placeData.icon;
                 if (placeData.fakePlace) {
-                    console.error('If the step does not have a placeid you should specify a step icon');
+                    console.error('If the mission does not have a placeid you should specify a mission icon');
                 }
             }
 
             // Fallback to the poi name.
-            if (step.name === null) {
-                step.name = placeData.name;
+            if (mission.name === null) {
+                mission.name = placeData.name;
                 if (placeData.fakePlace) {
-                    console.error('If the step does not have a placeid you should specify a step name');
+                    console.error('If the mission does not have a placeid you should specify a mission name');
                 }
             }
 
             // Fallback to the poi position.
-            if (step.position === null) {
+            if (mission.position === null) {
                 if (placeData.fakePlace) {
                     // Here we return because this is a required param, we can not have a generic one.
-                    console.error('If the step does not have a placeid you should specify a step position');
+                    console.error('If the mission does not have a placeid you should specify a mission position');
                     return;
                 }
-                step.position = placeData.geometry.location;
+                mission.position = placeData.geometry.location;
             }
 
             var marker = new google.maps.Marker({
                 map: this.map,
-                title: step.name,
-                position: step.position,
-                icon: step.icon,
+                title: mission.name,
+                position: mission.position,
+                icon: mission.icon,
                 zIndex: 7
             });
             marker.setAnimation(google.maps.Animation.BOUNCE);
 
-            // Steps may specify hints.
-            if (step.infoMessage) {
-                this.addNotification(step.infoMessage, step.position);
+            // Missions may specify hints.
+            if (mission.infoMessage) {
+                this.addNotification(mission.infoMessage, mission.position);
             }
 
             // Click listener.
@@ -124,39 +124,39 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'Map'], function($, External, Ic
 
                 this.user.moveTo(e.latLng, function(position) {
 
-                    // Clean previous steps garbage.
+                    // Clean previous missions garbage.
                     this.cleanGarbage();
 
                     // We show content if required, this might be pre-completed info, post-completed info or any
-                    // info during the step process.
-                    var contents = step.getContents();
+                    // info during the mission process.
+                    var contents = mission.getContents();
                     if (contents) {
-                        this.openInfoWindow(marker, step.name, contents, step.infoWindow);
+                        this.openInfoWindow(marker, mission.name, contents, mission.infoWindow);
                     }
 
                     // We add this here as a var as we need to access the marker var which
-                    // is not available in the step nor outside this context.
-                    var stepCompleteCallback = function(step) {
+                    // is not available in the mission nor outside this context.
+                    var missionCompleteCallback = function(mission) {
 
                         marker.setAnimation(null);
 
-                        // The step can decide whether the marker is removed or not.
-                        if (step.cleanIt()) {
+                        // The mission can decide whether the marker is removed or not.
+                        if (mission.cleanIt()) {
                             // We will clean it after next point is reached as otherwise we would
                             // have to deal with onClose infoWindow.
                             this.markersGarbage.push(marker);
                         }
 
-                        this.stepCompleted(step);
+                        this.missionCompleted(mission);
                     }.bind(this);
 
-                    // To execute it after the step is completed.
-                    step.setCompletedCallback(stepCompleteCallback.bind(this));
+                    // To execute it after the mission is completed.
+                    mission.setCompletedCallback(missionCompleteCallback.bind(this));
 
-                    // It only makes sense when the step is uncompleted, the step must control what should be shown
+                    // It only makes sense when the mission is uncompleted, the mission must control what should be shown
                     // depending on its internal status.
-                    if (!step.isCompleted()) {
-                        step.execute(stepCompleteCallback);
+                    if (!mission.isCompleted()) {
+                        mission.execute(missionCompleteCallback);
                     }
 
                 }.bind(this));
@@ -165,22 +165,22 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'Map'], function($, External, Ic
 
         cleanGarbage: function() {
             for (var i in this.markersGarbage) {
-                // TODO We might want to clean step data too if garbage remains there.
+                // TODO We might want to clean mission data too if garbage remains there.
                 this.markersGarbage[i].setMap(null);
             }
         },
 
-        stepCompleted: function(step) {
+        missionCompleted: function(mission) {
 
-            if (step.doneMessage) {
-                this.addNotification(step.doneMessage);
+            if (mission.doneMessage) {
+                this.addNotification(mission.doneMessage);
             }
 
-            var nextStep = this.getNextStep();
-            if (nextStep) {
-                // Reveal next step.
+            var nextMission = this.getNextMission();
+            if (nextMission) {
+                // Reveal next mission.
                 // TODO Play sound.
-                this.setStepLocation(nextStep);
+                this.setMissionLocation(nextMission);
             } else {
                 this.completedCallback();
             }
@@ -197,7 +197,7 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'Map'], function($, External, Ic
                 '<div class="infowindow-content">' + contents + '</div>';
 
             // Add some wikipedia info if available.
-            //var promise = External.getWikipediaInfo(step.name);
+            //var promise = External.getWikipediaInfo(mission.name);
             //promise.done(function(article) {
                 //content += '<br/>' + article;
             //}).always(function() {
@@ -240,5 +240,5 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'Map'], function($, External, Ic
 
     };
 
-    return StepsChain;
+    return MissionsChain;
 });

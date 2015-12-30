@@ -1,6 +1,6 @@
 define(['jquery', 'InfoWindow'], function($, InfoWindow) {
 
-    function StoryStep(data) {
+    function Mission(data) {
 
         if (data.position) {
             this.position = new google.maps.LatLng(data.position);
@@ -30,8 +30,8 @@ define(['jquery', 'InfoWindow'], function($, InfoWindow) {
             this.content = data.content;
         }
 
-        if (data.cleanStep) {
-            this.cleanStep = data.cleanStep;
+        if (data.cleanMission) {
+            this.cleanMission = data.cleanMission;
         }
 
         if (data.process) {
@@ -41,7 +41,7 @@ define(['jquery', 'InfoWindow'], function($, InfoWindow) {
         return this;
     }
 
-    StoryStep.prototype = {
+    Mission.prototype = {
 
         user: null,
         game: null,
@@ -57,12 +57,12 @@ define(['jquery', 'InfoWindow'], function($, InfoWindow) {
         doneMessage: null,
         reward: null,
 
-        // Step process, a single function to manage everything, on complex workflows
+        // Mission process, a single function to manage everything, on complex workflows
         // would probably need to set new attributes.
         process: null,
 
         // Set to true to completely remove the step from the map once finished.
-        cleanStep: false,
+        cleanMission: false,
 
         // Is the step completed?.
         completed: false,
@@ -99,7 +99,7 @@ define(['jquery', 'InfoWindow'], function($, InfoWindow) {
         },
 
         cleanIt: function() {
-            return this.cleanStep;
+            return this.cleanMission;
         },
 
         complete: function() {
@@ -118,5 +118,5 @@ define(['jquery', 'InfoWindow'], function($, InfoWindow) {
             return this.completed;
         }
     };
-    return StoryStep;
+    return Mission;
 });

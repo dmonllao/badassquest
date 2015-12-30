@@ -1,37 +1,37 @@
 define(['bs', 'UI', 'action/Base', 'Generator'], function($, UI, ActionBase, Generator) {
 
-    // More or less, Health = price / 2 and Energy = price * 20.
+    // TODO Change this, but I'm not convinced how could depend on the user.
     var randomFood = [
         {
             name: 'Fish and chips',
             price: 10,
-            health: 5,
-            energy: 200
-        }, {
-            name: 'Serranito sandwich',
-            price: 10,
-            health: 5,
-            energy: 200
-        }, {
-            name: 'Burger',
-            price: 20,
             health: 10,
             energy: 400
         }, {
+            name: 'Serranito sandwich',
+            price: 10,
+            health: 10,
+            energy: 400
+        }, {
+            name: 'Burger',
+            price: 20,
+            health: 20,
+            energy: 800
+        }, {
             name: 'Pizza',
             price: 30,
-            health: 20,
-            energy: 500
+            health: 30,
+            energy: 1000
         }, {
             name: 'Paella',
             price: 40,
-            health: 25,
-            energy: 700
+            health: 40,
+            energy: 1500
         }, {
             name: 'Beef steak',
             price: 50,
-            health: 30,
-            energy: 1000
+            health: 50,
+            energy: 2000
         }
     ];
 

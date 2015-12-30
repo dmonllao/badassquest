@@ -25,10 +25,6 @@ define(function() {
                 },
                 closeBoxURL: ""
             };
-
-            this.stepStyles = {
-            };
-
         },
 
         getInstance: function() {

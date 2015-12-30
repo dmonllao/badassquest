@@ -21,7 +21,7 @@ define(['bs', 'Generator', 'Icon'], function($, Generator, Icon) {
 
         /**
          * The marker is not always available, when the action is part of a
-         * mission the StepChain has control over the marker.
+         * mission the MissionsChain has control over the marker.
          */
         marker: null,
 
