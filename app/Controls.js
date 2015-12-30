@@ -135,13 +135,13 @@ define(['bs'], function($) {
             var mapViewDiv = document.createElement('div');
             mapViewDiv.setAttribute('id', 'mapView');
 
-            var mapViewHybridHtml = '<i class="fa fa-fw fa-map"></i>';
-            var mapViewStreetHtml = '<i class="fa fa-fw fa-street-view"></i>';
             var mapViewRoadHtml = '<i class="fa fa-fw fa-road"></i>';
+            var mapViewStreetHtml = '<i class="fa fa-fw fa-street-view"></i>';
+            var mapViewHybridHtml = '<i class="fa fa-fw fa-map"></i>';
 
-            // Hybrid by default.
-            var mapView = 'hybrid';
-            mapViewDiv.innerHTML = '<pre class="control actionable-control">' + mapViewStreetHtml + '</pre>';
+            // Defaults.
+            var mapView = 'roadmap';
+            mapViewDiv.innerHTML = '<pre class="control actionable-control">' + mapViewHybridHtml + '</pre>';
 
             // Rotate between the 3 formats.
             google.maps.event.addDomListener(mapViewDiv, 'click', function() {

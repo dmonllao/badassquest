@@ -148,6 +148,8 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
 
         moveTo: function(position, destinationCallback) {
 
+            InfoWindow.closeAll();
+
             var destinationReachedCallback = function(reachedPosition) {
 
                 // Execute the provided callback.

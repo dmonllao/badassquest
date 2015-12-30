@@ -110,7 +110,7 @@ define(function() {
 
     function MapOptions() {
         // We want this here as we need google.maps to be available when this is called.
-        this.mapTypeId = google.maps.MapTypeId.HYBRID;
+        this.mapTypeId = google.maps.MapTypeId.ROADMAP;
     }
 
     MapOptions.prototype = {

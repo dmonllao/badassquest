@@ -15,7 +15,7 @@ define(['jquery', 'Icon', 'StoryStep'], function($, Icon, StoryStep) {
 
         initialPosition: null,
 
-        zoom: 18,
+        zoom: 17,
 
         user: null,
         game: null,
