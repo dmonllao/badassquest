@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'Util', 'Generator', 'UI', 'action/Base'], function($, Const, Util, Generator, UI, ActionBase) {
+define(['bs', 'Const', 'Util', 'Icon', 'Generator', 'UI', 'action/Base'], function($, Const, Util, Icon, Generator, UI, ActionBase) {
 
     function ActionBuy(user, game, poiData, marker) {
         ActionBase.call(this, user, game, poiData, marker);
@@ -69,14 +69,15 @@ define(['bs', 'Const', 'Util', 'Generator', 'UI', 'action/Base'], function($, Co
             // Some experience based on the price, but not much.
             this.user.addExperience(Math.round(this.poiPrice / 100));
 
-            // During missions the property there is no marker, the property is
-            // not yours.
+            // During missions there is no this.marker, the property is not yours.
             if (this.marker) {
                 this.user.addProperty({
                     poiData: this.poiData,
                     marker: this.marker,
                     revenue: this.poiRevenue
                 });
+
+                this.markAsDone(false, Icon.getByType('home'));
             }
 
             this.doneCallback();

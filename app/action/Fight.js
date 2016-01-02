@@ -32,7 +32,7 @@ define(['bs', 'Generator', 'Icon', 'Foe', 'action/Base'], function($, Generator,
                 foes: this.foes,
                 location: this.poiData.vicinity,
                 wonCallback: function() {
-                    this.markAsDone();
+                    this.markAsDone(true);
                     this.doneCallback();
                 }.bind(this)
             };

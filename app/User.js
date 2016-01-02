@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindow', 'PissedOffPeople', 'Icon'], function($, Const, Generator, Router, Controls, Notifier, InfoWindow, PissedOffPeople, Icon) {
+define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindow', 'PissedOffPeople', 'ControlledAreas', 'Icon'], function($, Const, Generator, Router, Controls, Notifier, InfoWindow, PissedOffPeople, ControlledAreas, Icon) {
 
     function User(map, playerName, playerPhoto) {
 
@@ -35,6 +35,9 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
 
         // People you piss off while playing.
         this.pissedOff = new PissedOffPeople(this.map, this);
+
+        // Manages the pois and areas the user controls.
+        this.controlledAreas = new ControlledAreas(this.map);
 
         // TODO A pause feature should stop this timer.
         this.timers.dropFood = setInterval(this.breathDropFood.bind(this), Const.breathDropInterval);
@@ -74,6 +77,8 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
 
         // @type {PissedOffPeople}
         pissedOff: null,
+
+        controlledAreas: null,
 
         properties: {},
         taxes: {},

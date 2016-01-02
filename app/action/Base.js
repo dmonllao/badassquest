@@ -103,26 +103,39 @@ define(['bs', 'Generator', 'Icon'], function($, Generator, Icon) {
         /**
          * Marks a poi as done.
          *
-         * Replaces the marker icon by a done icon which can be overwriten
-         * by doneIcon.
+         * @param {bool} pissedOff
+         * @param {icon:string|Icon|Symbol} icon
          */
-        markAsDone: function() {
+        markAsDone: function(pissedOff, icon) {
 
             // The marker might be null if this action is part of a mission.
             if (!this.marker) {
                 return;
             }
 
+            if (typeof icon === "undefined") {
+                // By default set it to the shop keeper's image.
+                icon = {
+                    url: this.shopKeeperImage,
+                    scaledSize: new google.maps.Size(40, 40)
+                };
+            }
+
             // Clear the marker.
-            this.marker.setIcon({
-                url: this.shopKeeperImage,
-                scaledSize: new google.maps.Size(40, 40)
-            });
+            this.marker.setIcon(icon);
             this.marker.setClickable(false);
             google.maps.event.clearInstanceListeners(this.marker);
 
-            // Add to pissed off markers.
-            this.user.pissedOff.add({
+            // Add to pissed off markers if specified.
+            if (pissedOff) {
+                this.user.pissedOff.add({
+                    marker: this.marker
+                });
+            }
+
+            // Add the marker to the user controlled pois.
+            this.user.controlledAreas.addPoi({
+                poiData: this.poiData,
                 marker: this.marker
             });
         },

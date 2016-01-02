@@ -89,7 +89,7 @@ define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base'], function($, Util
 
     ActionExtort.prototype.extorted = function() {
         this.user.addExperience(this.tax * 2);
-        this.markAsDone();
+        this.markAsDone(true);
 
         this.doneCallback();
 
