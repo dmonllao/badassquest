@@ -77,7 +77,7 @@ define(['bs', 'Const', 'Util', 'Icon', 'Generator', 'UI', 'action/Base'], functi
                     revenue: this.poiRevenue
                 });
 
-                this.markAsDone(false, Icon.getByType('home'));
+                this.markAsDone(false, Icon.getByType('home', 0.5));
             }
 
             this.doneCallback();

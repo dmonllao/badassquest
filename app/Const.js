@@ -24,7 +24,7 @@ define(function() {
         maxReRouteLimit: 5,
         maxLoot: 2000,
         picsNum: 100,
-        areasPositionsDistance: 300,
+        areasPositionsDistance: 600,
         closePosition: 20,
         closePositionPissed: 80,
         politicLevels: {

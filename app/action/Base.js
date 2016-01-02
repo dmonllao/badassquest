@@ -113,16 +113,16 @@ define(['bs', 'Generator', 'Icon'], function($, Generator, Icon) {
                 return;
             }
 
-            if (typeof icon === "undefined") {
+            if (icon === true) {
                 // By default set it to the shop keeper's image.
-                icon = {
-                    url: this.shopKeeperImage,
-                    scaledSize: new google.maps.Size(40, 40)
-                };
+                icon = Icon.getByType('done', 0.5);
+            }
+
+            if (icon) {
+                this.marker.setIcon(icon);
             }
 
             // Clear the marker.
-            this.marker.setIcon(icon);
             this.marker.setClickable(false);
             google.maps.event.clearInstanceListeners(this.marker);
 

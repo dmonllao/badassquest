@@ -258,7 +258,6 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         },
 
         addProperty: function(property) {
-            property.marker.setIcon(Icon.getByType('bought', 0.5));
             this.properties[property.poiData.place_id] = property;
         },
 

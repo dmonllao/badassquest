@@ -1,10 +1,6 @@
 define(['fontawesome'], function(fontawesome) {
 
     var typeIcons = {
-        bought: {
-            icon: fontawesome.markers.FLAG,
-            color: '#95c355'
-        },
         angry: {
             icon: fontawesome.markers.CLOUD,
             color: '#FF2821'
@@ -15,7 +11,11 @@ define(['fontawesome'], function(fontawesome) {
         },
         home: {
             icon: fontawesome.markers.HOME,
-            color: '#dfff98'
+            color: '#95c355'
+        },
+        done: {
+            icon: fontawesome.markers.FLAG,
+            color: '#95c355'
         },
         institution: {
             icon: fontawesome.markers.UNIVERSITY,

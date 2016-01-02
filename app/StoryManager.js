@@ -5,6 +5,7 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'stor
         'Zoom out to see more nearby places',
         'Move to new areas to reveal new places',
         'Your energy <i style="color: #8397D2;" class="fa fa-cutlery"></i> is in the top left corner, it decreases over time, eat regularly or you will die',
+        'You can control areas buying places or extorting and fighting people',
         '<i style="color: red;" class="fa fa-fw fa-heart"></i> is your health. Restaurants or hospitals are good places to recover it',
         'You can switch to other map views using <i style="color: black;" class="fa fa-fw fa-map"></i>',
         'Center the map to your location with <i style="color: black;" class="fa fa-fw fa-arrows"></i>',
