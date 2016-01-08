@@ -1,4 +1,4 @@
-define(['bs', 'Generator', 'Foe', 'action/Base'], function($, Generator, Foe, ActionBase) {
+define(['bs', 'Generator', 'Foe', 'UI', 'action/Base'], function($, Generator, Foe, UI, ActionBase) {
 
     // Difficulty is only there to make things easy later.
     var randomScenarios = [
@@ -45,7 +45,7 @@ define(['bs', 'Generator', 'Foe', 'action/Base'], function($, Generator, Foe, Ac
         headerPromise.done(function(html) {
             html = html + '<div id="steal-info" class="info-box">' +
                 '<p>You can steal $' + this.scenario.loot + ' here... There are ' + this.scenario.guards.length + ' guards... Looks like it would be ' + this.scenario.difficulty + '.' +
-                '<p><button id="run" class="btn btn-success"/>Steal the money and run!</button></p></div>';
+                '<p>' + UI.renderActionButtons([{id: 'run', text: 'Steal the money and run!'}]) + '</p></div>';
             rendererPromise.resolve(html);
 
         }.bind(this));

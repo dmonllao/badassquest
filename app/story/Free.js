@@ -11,7 +11,7 @@ define(['jquery', 'story/Base'], function($, StoryBase) {
         var text = '<div>Terrorize the city.</div>';
 
         if (navigator.geolocation) {
-            text += '<div><button id="my-location" class="btn btn-success">Use my location</button></div>' +
+            text += '<div><button id="my-location" class="btn btn-danger">Use my location</button></div>' +
                 '<div> - OR - </div>';
         }
 

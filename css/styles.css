@@ -4,7 +4,7 @@ html, body {
     padding: 0;
 }
 body {
-    background-color: #333;
+    background-color: #474747;
 }
 
 /* Loader spinner. */
@@ -57,19 +57,23 @@ body {
 }
 
 /** Game controls */
+button.btn,
 .control {
-    margin: 10px;
     font-weight: bolder;
     font-size: large;
-    color: #f5f5f5;
-    background-color: #474747;
-    border: 1px solid #f5f5f5;
 }
 
 @media screen and (max-width : 480px) {
+    button.btn,
     .control {
         font-size: x-small;
     }
+}
+.control {
+    color: #f5f5f5;
+    background-color: #474747;
+    border: 1px solid #f5f5f5;
+    margin: 10px;
 }
 
 /* For icon with text */
@@ -117,7 +121,7 @@ pre.control span.badge {
 
 .infowindow-wrapper {
     margin-top: 8px;
-    background: #333;
+    background: #474747;
     overflow: visible;
     border:2px solid black;
     -webkit-box-shadow: 0 0 8px #000;

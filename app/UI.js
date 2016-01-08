@@ -4,7 +4,7 @@ define(['bs'], function($) {
     return {
 
         getActionButtonStyle: function(index) {
-            var styles = ['btn-success', 'btn-warning', 'btn-primary', 'btn-info', 'btn-danger'];
+            var styles = ['btn-danger', 'btn-success', 'btn-warning', 'btn-primary', 'btn-info'];
             if (typeof styles[index] !== "undefined") {
                 return styles[index];
             }
