@@ -1,35 +1,34 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <title>Bad ass quest</title>
-    <link rel="stylesheet" href="styles.min.css">
-    <script async defer data-main="app" src="bower_components/requirejs/require.js"></script>
-
-  </head>
-  <body>
-    <div id="map">
-        <!-- Loading while map is not available -->
-        <i class="fa fa-circle-o-notch fa-spin fa-5x loading"></i>
-    </div>
-    <div id="text-action" class="modal fade">
-        <div class="modal-dialog">
-            <div id="text-action-content" class="text-center modal-content modal-body"></div>
+    <head>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+        <meta charset="utf-8">
+        <title>Bad ass quest</title>
+        <link rel="stylesheet" href="styles.min.css">
+        <script async defer data-main="app" src="bower_components/requirejs/require.js"></script>
+    </head>
+    <body>
+        <div id="map">
+            <!-- Loading while map is not available -->
+            <i class="fa fa-circle-o-notch fa-spin fa-5x loading"></i>
         </div>
-    </div>
-    <div id="game-action" class="game-container modal fade">
-        <div class="modal-dialog">
-            <div id="game-action-content" class="modal-content modal-body"></div>
-        </div>
-    </div>
-    <div id="status" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content modal-body text-center">
-                <h3 id="status-title"></h3>
-                <div id="status-content"></div>
+        <div id="text-action" class="modal fade">
+            <div class="modal-dialog">
+                <div id="text-action-content" class="text-center modal-content modal-body"></div>
             </div>
         </div>
-    </div>
-  </body>
+        <div id="game-action" class="game-container modal fade">
+            <div class="modal-dialog">
+                <div id="game-action-content" class="modal-content modal-body"></div>
+            </div>
+        </div>
+        <div id="status" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content modal-body text-center">
+                    <h3 id="status-title"></h3>
+                    <div id="status-content"></div>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>
