@@ -151,7 +151,14 @@ pre.control span.badge {
 
 .infowindow-content {
     margin: 70px 10px 15px 20px;
-    font-size: larger;
+    font-size: x-large;
+}
+
+@media only screen and (max-width: 767px) {
+    .infowindow-content {
+        margin: 70px 10px 15px 20px;
+        font-size: large;
+    }
 }
 
 .infowindow-wrapper .action-buttons {
