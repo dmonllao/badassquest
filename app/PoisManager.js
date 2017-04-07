@@ -189,6 +189,7 @@ define(['bs', 'PoiTypes', 'Map', 'Const', 'UI', 'Util', 'InfoWindow', 'External'
                     // On click we render the selected action.
                     $('.start-action').click(function(ev) {
                         ev.preventDefault();
+                        ev.stopPropagation();
 
                         self.infoWindow.close();
 
