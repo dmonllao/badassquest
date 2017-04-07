@@ -11,7 +11,7 @@ body {
 #map>i.loading {
     color: white;
     width: 100%;
-    margin: 35% auto;
+    margin: 10% auto;
     display: inline-block;
     text-align: center;
     vertical-align: middle;
