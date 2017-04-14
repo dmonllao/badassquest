@@ -1,4 +1,4 @@
-define(['bs', 'Map', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManager', 'PoliticsManager'], function($, Map, User, Game, StoryManager, ChaseTracker, PoisManager, PoliticsManager) {
+define(['bs', 'Const', 'Map', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManager', 'PoliticsManager'], function($, Const, Map, User, Game, StoryManager, ChaseTracker, PoisManager, PoliticsManager) {
 
     // @param {Controls}
     var controls = null;
@@ -7,7 +7,7 @@ define(['bs', 'Map', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManage
     var map = Map.init();
 
     // @type {User} The current user.
-    var user = new User(map, 'Juanito', 'img/mushroom2.png');
+    var user = new User(map, 'Juanito', Const.characterPic);
 
     // Start the game.
     var appGame = new Game();

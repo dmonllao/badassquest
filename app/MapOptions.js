@@ -117,10 +117,11 @@ define(function() {
         zoom: 17,
         mapTypeControl: false,
         styles: mapStyles,
-        mapTypeId: null, 
+        mapTypeId: null,
         zoomControl: false,
         rotateControl: false,
-        streetViewControl: false
+        streetViewControl: false,
+        fullscreenControl: false
     };
 
     return MapOptions;

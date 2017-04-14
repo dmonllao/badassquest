@@ -27,7 +27,7 @@ define(['jquery', 'Const', 'Generator'], function($, Const, Generator) {
         this.state['cHealth'] = this.attrs.tHealth;
 
         // Default one.
-        this.image = this.setFaceImage('img/mushroom2.png');
+        this.image = this.setFaceImage(Const.characterPic);
         return this;
     }
 
