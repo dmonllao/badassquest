@@ -26,6 +26,10 @@ You just need to start grunt to watch for CSS changes, it autocompiles and minif
 
 ## Other info
 
+### Update people pictures
+* Download a faces dataset from http://vis-www.cs.umass.edu/lfw/ (e.g. http://vis-www.cs.umass.edu/lfw/lfw.tgz) and extract the zip content to scripts/lfw
+* Execute scripts/parse-lfw.sh
+
 ### Non-bower dependencies
 * https://github.com/nathan-muir/fontawesome-markers
 * http://www.geocodezip.com/scripts/v3_epoly.js

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-# This should run from the project root.
+# Update app people pictures.
 ##
 
 set -e
@@ -9,18 +9,22 @@ set -e
 # This should match Const.picsNum as images will be picked randomly.
 NUMFILES=100
 
-if [ ! -d "scripts/lfw" ]; then
+currentdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+projectroot=$currentdir'/..'
+
+if [ ! -d $currentdir'/lfw' ]; then
     echo "Error: lfw directory is not available, download it from http://vis-www.cs.umass.edu/lfw/ and uncompress it in scripts/"
     exit 1
 fi
 
 # Clean up
-if [ -d "img/people" ]; then
-    rm img/people/*.jpg
+if [ -d $projectroot'/img/people' ]; then
+    rm -rf $projectroot/img/people
 fi
+mkdir $projectroot/img/people
 
 counter=0
-for dirname in $(ls scripts/lfw); do
+for dirname in $(ls $currentdir/lfw); do
 
     # We stop once we have enough.
     if [ "$NUMFILES" == "$counter" ]; then
@@ -28,9 +32,9 @@ for dirname in $(ls scripts/lfw); do
         exit 0
     fi
 
-    dirpath='scripts/lfw/'$dirname
+    dirpath=$currentdir'/lfw/'$dirname
     if [ -d $dirpath ]; then
-        cp -f $dirpath'/'$dirname'_0001.jpg' 'img/people/'$counter'.jpg'
+        cp $dirpath'/'$dirname'_0001.jpg' $projectroot'/img/people/'$counter'.jpg'
         echo "$dirname added"
         let counter+=1
     fi
