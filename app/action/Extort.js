@@ -65,6 +65,7 @@ define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base'], function($, Util
             var args = {
                 user: this.user,
                 foes: foes,
+                location: this.poiData.vicinity,
                 wonCallback: function() {
                     $('#extort-info').html(this.getIntimidatedText());
                     this.extorted();
