@@ -22,6 +22,7 @@ define(['action/Cure', 'action/Food', 'action/Steal', 'action/Hack', 'action/Fig
         health: [ActionFight],
         shop: [ActionSteal, ActionExtort, ActionBuy],
         wealth: [ActionSteal, ActionFight],
+        hackable: [ActionHack],
         food: [ActionExtort, ActionBuy],
     };
 

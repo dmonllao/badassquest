@@ -69,6 +69,13 @@ define(['Const'], function(Const) {
                 infoMessage: 'I want to expand my influence in this area, go and buy this for me.',
                 doneMessage: 'Good good good, see you around.'
             }
+        ],
+        ActionHack: [
+            {
+                title: 'ATM Hacking',
+                infoMessage: 'I need you to hack an ATM',
+                doneMessage: 'Thanks mate'
+            }
         ]
     };
 
