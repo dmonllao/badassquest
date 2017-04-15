@@ -36,6 +36,7 @@ You just need to start grunt to watch for CSS changes, it autocompiles and minif
 * http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js
 
 ### Credits
+* Bad ass picture - http://www.memegenerator.es
 * Characted pictures: http://vis-www.cs.umass.edu/lfw/
 * ROADMAP styles: http://www.mapstylr.com/style/retro/
 * "Chuck Norris May 2015" by Staff Sgt. Tony Foster - https://www.dvidshub.net/image/1915215/fort-hood-camp-mabry-soldiers-attend-texas-state-prayer-breakfast. Licensed under Public Domain via Commons - https://commons.wikimedia.org/wiki/File:Chuck_Norris_May_2015.jpg#/media/File:Chuck_Norris_May_2015.jpg
