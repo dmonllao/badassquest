@@ -2,11 +2,11 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'stor
 
     // This contains the game instructions, ordered by how important they are to understand how the game works.
     var instructions = [
-        'Click on the map to move around and to reveal new places',
-        'Zoom out to see more nearby places. Center the map with <i style="color: black;" class="fa fa-fw fa-arrows"></i>',
-        'Gain control of city areas by extorting people or buying places',
-        'Your energy <i style="color: #8397D2;" class="fa fa-cutlery"></i> decreases over time, eat regularly or you will die',
-        '<i style="color: red;" class="fa fa-fw fa-heart"></i> is your health. Recover it in restaurants or hospitals',
+        '<i class="fa fa-circle-o" aria-hidden="true"></i> Click on the map to move around and to reveal new places',
+        '<i class="fa fa-circle-o" aria-hidden="true"></i> Zoom out to see more nearby places. Center the map with <i style="color: black;" class="fa fa-fw fa-arrows"></i>',
+        '<i class="fa fa-circle-o" aria-hidden="true"></i> Gain control of city areas by extorting people or buying places',
+        '<i class="fa fa-circle-o" aria-hidden="true"></i> Your energy <i style="color: #8397D2;" class="fa fa-cutlery"></i> decreases over time, eat regularly or you will die',
+        '<i class="fa fa-circle-o" aria-hidden="true"></i> <i style="color: red;" class="fa fa-fw fa-heart"></i> is your health. Recover it in restaurants or hospitals',
     ];
 
     var initPromise = $.Deferred();
@@ -174,7 +174,7 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'stor
 
             setTimeout(function() {
                 var content = '<h1>How to play</h1>' +
-                    '<div class="text-left"><ul><li>' + instructions.join('</li><li>') + '</li></ul></div>';
+                    '<div class="text-left"><ul class="list-unstyled"><li>' + instructions.join('</li><li>') + '</li></ul></div>';
                 $('#text-action-content').html(content);
                 $('#text-action').modal('show');
             }, 2000);

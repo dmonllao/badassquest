@@ -1,7 +1,7 @@
 define(function() {
     return {
         defaultMapCenterBackground: {lat: -31.956427724868902, lng: 115.86163059965043},
-        characterPic: 'img/character.png',
+        characterPic: 'img/badass.png',
         initFood: 4000,
         initHealth: 100,
         initSpeed: 4,
@@ -17,6 +17,7 @@ define(function() {
         breathDropAmount: 10,
         userAttackTime: 2000,
         foeAttackTime: 2000,
+        defaultFoePic: 'img/foe.png',
         chaseStartDelay: 3000,
         // Being firstLevelUpExp 50 this would be experience 6200 (not reliably calculated)
         maxReasonableLevel: 11,
