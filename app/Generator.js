@@ -44,7 +44,7 @@ define(['Const'], function(Const) {
                 doneMessage: 'Another one bites the dust. You are a good bad ass mate, thanks.',
             }, {
                 title: 'Defense',
-                infoMessage: 'I\'ve heard that Joselito the owner wants to kill me, I need you to kill him before me',
+                infoMessage: 'I\'ve heard that Joselito the owner wants to kill me, I need you to kill him before me.',
                 doneMessage: 'Yeah, that was close...'
             }
         ],

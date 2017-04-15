@@ -57,7 +57,7 @@ define(['bs', 'Const', 'MissionsChain', 'Mission', 'InfoWindow', 'Generator', 'P
             var reward = Generator.getRandomReward(this.user);
 
             // Add the reward to the info message.
-            missionData.infoMessage += 'There is a $' + reward + ' reward. Click to see where should you go.';
+            missionData.infoMessage += ' There is a $' + reward + ' reward. Click to see where should you go.';
 
             return new Mission({
                 name: missionData.title,

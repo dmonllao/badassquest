@@ -14,7 +14,6 @@ define(function() {
         taxesInterval: 5000,
         revenuesInterval: 10000,
         breathDropInterval: 3000,
-        instructionsInterval: 30000,
         breathDropAmount: 10,
         userAttackTime: 2000,
         foeAttackTime: 2000,

@@ -2,16 +2,12 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'stor
 
     // This contains the game instructions, ordered by how important they are to understand how the game works.
     var instructions = [
-        'Zoom out to see more nearby places',
-        'Move to new areas to reveal new places',
-        'Your energy <i style="color: #8397D2;" class="fa fa-cutlery"></i> is in the top left corner, it decreases over time, eat regularly or you will die',
-        'You can control areas buying places or extorting and fighting people',
-        '<i style="color: red;" class="fa fa-fw fa-heart"></i> is your health. Restaurants or hospitals are good places to recover it',
-        'You can switch to other map views using <i style="color: black;" class="fa fa-fw fa-map"></i>',
-        'Center the map to your location with <i style="color: black;" class="fa fa-fw fa-arrows"></i>',
-        'If you are being chased using the street view you will probably get caught and punched'
+        'Click on the map to move around and to reveal new places',
+        'Zoom out to see more nearby places. Center the map with <i style="color: black;" class="fa fa-fw fa-arrows"></i>',
+        'Gain control of city areas by extorting people or buying places',
+        'Your energy <i style="color: #8397D2;" class="fa fa-cutlery"></i> decreases over time, eat regularly or you will die',
+        '<i style="color: red;" class="fa fa-fw fa-heart"></i> is your health. Recover it in restaurants or hospitals',
     ];
-    var instructionsInterval;
 
     var initPromise = $.Deferred();
 
@@ -26,7 +22,7 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'stor
         //this.story = new StoryPerthUnderground(this.user, this.game);
         this.story = new StoryFree(this.user, this.game);
 
-        // Show intro text, attaching start up instructions.
+        // Show intro text.
         var content = '<h1 class="story-name">' + this.story.title + '</h1>' +
             '<div class="story-intro">' + this.story.getIntro() + '</div>' +
             '<img src="' + this.user.photo + '" class="mission-img img-responsive img-circle"/>';
@@ -176,33 +172,12 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'stor
 
         addGameTips: function() {
 
-            // A small timeout, would be easier for the user to notice the notification shake if we delay this a bit.
             setTimeout(function() {
-
-                // The first one should be quick.
-                this.addGameTip();
-
-                // Send game tips every X seconds.
-                var instructionsInterval = setInterval(function() {
-                    // Add a game tip if there is one.
-                    this.addGameTip();
-                }.bind(this), Const.instructionsInterval);
-            }.bind(this), 2000);
-        },
-
-        addGameTip: function() {
-
-            if (instructions.length == 0) {
-                clearInterval(instructionsInterval);
-                return;
-            }
-
-            // Bit of timeout to make it look real.
-            $('#map').trigger('notification:add', {
-                from: 'Game tip',
-                message: instructions.shift(),
-                notimportant: true
-            });
+                var content = '<h1>How to play</h1>' +
+                    '<div class="text-left"><ul><li>' + instructions.join('</li><li>') + '</li></ul></div>';
+                $('#text-action-content').html(content);
+                $('#text-action').modal('show');
+            }, 2000);
         },
 
         gameCompleted: function() {
