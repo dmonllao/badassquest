@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'Util'], function($, Const, Util) {
+define(['bs', 'Const', 'Util', 'Map'], function($, Const, Util, Map) {
 
     // Bunch of static methods.
     return {
@@ -27,6 +27,25 @@ define(['bs', 'Const', 'Util'], function($, Const, Util) {
                     promise.resolve(data.query.pages[pageKey].extract);
                     return;
                 });
+
+            return promise;
+        },
+
+        getLocationImage: function(locationName) {
+
+            var promise = $.Deferred();
+
+            var placesService = Map.getPlacesService();
+            placesService.textSearch({query: locationName}, function(results, status) {
+                if (status != google.maps.places.PlacesServiceStatus.OK) {
+                    promise.reject();
+                } else {
+                    // First picture of the first result, what is life without risk LOL.
+                    var photoUrl = results[0].photos[0].getUrl({'maxWidth': 400});
+                    console.log(locationName + ' - ' + photoUrl);
+                    promise.resolve(photoUrl);
+                }
+            });
 
             return promise;
         },
