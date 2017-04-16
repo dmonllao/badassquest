@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSetGenerator'], function($, Const, Icon, Generator, PoiTypes, Map, MissionsSetGenerator) {
+define(['bs', 'Const', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSetGenerator', 'External'], function($, Const, Icon, Generator, PoiTypes, Map, MissionsSetGenerator, External) {
 
     var adminLevels = ['locality', 'administrative_area_level_3', 'administrative_area_level_2', 'administrative_area_level_1', 'country'];
 
@@ -34,26 +34,32 @@ define(['bs', 'Const', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSetGener
             for (var i in this.politics[newLevel]) {
 
                 var politic = this.politics[newLevel][i];
-                var iconPromise = Generator.getRandomPersonImage();
                 var completedCallback = function() {
+                    // Notification and modal for congrats.
                     $('#map').trigger('notification:add', {
-                        from: politic.name,
-                        message: 'Hey bad ass, I get retired. I want you to be my successor, you deserve it. See you.'
+                        from: '<img src="' + politic.image + '" class="img-circle notification-img"> ' + politic.name,
+                        message: 'Hey badass, I am getting old and grumpy. I want you to be my successor, you deserve it. See you around.'
                     });
-                };
 
-                var placesPromise = this.getPlaces(newLevel);
+                    setTimeout(function() {
+                        var content = 'Congratulations! You now rule over ' + politic.location + '. You are the ' + politic.role + '.';
+                        if (politic.locationImage) {
+                            content += '<img src="' + politic.locationImage + '" class="big-centered-img img-responsive img-circle">';
+                        }
+                        $('#text-action-content').html(content);
+                        $('#text-action').modal('show');
+                    }, 2000);
+                };
 
                 // Too many binds required.
                 var self = this;
 
-                $.when(iconPromise, placesPromise)
-                .done(function(icon, places) {
+                this.getPlaces(newLevel).done(function(places) {
                     $('#map').trigger('notification:add', {
-                        from: politic.name + ' - ' + politic.location + ' capo',
-                        message: 'Hi, I\'ve heard you are a bad ass, you should work for me. Reply as soon as possible.',
+                        from: '<img src="' + politic.image + '" class="img-circle notification-img"> ' + politic.name + ' - ' + politic.location + ' ' + politic.role,
+                        message: 'Hi, I\'ve heard you are a badass, you should secretly work for me. Reply as soon as possible.',
                         callback: function() {
-                            var missionsGenerator = new MissionsSetGenerator(self.map, self.game, self.user, politic.name, icon, completedCallback.bind(this));
+                            var missionsGenerator = new MissionsSetGenerator(self.map, self.game, self.user, politic, completedCallback.bind(this));
                             missionsGenerator.create(places);
                         }
                     });
@@ -113,29 +119,29 @@ define(['bs', 'Const', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSetGener
                             var component = results[i].address_components[j];
                             if (component.types) {
                                 for (var y in component.types) {
-                                    var type = component.types[y];
+                                    var locationType = component.types[y];
 
-                                    // We skip it if we are not interested in this type.
-                                    if (adminLevels.indexOf(type) === -1) {
+                                    // We skip it if we are not interested in this locationType.
+                                    if (adminLevels.indexOf(locationType) === -1) {
                                         continue;
                                     }
 
                                     // We skip it if it is already set.
-                                    if (posPolitics[type]) {
+                                    if (posPolitics[locationType]) {
                                         continue;
                                     }
-                                    posPolitics[type] = component.long_name;
+                                    posPolitics[locationType] = component.long_name;
                                 }
                             }
                         }
                     }
                 }
 
-                // Depending on the type and the user level we require a level
+                // Depending on the locationType and the user level we require a level
                 // or another to make the politic contact the user.
-                for (var type in posPolitics) {
-                    if (posPolitics.hasOwnProperty(type)) {
-                        this.addPolitic(type, posPolitics[type]);
+                for (var locationType in posPolitics) {
+                    if (posPolitics.hasOwnProperty(locationType)) {
+                        this.addPolitic(locationType, posPolitics[locationType]);
                     }
                 }
             }.bind(this));
@@ -147,25 +153,56 @@ define(['bs', 'Const', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSetGener
          * We decide here, when setPolitics is called, what level
          * would need the user to be contacted by the politic.
          *
-         * @param {String} type Politic area of control.
+         * @param {String} locationType Politic area of control.
          * @param {String} location An address (read setPolitics, quite fragile)
          */
-        addPolitic: function(type, location) {
+        addPolitic: function(locationType, location) {
             var politic = {
                 name: Generator.getRandomName(),
-                type: type,
+                locationType: locationType,
+                role: this.locationTypeRole(locationType),
                 location: location
             };
 
-            // We already filtered types not part of adminLevels.
-            var level = Const.politicLevels[type];
+            // Character picture.
+            Generator.getRandomPersonImage().done(function(image) {
+                politic.image = image;
+            });
+
+            // Location picture.
+            External.getLocationImage(location).done(function(imageUrl) {
+                politic.locationImage = imageUrl;
+            });
+
+            // We already filtered locationTypes not part of adminLevels.
+            var level = Const.politicLevels[locationType];
 
             if (!this.politics[level]) {
                 this.politics[level] = [];
             }
 
             this.politics[level].push(politic);
-        }
+        },
+
+        locationTypeRole: function(locationType) {
+            switch (locationType) {
+                case 'locality':
+                    return 'major';
+                case 'administrative_area_level_3':
+                    return 'governor';
+                case 'administrative_area_level_2':
+                    return 'governor';
+                case 'administrative_area_level_1':
+                    return 'state governor';
+                case 'country':
+                    return 'president';
+            }
+
+            // Crappy fallback.
+            console.warn('Couldn\'t determine the role for ' + locationType + ' location type');
+            return 'manager';
+        },
+
     };
 
     return PoliticsManager;

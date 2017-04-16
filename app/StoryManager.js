@@ -25,7 +25,7 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'stor
         // Show intro text.
         var content = '<h1 class="story-name">' + this.story.title + '</h1>' +
             '<div class="story-intro">' + this.story.getIntro() + '</div>' +
-            '<img src="' + this.user.photo + '" class="mission-img img-responsive img-circle"/>';
+            '<img src="' + this.user.photo + '" class="big-centered-img img-responsive img-circle"/>';
 
         $('#text-action-content').html(content);
         $('#text-action').modal('show');
@@ -108,7 +108,7 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'stor
             var distance = Math.round(google.maps.geometry.spherical.computeDistanceBetween(userPosition, bounds.getNorthEast()).toFixed() * 0.5);
             var chuckPosition = google.maps.geometry.spherical.computeOffset(userPosition, distance, 45);
 
-            var html = '<img class="mission-img img-responsive img-circle" src="img/chuck.jpg"/><div>' + message + '</div>';
+            var html = '<img class="big-centered-img img-responsive img-circle" src="img/chuck.jpg"/><div>' + message + '</div>';
             // Chuck Norris will give you some info.
             var name = 'Chuck Norris';
             var marker = new google.maps.Marker({

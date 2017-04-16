@@ -105,7 +105,7 @@ define(['bs'], function($) {
             if (!notification.notimportant) {
                 div += '<strong>';
             }
-            div += notification.from + ': ' + '<a id="' + id + '">' + text + '</a>';
+            div += notification.from + '<br/>' + '<a id="' + id + '">' + text + '</a>';
             if (!notification.notimportant) {
                 div += '</strong>';
             }

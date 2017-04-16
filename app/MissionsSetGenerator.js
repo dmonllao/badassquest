@@ -1,12 +1,11 @@
 define(['bs', 'Const', 'MissionsChain', 'Mission', 'InfoWindow', 'Generator', 'PoiTypes'], function($, Const, MissionsChain, Mission, InfoWindow, Generator, PoiTypes) {
 
-    function MissionsSetGenerator(map, game, user, employer, icon, completedCallback) {
+    function MissionsSetGenerator(map, game, user, employer, completedCallback) {
         this.map = map;
         this.game = game;
         this.user = user;
 
         this.employer = employer;
-        this.icon = icon;
         this.completedCallback = completedCallback;
 
         return this;
@@ -18,7 +17,6 @@ define(['bs', 'Const', 'MissionsChain', 'Mission', 'InfoWindow', 'Generator', 'P
         user: null,
 
         employer: null,
-        icon: null,
         completedCallback : null,
 
         create: function(pois) {
@@ -63,7 +61,7 @@ define(['bs', 'Const', 'MissionsChain', 'Mission', 'InfoWindow', 'Generator', 'P
                 name: missionData.title,
                 position: {lat: poiData.geometry.location.lat(), lng: poiData.geometry.location.lng()},
                 icon: {
-                    url: this.icon,
+                    url: this.employer.image,
                     scaledSize: new google.maps.Size(40, 40)
                 },
                 cleanMission: true,
@@ -73,11 +71,11 @@ define(['bs', 'Const', 'MissionsChain', 'Mission', 'InfoWindow', 'Generator', 'P
                 }.bind(this),
                 infoMessage: {
                     message: missionData.infoMessage,
-                    from: this.employer
+                    from: '<img src="' + this.employer.image + '" class="img-circle notification-img"> ' + this.employer.name
                 },
                 doneMessage: {
                     message: missionData.doneMessage,
-                    from: this.employer
+                    from: '<img src="' + this.employer.image + '" class="img-circle notification-img"> ' + this.employer.name
                 },
                 reward: reward
             });

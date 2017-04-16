@@ -222,7 +222,7 @@ pre.control span.badge {
     font-weight: bold;
 }
 
-.mission-img {
+.big-centered-img {
     width: 40%;
     margin: 20px auto 10px auto;
     border-style: solid;
@@ -232,6 +232,10 @@ pre.control span.badge {
 .notification a {
     text-decoration: none;
     cursor: pointer;
+}
+
+.notification-img {
+    height: 2em;
 }
 
 /** From bootstrap components .badge */

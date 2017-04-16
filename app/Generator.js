@@ -19,7 +19,7 @@ define(['Const'], function(Const) {
         'Hey hey look at him! You should be ashamed!',
         'I will tell your mother you like to destroy people\'s lives',
         'He who laughs last laughs best, we will see you dead!',
-        'You bad ass',
+        'You badass',
     ];
 
     /**
@@ -41,7 +41,7 @@ define(['Const'], function(Const) {
             {
                 title: 'Burn cockburn burn',
                 infoMessage: 'Mr Cockburn owes me a lot of money and they don\'t want to pay, I want them dead.',
-                doneMessage: 'Another one bites the dust. You are a good bad ass mate, thanks.',
+                doneMessage: 'Another one bites the dust. You are a badass mate, thanks.',
             }, {
                 title: 'Defense',
                 infoMessage: 'I\'ve heard that Joselito the owner wants to kill me, I need you to kill him before me.',
