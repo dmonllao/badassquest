@@ -12,6 +12,8 @@ define(['Const'], function(Const) {
     ];
 
     /**
+     * For people that badass already annoyed.
+     *
      * Keep them short, should fit in 1 line even in mobile window size.
      */
     var badMoodLines = [
@@ -19,8 +21,67 @@ define(['Const'], function(Const) {
         'Hey hey look at him! You should be ashamed!',
         'I will tell your mother you like to destroy people\'s lives',
         'He who laughs last laughs best, we will see you dead!',
-        'You badass',
     ];
+
+    /**
+     * For random people that walks streets.
+     *
+     * Keep them short, should fit in 1 line even in mobile window size.
+     */
+    var pederstianLines = [
+        'You badass',
+        'look at that stallion',
+        'hey you macho man, won\'t you come with me if I\'d ask to?',
+        'run Johnny boy run, that guy is dangerous',
+        'don\'t stare at him Sheila, you eyes will burn if you do',
+        'such a stallion',
+        'penetrator',
+        'what an alpha male',
+        'uuuuhh papi where are you going',
+        'such a papi chulo',
+        'oh! he looked at me. I just got pregnant.',
+        'niquela niquela eh eh eh',
+        'come here badass, I will sing you a lullaby',
+        'mmmmm, pure horse power',
+        'uffff, my undercarriage is steaming',
+        'heavy weapon at 10pm Sheila',
+        'children! escape while you can! the badass, is coming!!',
+        'aye mamma, make me one papi',
+        'I want to cook for him',
+        'ssshhh, shut up, that guy is worst than the Spanish flu',
+        'someone told me that he once ate alive chicken',
+        'cunt',
+        'twat',
+        'badass style - tiny Willy',
+        'where are your sunglasses terminator',
+        'ups, pregnant',
+        'arrrggg he looked at me! pressure in my hearth! I\'m dying',
+        'just peed',
+        'Ohhh nooo, the badass is coming, I\'m frozen I can not move',
+        'what a Frodo',
+        'uhhh papitooo, a big size menu for me please',
+        'that is a tool, best plumber ever',
+        'time to move to another neighbourhood',
+        'ruuuunnnn',
+        'I\'ve been told he owns a sado dungeon',
+        'hey hey hey hey',
+        'I want to disappeeeaaaarree',
+        'oh badass, sorry for existing',
+        '(hearth attack)',
+        'take my wallet',
+        'don\'t hurt me please I am not worth',
+        'he once punched a baby',
+        'he once ate a cow for breakfast',
+        'he probably listens to Barbara Straisand',
+        'father of hordes',
+        'what is that smell?',
+        'smelly pants',
+        '(throws up)',
+        '(touches herself)',
+        'noooo, the badassss!!!',
+    ];
+
+    var usedPersonImages = [];
 
     /**
      * Mission titles should be unique! We are using array map to retrieve an index from the mission title.
@@ -101,12 +162,30 @@ define(['Const'], function(Const) {
 
         /**
          * This returns a promise in case we want to use an external service in future.
+         *
          * @return Promise
          */
         getRandomPersonImage: function() {
+
+            var imageIndex = this.getRandomIndex(Const.picsNum);
+
+            // Shortcut in case we already ran out of random pics.
+            if (usedPersonImages.length == Const.picsNum) {
+                var promise = new $.Deferred();
+                promise.resolve('img/people/' + imageIndex + '.jpg');
+                return promise;
+            }
+
+            while (usedPersonImages.indexOf(imageIndex) !== -1) {
+                imageIndex = this.getRandomIndex(Const.picsNum);
+            }
+
+            // Add the pic to used pics list.
+            usedPersonImages.push(imageIndex);
+
+            // Yeah, I know it looks dumb read ^ (method doc).
             var promise = new $.Deferred();
-            var index = this.getRandomIndex(Const.picsNum);
-            promise.resolve('img/people/' + index + '.jpg');
+            promise.resolve('img/people/' + imageIndex + '.jpg');
             return promise;
         },
 
@@ -115,7 +194,11 @@ define(['Const'], function(Const) {
         },
 
         getRandomBadMoodLine: function() {
-            return this.getRandomElement(badMoodLines)
+            return this.getRandomElement(badMoodLines);
+        },
+
+        getRandomPederstianLine: function() {
+            return this.getRandomElement(pederstianLines);
         },
 
         poiPrice: function(poiData) {
