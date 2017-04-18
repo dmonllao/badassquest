@@ -28,7 +28,7 @@ define(['Const'], function(Const) {
      *
      * Keep them short, should fit in 1 line even in mobile window size.
      */
-    var pederstianLines = [
+    var pedestrianLines = [
         'You badass',
         'look at that stallion',
         'hey you macho man, won\'t you come with me if I\'d ask to?',
@@ -197,8 +197,8 @@ define(['Const'], function(Const) {
             return this.getRandomElement(badMoodLines);
         },
 
-        getRandomPederstianLine: function() {
-            return this.getRandomElement(pederstianLines);
+        getRandomPedestrianLine: function() {
+            return this.getRandomElement(pedestrianLines);
         },
 
         poiPrice: function(poiData) {

@@ -1,4 +1,4 @@
-define(function() {
+define(['Const', 'Generator', 'InfoWindow'], function(Const, Generator, InfoWindow) {
 
     function Router(appMap) {
 
@@ -21,6 +21,7 @@ define(function() {
         endLocation: {},
         polyline: null,
         animationTimer: null,
+        shoutInterval: null,
         current: null,
         eol: null,
         step: null,
@@ -147,6 +148,8 @@ define(function() {
             // This is the total distance to travel.
             this.eol = this.polyline.Distance();
 
+            this.shoutInterval = setInterval(this.shout.bind(this), Const.passingByLapse);
+
             // We start from 0.
             this.animate(0);
         },
@@ -233,8 +236,11 @@ define(function() {
             // Remove DirectionsRenderer.
             this.directionsDisplay.setMap(null);
 
-            // Clean polylines and stop scheduled animation.
+            // Clear polylines and stop scheduled animation.
             clearTimeout(this.animationTimer);
+
+            // Clear shouting people.
+            clearInterval(this.shoutInterval);
 
             if (this.polyline !== null) {
                 this.polyline.setMap(null);
@@ -244,6 +250,29 @@ define(function() {
             this.eol = null;
             this.current = null;
             this.endLocation = {};
+        },
+
+        shout: function() {
+
+            // Fake marker just to shout.
+            var marker = new google.maps.Marker({
+                position: this.marker.getPosition(),
+                map: this.map,
+            });
+            marker.setVisible(false);
+
+            InfoWindow.openInfoInstance({
+                map: this.map,
+                marker: marker,
+                content: Generator.getRandomPedestrianLine(),
+                delay: 2000,
+                closedCallback: function() {
+                    // Free memory.
+                    marker.setMap(null);
+                    delete marker;
+                }
+            });
+
         }
     };
 
