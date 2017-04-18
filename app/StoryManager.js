@@ -123,8 +123,9 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'stor
             });
             marker.setAnimation(google.maps.Animation.BOUNCE);
 
+            var self = this;
             marker.addListener('click', function() {
-                this.user.moveTo(marker.getPosition(), function() {
+                self.user.moveTo(marker.getPosition(), function() {
 
                     // Clickable just once.
                     google.maps.event.clearInstanceListeners(marker);
@@ -132,18 +133,18 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'stor
 
                     // Show info, stop animation and remove the marker after
                     // 10 secs, considering 10 secs enough for the user to see the message.
-                    this.openInfo(marker, name, html, this.infoPersonWindow);
+                    self.openInfo(marker, name, html, self.infoPersonWindow);
                     marker.setAnimation(null);
                     setTimeout(function() {
-                        this.infoPersonWindow.setMap(null);
+                        self.infoPersonWindow.setMap(null);
                         marker.setMap(null);
                         marker = null;
                         if (typeof callback !== "undefined") {
                             callback();
                         }
-                    }.bind(this), 10000);
-                }.bind(this));
-            }.bind(this));
+                    }, 10000);
+                });
+            });
         },
 
         /**

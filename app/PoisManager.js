@@ -1,9 +1,5 @@
 define(['bs', 'PoiTypes', 'Map', 'Const', 'UI', 'Util', 'InfoWindow', 'External', 'Icon'], function($, PoiTypes, Map, Const, UI, Util, InfoWindow, External, Icon) {
 
-    var enableButtons = function(position) {
-        $('.start-action').attr('disabled', false);
-    };
-
     function PoisManager(map, game, user) {
         this.placesService = Map.getPlacesService();
         this.map = map;
@@ -124,14 +120,19 @@ define(['bs', 'PoiTypes', 'Map', 'Const', 'UI', 'Util', 'InfoWindow', 'External'
                 marker: marker
             };
 
-            // Click listener.
+            // Load place details while moving but only show details once arrived.
+            var self = this;
             marker.addListener('click', function(e) {
-                this.user.moveTo(e.latLng, enableButtons);
-                this.showPlaceDetails(data, marker);
-            }.bind(this));
+                var placeDetails = self.loadPlaceDetails(data, marker);
+                self.user.moveTo(e.latLng, function() {
+                    placeDetails.done(self.showPlaceDetails.bind(self));
+                });
+            });
         },
 
-        showPlaceDetails: function(data, marker) {
+        loadPlaceDetails: function(data, marker) {
+
+            var promise = $.Deferred();
 
             var request = {placeId: data.place_id};
             var propertyActions = PoiTypes.getPropertyActions();
@@ -143,7 +144,7 @@ define(['bs', 'PoiTypes', 'Map', 'Const', 'UI', 'Util', 'InfoWindow', 'External'
 
                 if (status !== google.maps.places.PlacesServiceStatus.OK) {
                     console.error('PlacesService error: ' + status);
-                    return;
+                    promise.reject();
                 }
 
                 // Get the first valid place type and get the valid actions for that type.
@@ -169,37 +170,45 @@ define(['bs', 'PoiTypes', 'Map', 'Const', 'UI', 'Util', 'InfoWindow', 'External'
                         if (!owned || propertyActions.indexOf(actions[i].constructor.name) !== -1) {
                             var id = 'id-action-' + i;
                             var buttonClass = 'start-action btn ' + UI.getActionButtonStyle(i);
-                            content = content + '<button id="' + id + '" class="' + buttonClass + '" disabled="disabled">' +
+                            content = content + '<button id="' + id + '" class="' + buttonClass + '">' +
                                 actions[i].getVisibleName() + '</button>';
                         }
                     }
                     content = content + '</div>';
                 }
 
-                InfoWindow.open({
-                    map: self.map,
-                    marker: marker,
-                    content: content,
-                    infoWindow: self.infoWindow,
-                });
-
-                // Clear remaining listeners as we don't want them queued.
-                google.maps.event.clearListeners(self.infoWindow, 'domready');
-                google.maps.event.addListener(self.infoWindow, 'domready', function() {
-                    // On click we render the selected action.
-                    $('.start-action').click(function(ev) {
-                        ev.preventDefault();
-                        ev.stopPropagation();
-
-                        self.infoWindow.close();
-
-                        // Get the selected action.
-                        var action = actions[ev.target.id.substr(10)];
-                        action.start();
-                    });
-                });
+                promise.resolve(marker, content, actions);
             });
 
+            return promise;
+        },
+
+        showPlaceDetails: function(marker, content, actions) {
+
+            var self = this;
+
+            InfoWindow.open({
+                map: this.map,
+                marker: marker,
+                content: content,
+                infoWindow: this.infoWindow,
+            });
+
+            // Clear remaining listeners as we don't want them queued.
+            google.maps.event.clearListeners(this.infoWindow, 'domready');
+            google.maps.event.addListener(this.infoWindow, 'domready', function() {
+                // On click we render the selected action.
+                $('.start-action').click(function(ev) {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+
+                    self.infoWindow.close();
+
+                    // Get the selected action.
+                    var action = actions[ev.target.id.substr(10)];
+                    action.start();
+                });
+            });
         },
 
         /**
