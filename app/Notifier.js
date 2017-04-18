@@ -92,8 +92,8 @@ define(['bs'], function($) {
             // The alternative using shown.bs.popover is not working as shown is being
             // triggered also during hidden.
             setTimeout(function() {
-                $('.notification a').off('click');
-                $('.notification a').on('click', this.clickNotification.bind(this));
+                $('.notification').off('click');
+                $('.notification').on('click', this.clickNotification.bind(this));
             }.bind(this), 500);
         },
 
@@ -101,11 +101,11 @@ define(['bs'], function($) {
             var id = 'notification-' + uniqid;
             var text = notification.message;
 
-            var div = '<div class="notification">';
+            var div = '<div class="notification" id="' + id + '">';
             if (!notification.notimportant) {
                 div += '<strong>';
             }
-            div += notification.from + '<br/>' + '<a id="' + id + '">' + text + '</a>';
+            div += notification.from + '<br/>' + '<a>' + text + '</a>';
             if (!notification.notimportant) {
                 div += '</strong>';
             }
@@ -117,7 +117,7 @@ define(['bs'], function($) {
         clickNotification: function(ev) {
 
             // Remove the 'notification-' prefix.
-            var index = ev.target.id.substr(13);
+            var index = ev.currentTarget.id.substr(13);
 
             if (typeof this.notifications[index] === "undefined") {
                 console.warn('Duplicated clickNotification click');
