@@ -23,7 +23,7 @@ define(['bs', 'PoiTypes', 'Map', 'Const', 'UI', 'Util', 'InfoWindow', 'External'
             this.game.state.start('Empty');
         }.bind(this));
 
-        $('#map').on('pois:get', this.getNearbyPois.bind(this));
+        $('#map').on('move:finished', this.getNearbyPois.bind(this));
 
         return this;
     }

@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindow', 'PissedOffPeople', 'ControlledAreas', 'Icon'], function($, Const, Generator, Router, Controls, Notifier, InfoWindow, PissedOffPeople, ControlledAreas, Icon) {
+define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindow', 'PissedPeople', 'ControlledAreas', 'Icon'], function($, Const, Generator, Router, Controls, Notifier, InfoWindow, PissedPeople, ControlledAreas, Icon) {
 
     function User(map, playerName, playerPhoto) {
 
@@ -34,7 +34,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         }.bind(this), 1000);
 
         // People you piss off while playing.
-        this.pissedOff = new PissedOffPeople(this.map, this);
+        this.pissed = new PissedPeople(this.map, this);
 
         // Manages the pois and areas the user controls.
         this.controlledAreas = new ControlledAreas(this.map);
@@ -75,8 +75,8 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         // @type {Notifier}
         notifier: null,
 
-        // @type {PissedOffPeople}
-        pissedOff: null,
+        // @type {PissedPeople}
+        pissed: null,
 
         controlledAreas: null,
 
@@ -131,7 +131,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
             });
 
             // People shouts at you where you annoyed them.
-            this.pissedOff.shout();
+            this.pissed.shout();
         },
 
         attackTurn: function(game, callback) {
@@ -162,8 +162,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
                     destinationCallback(reachedPosition);
                 }
 
-                // We trigger the event, PoisManager will decide if nearby points should be fetched or not.
-                $('#map').trigger('pois:get');
+                $('#map').trigger('move:finished');
             }
             this.router.route(this.marker, position, this.passingBy.bind(this), destinationReachedCallback, this.attrs.speed);
         },

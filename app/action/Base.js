@@ -103,10 +103,10 @@ define(['bs', 'Generator', 'Icon'], function($, Generator, Icon) {
         /**
          * Marks a poi as done.
          *
-         * @param {bool} pissedOff
+         * @param {bool} pissed
          * @param {icon:string|Icon|Symbol} icon
          */
-        markAsDone: function(pissedOff, icon) {
+        markAsDone: function(pissed, icon) {
 
             // The marker might be null if this action is part of a mission.
             if (!this.marker) {
@@ -127,8 +127,8 @@ define(['bs', 'Generator', 'Icon'], function($, Generator, Icon) {
             google.maps.event.clearInstanceListeners(this.marker);
 
             // Add to pissed off markers if specified.
-            if (pissedOff) {
-                this.user.pissedOff.add({
+            if (pissed) {
+                this.user.pissed.add({
                     marker: this.marker
                 });
             }
