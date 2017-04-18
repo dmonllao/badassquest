@@ -39,7 +39,7 @@ define(['bs', 'Const', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSetGener
                     $('#map').trigger('notification:add', {
                         from: '<img src="' + politic.image + '" class="img-circle notification-img"> ' + politic.name,
                         message: 'Hey badass, I am getting old and grumpy. I want you to be my successor, you deserve it. See you around.'
-                    });
+                    }, 2000);
 
                     setTimeout(function() {
                         var content = 'Congratulations! You now rule over ' + politic.location + '. You are the ' + politic.role + '.';
@@ -48,21 +48,24 @@ define(['bs', 'Const', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSetGener
                         }
                         $('#text-action-content').html(content);
                         $('#text-action').modal('show');
-                    }, 2000);
+                    }, 4000);
                 };
 
                 // Too many binds required.
                 var self = this;
 
                 this.getPlaces(newLevel).done(function(places) {
-                    $('#map').trigger('notification:add', {
-                        from: '<img src="' + politic.image + '" class="img-circle notification-img"> ' + politic.name + ' - ' + politic.location + ' ' + politic.role,
-                        message: 'Hi, I\'ve heard you are a badass, you should secretly work for me. Reply as soon as possible.',
-                        callback: function() {
-                            var missionsGenerator = new MissionsSetGenerator(self.map, self.game, self.user, politic, completedCallback.bind(this));
-                            missionsGenerator.create(places);
-                        }
-                    });
+                    // Long wait so that the message does not interfere with the action that lead to the level up.
+                    setTimeout(function() {
+                        $('#map').trigger('notification:add', {
+                            from: '<img src="' + politic.image + '" class="img-circle notification-img"> ' + politic.name + ' - ' + politic.location + ' ' + politic.role,
+                            message: 'Hi, I\'ve heard you are a badass, you should secretly work for me. Reply as soon as possible.',
+                            callback: function() {
+                                var missionsGenerator = new MissionsSetGenerator(self.map, self.game, self.user, politic, completedCallback.bind(self));
+                                missionsGenerator.create(places);
+                            }
+                        });
+                    }, 7000);
                 })
                 .fail(function() {
                     return;

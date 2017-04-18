@@ -180,7 +180,10 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'Map'], function($, External, Ic
             if (nextMission) {
                 // Reveal next mission.
                 // TODO Play sound.
-                this.setMissionLocation(nextMission);
+                // Wait some time before showing the next mission to the user.
+                setTimeout(function() {
+                    this.setMissionLocation(nextMission);
+                }.bind(this), 7000);
             } else {
                 this.completedCallback();
             }
