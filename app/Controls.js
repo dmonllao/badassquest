@@ -1,9 +1,10 @@
-define(['bs'], function($) {
+define(['bs', 'Sound'], function($, Sound) {
 
     var user = null;
     var panorama = null;
 
     function Controls() {
+        return this;
     }
 
     Controls.prototype = {
@@ -27,6 +28,7 @@ define(['bs'], function($) {
             this.initZoom();
             this.initCenter();
             this.initMapView();
+            this.initSound();
             this.initNotifications();
 
             this.initStatics();
@@ -182,6 +184,23 @@ define(['bs'], function($) {
             }.bind(this));
 
             this.controls[google.maps.ControlPosition.RIGHT_TOP].push(mapViewDiv);
+        },
+
+        initSound: function() {
+
+            Sound.init();
+
+            var musicOnHtml = '<i class="fa fa-fw fa-volume-up"></i>';
+            var musicOffHtml = '<i class="fa fa-fw fa-volume-off"></i>';
+
+            // Sound is enabled by default, so we initially show mute button.
+            musicDiv.innerHTML = '<pre class="control actionable-control">' + musicOffHtml + '</pre>';
+
+            google.maps.event.addDomListener(musicDiv, 'click', function() {
+                Sound.toggle();
+            });
+
+            this.controls[google.maps.ControlPosition.RIGHT_TOP].push(musicDiv);
         },
 
         initNotifications: function() {
