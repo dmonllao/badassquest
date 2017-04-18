@@ -1,8 +1,5 @@
 define(['bs', 'Const', 'Map', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManager', 'PoliticsManager'], function($, Const, Map, User, Game, StoryManager, ChaseTracker, PoisManager, PoliticsManager) {
 
-    // @param {Controls}
-    var controls = null;
-
     // @param {google.maps.Map}
     var map = Map.init();
 

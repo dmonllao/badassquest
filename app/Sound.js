@@ -13,7 +13,7 @@ define(['bs'], function($) {
             // Event subscriptions.
             $('#map').on('user:levelup', function(ev, newLevel) {
                 this.play('sound/cash.mp3');
-            });
+            }.bind(this));
         },
 
         toggle: function() {
@@ -23,6 +23,9 @@ define(['bs'], function($) {
             } else {
                 mute = true;
             }
+
+            // Returns sound yes or no.
+            return !mute;
         },
 
         play: function(file) {
