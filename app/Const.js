@@ -19,8 +19,8 @@ define(function() {
         foeAttackTime: 2000,
         defaultFoePic: 'img/foe.png',
         chaseStartDelay: 3000,
-        // Being firstLevelUpExp 50 this would be experience 6200 (not reliably calculated)
-        maxReasonableLevel: 11,
+        // Var below used to calculate foe's power.
+        maxReasonableLevel: 20,
         maxChaseDuration: 15,
         maxReRouteLimit: 5,
         maxLoot: 2000,
@@ -30,12 +30,13 @@ define(function() {
         closePositionPissed: 80,
         politicLevels: {
             locality: 2,
-            administrative_area_level_3: 4,
-            administrative_area_level_2: 5,
-            administrative_area_level_1: 6,
-            country: 7
+            administrative_area_level_3: 5,
+            administrative_area_level_2: 7,
+            administrative_area_level_1: 10,
+            country: 15
         },
-        passingByLapse: 10,
-        passingByRampUp: 2
+        pissedPassingByLapse: 10,
+        pissedPassingByRampUp: 2,
+        passingByLapse: 3000,
     };
 });
