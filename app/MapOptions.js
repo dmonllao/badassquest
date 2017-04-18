@@ -121,7 +121,8 @@ define(function() {
         zoomControl: false,
         rotateControl: false,
         streetViewControl: false,
-        fullscreenControl: false
+        fullscreenControl: false,
+        disableDoubleClickZoom: true,
     };
 
     return MapOptions;
