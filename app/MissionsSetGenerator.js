@@ -23,7 +23,7 @@ define(['bs', 'Const', 'MissionsChain', 'Mission', 'InfoWindow', 'Generator', 'P
 
             var missions = [];
             for (var i = 0; i < pois.length; i++) {
-                var mission = this.createMission(pois[i]);
+                var mission = this.createMission(pois[i], (i + 1));
                 if (mission) {
                     missions.push(mission);
                 }
@@ -35,7 +35,7 @@ define(['bs', 'Const', 'MissionsChain', 'Mission', 'InfoWindow', 'Generator', 'P
 
         },
 
-        createMission: function(poiData) {
+        createMission: function(poiData, nMission) {
 
             // Selecting a random action, actions depend on the poi type.
             var actions = PoiTypes.getMissionActions(poiData.types);
@@ -52,7 +52,8 @@ define(['bs', 'Const', 'MissionsChain', 'Mission', 'InfoWindow', 'Generator', 'P
                 return;
             }
 
-            var reward = Generator.getRandomReward(this.user);
+            // * nMission as reward should be incremental.
+            var reward = Generator.getRandomReward(this.user) * nMission;
 
             // Add the reward to the info message.
             missionData.infoMessage += ' There is a $' + reward + ' reward. Click to see where should you go.';
