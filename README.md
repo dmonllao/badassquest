@@ -1,6 +1,6 @@
 # Play it
 
-[http://badassquest.github.io/badassquest](http://badassquest.github.io/badassquest)
+[http://dmonllao.github.io/badassquest](http://dmonllao.github.io/badassquest)
 
 # Develop it
 
@@ -12,7 +12,7 @@
     npm install bower -g
 
 ## Install
-    git clone git://github.com/badassquest/badassquest.git /somewhere/in/www
+    git clone git://github.com/dmonllao/badassquest.git /somewhere/in/www
     cd /somewhere/in/www
     npm install
     bower install

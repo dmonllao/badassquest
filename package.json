@@ -17,11 +17,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/badassquest/badassquest.git"
+    "url": "git://github.com/dmonllao/badassquest.git"
   },
   "author": "David Monllao",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/badassquest/badassquest/issues"
+    "url": "https://github.com/dmonllao/badassquest/issues"
   }
 }

@@ -236,7 +236,7 @@ define(['bs', 'Sound'], function($, Sound) {
             google.maps.event.addDomListener(githubDiv, 'click', function() {
                  var form = document.createElement("form");
                  form.method = "GET";
-                 form.action = "https://github.com/badassquest/badassquest";
+                 form.action = "https://github.com/dmonllao/badassquest";
                  form.target = "_blank";
                  document.body.appendChild(form);
                  form.submit();
