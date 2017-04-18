@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSetGenerator', 'External'], function($, Const, Icon, Generator, PoiTypes, Map, MissionsSetGenerator, External) {
+define(['bs', 'Const', 'UI', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSetGenerator', 'External'], function($, Const, UI, Icon, Generator, PoiTypes, Map, MissionsSetGenerator, External) {
 
     var adminLevels = ['locality', 'administrative_area_level_3', 'administrative_area_level_2', 'administrative_area_level_1', 'country'];
 
@@ -46,8 +46,7 @@ define(['bs', 'Const', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSetGener
                         if (politic.locationImage) {
                             content += '<img src="' + politic.locationImage + '" class="big-centered-img img-responsive img-circle">';
                         }
-                        $('#text-action-content').html(content);
-                        $('#text-action').modal('show');
+                        UI.showModal(content, '<i class="fa fa-thumbs-o-up"></i>');
                     }, 4000);
                 };
 

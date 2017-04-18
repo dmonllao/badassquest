@@ -20,6 +20,29 @@ define(['bs'], function($) {
             }
             html = html + '</div>';
             return html;
+        },
+
+        renderOkButton: function(text) {
+            var html = '<div class="action-buttons">' +
+                '<button id="ok" class="btn btn-success">' + text + '</button>' +
+                '</div>';
+            return html;
+        },
+
+        showModal: function(content, okButton) {
+
+            if (okButton) {
+                content = content + this.renderOkButton(okButton);
+            }
+
+            $('#text-action-content').html(content);
+            $('#text-action').modal('show');
+
+            if (okButton) {
+                $('#ok').on('click', function(ev) {
+                    $('#text-action').modal('hide');
+                });
+            }
         }
     }
 });

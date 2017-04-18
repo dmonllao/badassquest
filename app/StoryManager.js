@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'story/PerthUnderground'], function($, Const, Map, InfoWindow, MissionsChain, StoryFree, StoryPerthUnderground) {
+define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'story/PerthUnderground'], function($, Const, UI, Map, InfoWindow, MissionsChain, StoryFree, StoryPerthUnderground) {
 
     // This contains the game instructions, ordered by how important they are to understand how the game works.
     var instructions = [
@@ -26,9 +26,7 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'stor
         var content = '<h1 class="story-name">' + this.story.title + '</h1>' +
             '<div class="story-intro">' + this.story.getIntro() + '</div>' +
             '<img src="' + this.user.photo + '" class="big-centered-img img-responsive img-circle"/>';
-
-        $('#text-action-content').html(content);
-        $('#text-action').modal('show');
+        UI.showModal(content);
 
         // Set the story initial position.
         this.map.setZoom(this.story.zoom);
@@ -174,10 +172,9 @@ define(['bs', 'Const', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'stor
         addGameTips: function() {
 
             setTimeout(function() {
-                var content = '<h1>How to play</h1>' +
+                var content = '<h1>Instructions</h1>' +
                     '<div class="text-left"><ul class="list-unstyled"><li>' + instructions.join('</li><li>') + '</li></ul></div>';
-                $('#text-action-content').html(content);
-                $('#text-action').modal('show');
+                UI.showModal(content, '<i class="fa fa-check"></i>');
             }, 2000);
         },
 
