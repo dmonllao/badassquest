@@ -13,7 +13,7 @@ define(['bs', 'Const', 'Generator', 'InfoWindow'], function($, Const, Generator,
 
         add: function(pissed) {
             // + something to avoid shouting immediatelly.
-            pissed.time = Math.floor(Date.now() / 1000) + Const.passingByRampUp;
+            pissed.time = Math.floor(Date.now() / 1000) + Const.pissedPassingByRampUp;
             this.places.push(pissed);
         },
 
@@ -33,7 +33,7 @@ define(['bs', 'Const', 'Generator', 'InfoWindow'], function($, Const, Generator,
                         closedCallback: function() {
                             // Reset it to shout again in a while.
                             pissed.shouting = false;
-                            pissed.time = Math.floor(Date.now() / 1000) + Const.passingByLapse;
+                            pissed.time = Math.floor(Date.now() / 1000) + Const.pissedPassingByLapse;
                         }.bind(this)
                     });
                 }
