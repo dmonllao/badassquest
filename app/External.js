@@ -39,6 +39,8 @@ define(['bs', 'Const', 'Util', 'Map'], function($, Const, Util, Map) {
             placesService.textSearch({query: locationName}, function(results, status) {
                 if (status != google.maps.places.PlacesServiceStatus.OK) {
                     promise.reject();
+                } else if (!results[0].photos) {
+                    promise.reject();
                 } else {
                     // First picture of the first result, what is life without risk LOL.
                     var photoUrl = results[0].photos[0].getUrl({'maxWidth': 400});
