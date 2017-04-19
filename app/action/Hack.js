@@ -41,7 +41,7 @@ define(['bs', 'Generator', 'UI', 'Foe', 'action/Steal'], function($, Generator, 
         var header = '<div class="action-header row"><h4>Welcome to ' + this.poiData.name + '</h4></div>';
         var html = header + '<div id="steal-info" class="info-box">' +
             '<p>You can steal $' + this.scenario.loot + ' here... There are ' + this.scenario.guards.length + ' guards... Looks like it would be ' + this.scenario.difficulty + '.' +
-            '<p>' + UI.renderActionButtons([{id: 'run', text: 'Hack it and run!'}]) + '</p>' +
+            '<p>' + UI.renderActionButtons([{id: 'run', text: 'Hack it and run!'}, {id: 'cancel', text: 'Cancel'}]) + '</p>' +
             '</div>';
         rendererPromise.resolve(html);
 

@@ -4,7 +4,7 @@ define(['bs'], function($) {
     return {
 
         getActionButtonStyle: function(index) {
-            var styles = ['btn-danger', 'btn-success', 'btn-warning', 'btn-primary', 'btn-info'];
+            var styles = ['btn-success', 'btn-danger', 'btn-warning', 'btn-primary', 'btn-info'];
             if (typeof styles[index] !== "undefined") {
                 return styles[index];
             }
@@ -22,18 +22,29 @@ define(['bs'], function($) {
             return html;
         },
 
-        renderOkButton: function(text) {
-            var html = '<div class="action-buttons">' +
-                '<button id="ok" class="btn btn-success">' + text + '</button>' +
+        renderOkButton: function(text, buttonClass) {
+
+            if (!text) {
+                text = '<i class="fa fa-check"></i>';
+            }
+
+            if (!buttonClass) {
+                buttonClass = 'btn btn-success';
+            }
+
+            return '<div class="action-buttons">' +
+                '<button id="ok" class="' + buttonClass + '">' + text + '</button>' +
                 '</div>';
-            return html;
         },
 
-        showModal: function(content, okButton) {
+        showModal: function(content, okButton, buttonClass) {
 
             if (okButton) {
-                content = content + this.renderOkButton(okButton);
+                content = content + this.renderOkButton(okButton, buttonClass);
             }
+
+            // Close any possibly opened modal.
+            $('#text-action').modal('hide');
 
             $('#text-action-content').html(content);
             $('#text-action').modal('show');

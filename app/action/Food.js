@@ -185,7 +185,7 @@ define(['bs', 'UI', 'action/Base', 'Generator'], function($, UI, ActionBase, Gen
 
         // Show the results in a modal window.
         $('#food-info').html("<p>I've caught you mate! You will swallow this punch!<br/>(They punched you and stole some of your money)</p>");
-        $('#text-action').modal('show');
+        UI.showModal($('#text-action-content').html(), 'Continue', 'btn btn-warning');
     };
 
     return ActionFood;

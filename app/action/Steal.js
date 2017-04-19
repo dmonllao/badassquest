@@ -45,7 +45,7 @@ define(['bs', 'Generator', 'Foe', 'UI', 'action/Base'], function($, Generator, F
         headerPromise.done(function(html) {
             html = html + '<div id="steal-info" class="info-box">' +
                 '<p>You can steal $' + this.scenario.loot + ' here... There are ' + this.scenario.guards.length + ' guards... Looks like it would be ' + this.scenario.difficulty + '.' +
-                '<p>' + UI.renderActionButtons([{id: 'run', text: 'Steal the money and run!'}]) + '</p></div>';
+                '<p>' + UI.renderActionButtons([{id: 'run', text: 'Steal the money and run!'}, {id: 'cancel', text: 'Cancel'}]) + '</p></div>';
             rendererPromise.resolve(html);
 
         }.bind(this));
@@ -54,6 +54,9 @@ define(['bs', 'Generator', 'Foe', 'UI', 'action/Base'], function($, Generator, F
     };
 
     ActionSteal.prototype.rendered = function() {
+        $('#cancel').on('click', function(ev) {
+            $('#text-action').modal('hide');
+        });
         $('#run').on('click', function(ev) {
             ev.preventDefault();
 
@@ -96,7 +99,7 @@ define(['bs', 'Generator', 'Foe', 'UI', 'action/Base'], function($, Generator, F
         $('#steal-info').html("<p>I've caught you mate! You will swallow this punch!<br/>" +
             "(They punched you and recovered the money you have stolen them)</p>");
 
-        $('#text-action').modal('show');
+        UI.showModal($('#text-action-content').html(), 'Continue', 'btn btn-warning');
     };
 
     ActionSteal.prototype.getLootImportance = function(loot) {
