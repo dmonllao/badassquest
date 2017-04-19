@@ -1,10 +1,16 @@
 define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, InfoWindow, Icon) {
 
-    function Router(appMap) {
+    function Router(appMap, isPlayer) {
 
         directionsService = new google.maps.DirectionsService();
 
         this.map = appMap;
+
+        if (isPlayer == 'undefined') {
+            // Default to no.
+            isPlayer = false;
+        }
+        this.isPlayer = isPlayer;
 
         var rendererOptions = {
             map : this.map,
@@ -28,7 +34,10 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
         tick: 50,
 
         // @type {google.maps.Map}
-        map : null,
+        map: null,
+
+        // @type {Boolean} Is this router for the player.
+        isPlayer: false,
 
         // @type {google.maps.Marker}
         marker: null,
@@ -41,6 +50,9 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
 
         // @type {google.maps.DirectionsService}
         directionsService: null,
+
+        // @type {Boolean}
+        moving: false,
 
         route: function(routeMarker, position, stepCallback, destinationCallback, stepLong) {
 
@@ -74,8 +86,17 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
         },
 
         stop: function() {
-            this.clearRoute();
+
+            // Stop animation. This is done here rather than in clearRoute as
+            // it is fine to stop the visible animation only once a destination is
+            // reached, not when another location is clicked while moving to a
+            // destination.
             this.marker.setAnimation(null);
+
+            this.moving = false;
+
+            // Clean up all other stuff.
+            this.clearRoute();
         },
 
         routeCallback: function() {
@@ -149,11 +170,20 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
             this.eol = this.polyline.Distance();
 
             // People shouting stuff as the badass walk.
-            setTimeout(function() {
-                // First message early so the player don't get bored while walking.
-                this.shout();
-                this.shoutInterval = setInterval(this.shout.bind(this), Const.passingByLapse);
-            }.bind(this), 1000);
+            if (this.isPlayer) {
+                setTimeout(function() {
+                    // We don't start shouting if the user already stopped.
+                    if (this.moving) {
+
+                        // First message early so the player don't get bored while walking.
+                        this.shout();
+                        this.shoutInterval = setInterval(this.shout.bind(this), Const.passingByLapse);
+                    }
+                }.bind(this), 1000);
+            }
+
+            // Flag this route as active.
+            this.moving = true;
 
             // We start from 0.
             this.animate(0);
@@ -218,19 +248,12 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
 
         done: function(position) {
 
-            // Stop animation. This is done here rather than in clearRoute as
-            // it is fine to stop the visible animation only once a destination is
-            // reached, not when another location is clicked while moving to a
-            // destination.
-            this.marker.setAnimation(null);
+            this.stop();
 
             // Execute the caller callback once all done.
             if (this.destinationReachedCallback) {
                 this.destinationReachedCallback(position);
             }
-
-            // Clean up all other stuff.
-            this.clearRoute();
         },
 
         /**
@@ -246,10 +269,10 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
 
             // Clear shouting people.
             setTimeout(function() {
-                // Same delay than in startAnimation, otherwise we may clear the route
+                // Same delay (+1) than in startAnimation, otherwise we may clear the route
                 // before the interval starts.
                 clearInterval(this.shoutInterval);
-            }, 1000);
+            }.bind(this), 1001);
 
             if (this.polyline !== null) {
                 this.polyline.setMap(null);

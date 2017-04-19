@@ -22,7 +22,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
             defense: Const.initDefense
         };
 
-        this.router = new Router(this.map);
+        this.router = new Router(this.map, true);
 
         // Custom controls.
         this.controls = new Controls();
