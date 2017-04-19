@@ -192,7 +192,7 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
             // Execute the step callback before anything else.
             // We arrived.
             if (distance > this.eol) {
-                this.setDestination(this.endLocation.latLng);
+                this.done(this.endLocation.latLng);
                 return;
             }
 
@@ -216,7 +216,7 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
             }.bind(this), this.tick);
         },
 
-        setDestination: function(position) {
+        done: function(position) {
 
             // Stop animation. This is done here rather than in clearRoute as
             // it is fine to stop the visible animation only once a destination is
@@ -245,7 +245,11 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
             clearTimeout(this.animationTimer);
 
             // Clear shouting people.
-            clearInterval(this.shoutInterval);
+            setTimeout(function() {
+                // Same delay than in startAnimation, otherwise we may clear the route
+                // before the interval starts.
+                clearInterval(this.shoutInterval);
+            }, 1000);
 
             if (this.polyline !== null) {
                 this.polyline.setMap(null);
