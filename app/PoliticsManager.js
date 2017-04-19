@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'UI', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSetGenerator', 'External'], function($, Const, UI, Icon, Generator, PoiTypes, Map, MissionsSetGenerator, External) {
+define(['bs', 'Const', 'UI', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSetGenerator', 'External', 'Sound'], function($, Const, UI, Icon, Generator, PoiTypes, Map, MissionsSetGenerator, External, Sound) {
 
     var adminLevels = ['locality', 'administrative_area_level_3', 'administrative_area_level_2', 'administrative_area_level_1', 'country'];
 
@@ -42,6 +42,7 @@ define(['bs', 'Const', 'UI', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSe
                     }, 2000);
 
                     setTimeout(function() {
+                        Sound.play('achievement');
                         var content = 'Congratulations! You now rule over ' + politic.location + '. You are the ' + politic.role + '.';
                         if (politic.locationImage) {
                             content += '<img src="' + politic.locationImage + '" class="big-centered-img img-responsive img-circle">';

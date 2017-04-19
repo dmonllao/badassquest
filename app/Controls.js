@@ -2,7 +2,6 @@ define(['bs', 'Sound'], function($, Sound) {
 
     var user = null;
     var panorama = null;
-    var sound = null;
 
     function Controls() {
         return this;
@@ -189,8 +188,7 @@ define(['bs', 'Sound'], function($, Sound) {
 
         initSound: function() {
 
-            var sound = new Sound();
-            sound.init();
+            Sound.init();
 
             var musicDiv = document.createElement('div');
             musicDiv.setAttribute('id', 'sound');
@@ -202,7 +200,7 @@ define(['bs', 'Sound'], function($, Sound) {
             musicDiv.innerHTML = '<pre class="control actionable-control">' + musicOffHtml + '</pre>';
 
             google.maps.event.addDomListener(musicDiv, 'click', function() {
-                var soundOn = sound.toggle();
+                var soundOn = Sound.toggle();
                 if (soundOn === true) {
                     $('#sound pre').html(musicOffHtml);
                 } else {

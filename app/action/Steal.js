@@ -1,4 +1,4 @@
-define(['bs', 'Generator', 'Foe', 'UI', 'action/Base'], function($, Generator, Foe, UI, ActionBase) {
+define(['bs', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], function($, Generator, Foe, UI, ActionBase, Sound) {
 
     // Difficulty is only there to make things easy later.
     var randomScenarios = [
@@ -61,6 +61,8 @@ define(['bs', 'Generator', 'Foe', 'UI', 'action/Base'], function($, Generator, F
             ev.preventDefault();
 
             var lootImportance = this.getLootImportance(this.scenario.loot);
+
+            Sound.play('achievement');
 
             // Get the loot.
             this.user.updateState({

@@ -1,4 +1,4 @@
-define(['bs', 'action/Base'], function($, ActionBase) {
+define(['bs', 'action/Base', 'Sound'], function($, ActionBase, Sound) {
 
     function ActionCure(user, game, poiData, marker) {
         ActionBase.call(this, user, game, poiData, marker);
@@ -23,6 +23,8 @@ define(['bs', 'action/Base'], function($, ActionBase) {
         headerPromise.done(function(html) {
             html = html + '<div class="info-box"><p>Hey amigo! Your health has been restored, enjoy your day and behave!</p></div>';
             rendererPromise.resolve(html);
+
+            Sound.play('heal');
 
             // Update the user state.
             this.user.updateState({

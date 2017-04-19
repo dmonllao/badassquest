@@ -1,4 +1,4 @@
-define(['Phaser', 'Const', 'Generator', 'Util', 'External'], function(Phaser, Const, Generator, Util, External) {
+define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound'], function(Phaser, Const, Generator, Util, External, Sound) {
 
     var game = null;
 
@@ -239,6 +239,8 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External'], function(Phaser, Co
             this.formatText(text, Util.getGameFontSize());
             text.fill = '#FF2821';
 
+            Sound.play('hurt');
+
             // Show it while the user can attack.
             setTimeout(function() {
                 text.destroy();
@@ -258,6 +260,12 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External'], function(Phaser, Co
             // Notify the damage points.
             var text = game.add.text(pointer.x, pointer.y, damagePoints);
             this.formatText(text, 20);
+
+            if (this.foes[foeIndex].isDead()) {
+                Sound.play('kill');
+            } else {
+                Sound.play('hit');
+            }
 
             // Show it while the user can attack.
             setTimeout(function() {

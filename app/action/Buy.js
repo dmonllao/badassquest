@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'Util', 'Icon', 'Generator', 'UI', 'action/Base'], function($, Const, Util, Icon, Generator, UI, ActionBase) {
+define(['bs', 'Const', 'Util', 'Icon', 'Generator', 'UI', 'action/Base', 'Sound'], function($, Const, Util, Icon, Generator, UI, ActionBase, Sound) {
 
     function ActionBuy(user, game, poiData, marker) {
         ActionBase.call(this, user, game, poiData, marker);
@@ -61,6 +61,8 @@ define(['bs', 'Const', 'Util', 'Icon', 'Generator', 'UI', 'action/Base'], functi
             }
 
             this.closeAction(ev);
+
+            Sound.play('achievement');
 
             this.user.updateState({
                 cWealth: this.user.state.cWealth - this.poiPrice

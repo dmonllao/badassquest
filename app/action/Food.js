@@ -1,4 +1,4 @@
-define(['bs', 'UI', 'action/Base', 'Generator'], function($, UI, ActionBase, Generator) {
+define(['bs', 'UI', 'action/Base', 'Generator', 'Sound'], function($, UI, ActionBase, Generator, Sound) {
 
     // TODO Change this, but I'm not convinced how could depend on the user.
     var randomFood = [
@@ -130,6 +130,8 @@ define(['bs', 'UI', 'action/Base', 'Generator'], function($, UI, ActionBase, Gen
                 cWealth: this.user.state.cWealth - this.food.price
             });
 
+            Sound.play('heal');
+
             // Just paying is not "awesome".
             this.user.addExperience(foodImportance * 4);
             this.doneCallback();
@@ -144,6 +146,8 @@ define(['bs', 'UI', 'action/Base', 'Generator'], function($, UI, ActionBase, Gen
                 cHealth: this.user.state.cHealth + this.food.health,
                 cFood: this.user.state.cFood + this.food.energy,
             });
+
+            Sound.play('heal');
 
             this.user.addExperience(foodImportance * 10);
             this.doneCallback();

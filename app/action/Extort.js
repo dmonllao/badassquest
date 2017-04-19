@@ -1,4 +1,4 @@
-define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base'], function($, Util, Generator, Foe, UI, ActionBase) {
+define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], function($, Util, Generator, Foe, UI, ActionBase, Sound) {
 
     function ActionExtort(user, game, poiData, marker) {
         ActionBase.call(this, user, game, poiData, marker);
@@ -91,6 +91,8 @@ define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base'], function($, Util
     ActionExtort.prototype.extorted = function() {
         this.user.addExperience(this.tax * 2);
         this.markAsDone(true, true);
+
+        Sound.play('achievement');
 
         this.doneCallback();
 
