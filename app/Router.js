@@ -1,4 +1,4 @@
-define(['Const', 'Generator', 'InfoWindow'], function(Const, Generator, InfoWindow) {
+define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, InfoWindow, Icon) {
 
     function Router(appMap) {
 
@@ -148,6 +148,11 @@ define(['Const', 'Generator', 'InfoWindow'], function(Const, Generator, InfoWind
             // This is the total distance to travel.
             this.eol = this.polyline.Distance();
 
+            // People shouting stuff as the badass walk.
+            setTimeout(function() {
+                // First message early so the played don't get bored.
+                this.shout();
+            }.bind(this), 1000);
             this.shoutInterval = setInterval(this.shout.bind(this), Const.passingByLapse);
 
             // We start from 0.
@@ -258,8 +263,8 @@ define(['Const', 'Generator', 'InfoWindow'], function(Const, Generator, InfoWind
             var marker = new google.maps.Marker({
                 position: this.marker.getPosition(),
                 map: this.map,
+                icon: Icon.getByType('comment', 0.5)
             });
-            marker.setVisible(false);
 
             InfoWindow.openInfoInstance({
                 map: this.map,

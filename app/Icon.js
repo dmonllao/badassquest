@@ -48,8 +48,11 @@ define(['fontawesome'], function(fontawesome) {
         interest: {
             icon: fontawesome.markers.UNIVERSITY,
             color: 'blue'
+        },
+        comment: {
+            icon: fontawesome.markers.COMMENTING_O,
+            color: 'white'
         }
-
     };
 
     return {
