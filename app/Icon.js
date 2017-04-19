@@ -1,4 +1,4 @@
-define(['fontawesome'], function(fontawesome) {
+define(['fontawesomeMarkers'], function(fontawesomeMarkers) {
 
     var typeIcons = {
         angry: {

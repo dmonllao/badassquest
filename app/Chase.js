@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'InfoWindow', 'fontawesome', 'Router'], function($, Const, InfoWindow, fontawesome, Router) {
+define(['bs', 'Const', 'InfoWindow', 'fontawesomeMarkers', 'Router'], function($, Const, InfoWindow, fontawesomeMarkers, Router) {
 
     function Chase(map, user, chaseData) {
 

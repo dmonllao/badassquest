@@ -150,10 +150,10 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
 
             // People shouting stuff as the badass walk.
             setTimeout(function() {
-                // First message early so the played don't get bored.
+                // First message early so the player don't get bored while walking.
                 this.shout();
+                this.shoutInterval = setInterval(this.shout.bind(this), Const.passingByLapse);
             }.bind(this), 1000);
-            this.shoutInterval = setInterval(this.shout.bind(this), Const.passingByLapse);
 
             // We start from 0.
             this.animate(0);

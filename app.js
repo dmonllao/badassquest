@@ -1,7 +1,7 @@
 requirejs.config({
     baseUrl: 'app',
     paths: {
-        fontawesome: '../vendor/fontawesome-markers/fontawesome-markers.min',
+        fontawesomeMarkers: '../bower_components/fontawesome-markers/fontawesome-markers.min',
         jquery: '../bower_components/jquery/dist/jquery',
         jqueryShake: '../vendor/others/jquery-shake',
         bs: '../bower_components/bootstrap/dist/js/bootstrap',
@@ -18,9 +18,6 @@ requirejs.config({
         bs: {
             deps: ['jquery', 'jqueryShake'],
             exports: "$"
-        },
-        fontawesome: {
-            exports: "fontawesome"
         },
         infobox: {
             deps: ['google']
