@@ -241,23 +241,6 @@ define(['bs', 'Sound'], function($, Sound) {
             });
 
             this.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(githubDiv);
-
-            // Twitter.
-            var twitterDiv = document.createElement('div');
-            twitterDiv.setAttribute('id', 'twitter');
-
-            twitterDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-twitter"></i></pre>';
-
-            google.maps.event.addDomListener(twitterDiv, 'click', function() {
-                 var form = document.createElement("form");
-                 form.method = "GET";
-                 form.action = "https://twitter.com/DavidMonllao";
-                 form.target = "_blank";
-                 document.body.appendChild(form);
-                 form.submit();
-            });
-
-            this.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(twitterDiv);
         },
 
         /**
