@@ -2,6 +2,8 @@
 
 [http://dmonllao.github.io/badassquest](http://dmonllao.github.io/badassquest)
 
+[![Screenshot](https://dmonllao.github.io/badassquest/img/readme-img1.png)]
+
 # Develop it
 
 ## Requirements
