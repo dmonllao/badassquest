@@ -102,7 +102,7 @@ define(function() {
             "elementType": "geometry",
             "stylers": [
                 {
-                    "color": "#3f518c"
+                    "visibility": "off"
                 }
             ]
         }
