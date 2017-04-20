@@ -420,11 +420,19 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
                 }
             }
 
-            $('text-action').modal('hide');
-            $('game-action').modal('hide');
+            $('#text-action').modal('hide');
+            $('#game-action').modal('hide');
 
             $('#status-title').html('Game over');
-            $('#status-content').html('You died! <a href="' + window.location.href + '">Try again</a> loser.');
+            var content = '<div>You died! <a href="' + window.location.href + '">Try again</a> loser.</div>';
+
+            if (this.state.cFood == 0) {
+                content = content + '<br/><div>(You ran out of energy <i class="fa fa-cutlery" style="color: grey;"></i>. Recover it in restaurants.)</div>'
+            } else {
+                // We don't show this message if cFood == 0 because the user probably died because of ^.
+                content = content + '<br/><div>(You ran out of life <i class="fa fa-heartbeat" style="color: #e15c5c"></i>. Remember to go regularly to the hospital <i class="fa fa-h-square" style="color: #e15c5c;"></i>.)</div>';
+            }
+            $('#status-content').html(content);
             $('#status').modal('show');
         }
 
