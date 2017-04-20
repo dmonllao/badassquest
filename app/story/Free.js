@@ -4,7 +4,7 @@ define(['bs', 'Map', 'story/Base'], function($, Map, StoryBase) {
 
     function Free(user, game) {
         StoryBase.call(this, user, game);
-        this.title = 'Bad Ass Quest';
+        this.title = 'Badass Quest';
     }
 
     Free.prototype.getIntro = function() {

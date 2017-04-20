@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'story/PerthUnderground'], function($, Const, UI, Map, InfoWindow, MissionsChain, StoryFree, StoryPerthUnderground) {
+define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'story/PerthUnderground', 'story/ForPresident'], function($, Const, UI, Map, InfoWindow, MissionsChain, StoryFree, StoryPerthUnderground, StoryForPresident) {
 
     // This contains the game instructions, ordered by how important they are to understand how the game works.
     var instructions = [
@@ -20,7 +20,8 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
         // TODO Hardcoded as this is supposed to cover all Mission API.
         //this.story = new StoryModernAlchemist(this.user, this.game);
         //this.story = new StoryPerthUnderground(this.user, this.game);
-        this.story = new StoryFree(this.user, this.game);
+        //this.story = new StoryFree(this.user, this.game);
+        this.story = new StoryForPresident(this.user, this.game);
 
         // Show intro text.
         var content = '<h1 class="story-name">' + this.story.title + '</h1>' +
@@ -43,6 +44,11 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
             var missionsChain = new MissionsChain(this.map, this.game, this.user,
                 this.story.missions, this.gameCompleted.bind(this));
             missionsChain.setMissionLocation();
+        }
+
+        // Allow stories to execute extra stuff.
+        if (typeof this.story.ready !== "undefined") {
+            this.story.ready();
         }
 
         return this;
