@@ -4,7 +4,7 @@ define(['bs', 'Const', 'Map', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'P
     var map = Map.init();
 
     // @type {User} The current user.
-    var user = new User(map, 'Juanito', Const.characterPic);
+    var user = new User(map, 'Badass', Const.characterPic);
 
     // Start the game.
     var appGame = new Game();

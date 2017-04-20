@@ -119,6 +119,7 @@ define(['bs', 'UI', 'action/Base', 'Generator', 'Sound'], function($, UI, Action
 
             if (this.user.state.cWealth < this.food.price) {
                 $('#food-info').html("<p>You can not afford it mate, get out.</p>");
+                UI.showModal($('#text-action-content').html(), 'Continue', 'btn btn-warning');
                 return;
             }
 
@@ -154,6 +155,7 @@ define(['bs', 'UI', 'action/Base', 'Generator', 'Sound'], function($, UI, Action
 
             if (!this.isUserFollowed()) {
                 $('#food-info').html("<p>You escaped and nobody followed you!</p>");
+                UI.showModal($('#text-action-content').html(), 'Continue', 'btn btn-warning');
                 return;
             }
 

@@ -26,7 +26,7 @@ define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], functio
         var text;
         if (this.user.canIntimidate(this.poiData)) {
             // They are intimidated and they will pay.
-            text = this.getIntimidatedText();
+            text = this.getIntimidatedText() + UI.renderOkButton('Continue', 'btn btn-warning');
             this.extorted();
         } else {
             // You are not strong enough, they are not scared of you.
@@ -54,6 +54,11 @@ define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], functio
 
     ActionExtort.prototype.rendered = function() {
 
+        // Only useful for canIntimidate == true.
+        $('#ok').on('click', function(ev) {
+            $('#text-action').modal('hide');
+        });
+
         $('#fight').on('click', function(ev) {
 
             var foes = Generator.foes(this.poiData);
@@ -68,6 +73,7 @@ define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], functio
                 location: this.poiData.vicinity,
                 wonCallback: function() {
                     $('#extort-info').html(this.getIntimidatedText());
+                    UI.showModal($('#text-action-content').html(), 'Continue', 'btn btn-warning');
                     this.extorted();
                     $('#game-action').modal('hide');
                 }.bind(this)

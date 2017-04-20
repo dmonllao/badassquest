@@ -57,6 +57,7 @@ define(['bs', 'Const', 'Util', 'Icon', 'Generator', 'UI', 'action/Base', 'Sound'
 
             if (this.user.state.cWealth < this.poiPrice) {
                 $('#buy-info').html("<p>You can not afford it mate, get out.</p>");
+                UI.showModal($('#text-action-content').html(), 'Continue', 'btn btn-warning');
                 return;
             }
 

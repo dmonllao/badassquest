@@ -43,9 +43,7 @@ define(['bs'], function($) {
                 content = content + this.renderOkButton(okButton, buttonClass);
             }
 
-            // Close any possibly opened modal.
-            $('#text-action').modal('hide');
-
+            // We overwrite possible previous contents.
             $('#text-action-content').html(content);
             $('#text-action').modal('show');
 

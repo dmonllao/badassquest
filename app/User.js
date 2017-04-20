@@ -103,7 +103,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
                     url: this.photo,
                     scaledSize: new google.maps.Size(40, 40),
                 },
-                title: 'I\'m ' + this.playerName,
+                title: this.playerName,
                 zIndex: 9
             });
             google.maps.event.addListener(this.marker, 'click', function() {

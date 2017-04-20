@@ -112,6 +112,7 @@ define(['bs', 'PoiTypes', 'Map', 'Const', 'UI', 'Util', 'InfoWindow', 'External'
 
             var marker = new google.maps.Marker({
                 map: this.map,
+                title: data.name,
                 position: data.geometry.location,
                 icon: Icon.get(data.types, PoiTypes.get(), 0.5),
                 zIndex: 1
