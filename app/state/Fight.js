@@ -135,7 +135,6 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound'], function(P
 
             // Finish if the player is dead.
             if (this.user.isDead()) {
-                this.killed();
                 return;
             }
 
