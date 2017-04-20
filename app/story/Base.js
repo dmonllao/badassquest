@@ -1,4 +1,4 @@
-define(['jquery'], function($) {
+define(['bs'], function($) {
 
     function StoryBase(user, game) {
         this.user = user;

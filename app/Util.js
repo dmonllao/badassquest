@@ -1,4 +1,4 @@
-define(['jquery'], function($) {
+define(['bs'], function($) {
 
     return {
 

@@ -1,4 +1,4 @@
-define(['jquery', 'InfoWindow'], function($, InfoWindow) {
+define(['bs', 'InfoWindow'], function($, InfoWindow) {
 
     function Mission(data) {
 

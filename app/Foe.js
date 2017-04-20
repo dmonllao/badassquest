@@ -1,4 +1,4 @@
-define(['jquery', 'Const', 'Generator'], function($, Const, Generator) {
+define(['bs', 'Const', 'Generator'], function($, Const, Generator) {
 
     // Sprite hardcoded values.
     var bodyScale = 2;

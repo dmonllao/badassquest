@@ -1,4 +1,4 @@
-define(['jquery', 'story/Base', 'UI', 'Icon', 'InfoWindow', 'Mission', 'Foe'], function($, StoryBase, UI, Icon, InfoWindow, Mission, Foe) {
+define(['bs', 'story/Base', 'UI', 'Icon', 'InfoWindow', 'Mission', 'Foe'], function($, StoryBase, UI, Icon, InfoWindow, Mission, Foe) {
 
     PerthUnderground.prototype = Object.create(StoryBase.prototype);
 

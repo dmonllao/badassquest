@@ -1,4 +1,4 @@
-define(['jquery', 'Map', 'story/Base'], function($, Map, StoryBase) {
+define(['bs', 'Map', 'story/Base'], function($, Map, StoryBase) {
 
     Free.prototype = Object.create(StoryBase.prototype);
 
