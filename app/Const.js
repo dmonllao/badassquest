@@ -1,7 +1,7 @@
 define(function() {
     return {
         defaultMapCenterBackground: {lat: -31.956427724868902, lng: 115.86163059965043},
-        characterPic: 'img/badass.png',
+        characterPic: 'img/trump.png',
         initFood: 4000,
         initHealth: 100,
         initSpeed: 4,
