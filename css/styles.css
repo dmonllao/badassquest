@@ -221,6 +221,7 @@ pre.control span.badge {
 
 .story-name {
     margin-bottom: 20px;
+    font-size: x-large;
     font-weight:700;
     color: #e15c5c;
 }
