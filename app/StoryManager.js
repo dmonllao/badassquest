@@ -88,7 +88,7 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
                 var text = 'Hey! You look exactly like my dead son! Are you new in the city? I should adopt you, keep my phone number, I will contact you.';
                 this.addInfoPerson(position, text, function() {
                     $('#map').trigger('notification:add', {
-                        from: 'Chuck Norris',
+                        from: '<img src="img/chuck.jpg" class="img-circle notification-img"> Chuck Norris',
                         message: 'Explore the city for a while, I hope you survive... catch you later amigou',
                     });
                 });
