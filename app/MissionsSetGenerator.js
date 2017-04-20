@@ -72,7 +72,7 @@ define(['bs', 'Const', 'MissionsChain', 'Mission', 'InfoWindow', 'Generator', 'P
                 }.bind(this),
                 infoMessage: {
                     message: missionData.infoMessage,
-                    from: '<img src="' + this.employer.image + '" class="img-circle notification-img"> ' + this.employer.name
+                    from: '<img src="' + this.employer.image + '" class="img-circle notification-img"> ' + this.employer.name + ' - ' + this.employer.location
                 },
                 doneMessage: {
                     message: missionData.doneMessage,

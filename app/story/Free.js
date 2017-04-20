@@ -4,8 +4,12 @@ define(['bs', 'Map', 'story/Base'], function($, Map, StoryBase) {
 
     function Free(user, game) {
         StoryBase.call(this, user, game);
-        this.title = 'Badass Quest';
     }
+
+    Free.prototype.getTitle = function() {
+        var spinningMoney = '<i class="fa fa-money fa-spin fa-lg" style="color: green;"></i>';
+        return spinningMoney + '&nbsp;Badass Quest&nbsp;' + spinningMoney;
+    };
 
     Free.prototype.getIntro = function() {
         return '<div>Terrorize the city.</div><div><input id="place-input" class="form-control"/></div>';

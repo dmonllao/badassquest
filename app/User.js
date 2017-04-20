@@ -6,6 +6,9 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         this.playerName = playerName;
         this.photo = playerPhoto;
 
+        this.healthWarningShown = false;
+        this.foodWarningShown = false;
+
         this.state = {
             cHealth: Const.initHealth,
             cFood: Const.initFood,
@@ -84,6 +87,9 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         taxes: {},
 
         timers: {},
+
+        healthWarningShown: null,
+        foodWarningShown: null,
 
         setPosition: function(position) {
             if (this.marker === null) {
@@ -332,7 +338,21 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
                 this.state.cFood = params.cFood;
                 if (this.state.cFood > this.attrs.tFood) {
                     this.state.cFood = this.attrs.tFood;
-                    // TODO popover if life starts draining.
+                }
+                // popover if energy starts draining.
+                if (this.foodWarningShown === false && this.state.cFood < 200) {
+                    $('#food').popover({
+                        delay: {show: 500, hide: 100},
+                        html: true,
+                        trigger: 'manual',
+                        content: 'Go to the restaurant <i class="fa fa-cutlery" style="color: grey;"></i> and eat something or you will die!',
+
+                    });
+                    $('#food').popover('show');
+                    setTimeout(function() {
+                        $('#food').popover('destroy');
+                    }, 5000);
+                    this.foodWarningShown = true;
                 }
             }
 
@@ -342,6 +362,24 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
                 if (this.state.cHealth > this.attrs.tHealth) {
                     this.state.cHealth = this.attrs.tHealth;
                 }
+
+                // popover if life starts draining.
+                if (this.healthWarningShown === false && this.state.cHealth < 40) {
+                    $('#health').popover({
+                        delay: {show: 500, hide: 100},
+                        html: true,
+                        trigger: 'manual',
+                        content: 'You are seriously injured. Go to the hospital <i class="fa fa-h-square" style="color: #e15c5c;"></i>, ' +
+                            'eat something <i class="fa fa-cutlery" style="color: grey;"></i> or you will die!',
+
+                    });
+                    $('#health').popover('show');
+                    setTimeout(function() {
+                        $('#health').popover('destroy');
+                    }, 5000);
+                    this.healthWarningShown = true;
+                }
+
             }
 
             // Food and health zero limits.

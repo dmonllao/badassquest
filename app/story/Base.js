@@ -11,8 +11,6 @@ define(['bs'], function($) {
 
     StoryBase.prototype = {
 
-        title: '(overwrite me)',
-
         initialPosition: null,
 
         zoom: 17,
@@ -21,6 +19,11 @@ define(['bs'], function($) {
         game: null,
 
         missions: null,
+
+        getTitle: function() {
+            console.error('getTitle should be overwriten');
+            return '';
+        },
 
         getIntro: function() {
             console.error('getIntro should be overwriten');

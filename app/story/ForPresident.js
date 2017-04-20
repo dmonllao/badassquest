@@ -4,8 +4,11 @@ define(['bs', 'story/Free', 'UI', 'Icon', 'InfoWindow', 'Mission', 'Foe'], funct
 
     function ForPresident(user, game) {
         StoryFree.call(this, user, game);
-        this.title = 'Badass for president';
     }
+
+    ForPresident.prototype.getIntro = function() {
+        return '<div>Badass for president</div><div><input id="place-input" class="form-control"/></div>';
+    };
 
     return ForPresident;
 });

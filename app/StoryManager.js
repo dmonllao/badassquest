@@ -5,8 +5,6 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
         '<i class="fa fa-circle-o" aria-hidden="true"></i> Click on the map to move around and to reveal new places',
         '<i class="fa fa-circle-o" aria-hidden="true"></i> Zoom out to see more nearby places. Center the map with <i style="color: black;" class="fa fa-fw fa-arrows"></i>',
         '<i class="fa fa-circle-o" aria-hidden="true"></i> Gain control of city areas by extorting people or buying places',
-        '<i class="fa fa-circle-o" aria-hidden="true"></i> Your energy <i style="color: #8397D2;" class="fa fa-cutlery"></i> decreases over time, eat regularly or you will die',
-        '<i class="fa fa-circle-o" aria-hidden="true"></i> <i style="color: red;" class="fa fa-fw fa-heart"></i> is your health. Recover it in restaurants or hospitals',
     ];
 
     var initPromise = $.Deferred();
@@ -24,7 +22,7 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
         this.story = new StoryForPresident(this.user, this.game);
 
         // Show intro text.
-        var content = '<h1 class="story-name">' + this.story.title + '</h1>' +
+        var content = '<h1 class="story-name">' + this.story.getTitle() + '</h1>' +
             '<div class="story-intro">' + this.story.getIntro() + '</div>' +
             '<img src="' + this.user.photo + '" class="big-centered-img img-responsive img-circle"/>';
         UI.showModal(content);
@@ -178,9 +176,9 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
         addGameTips: function() {
 
             setTimeout(function() {
-                var content = '<h1>Instructions</h1>' +
+                var content = '<h1>How to play</h1>' +
                     '<div class="text-left"><ul class="list-unstyled"><li>' + instructions.join('</li><li>') + '</li></ul></div>';
-                UI.showModal(content, '<i class="fa fa-check"></i>');
+                UI.showModal(content, '<i class="fa fa-gamepad"></i>');
             }, 2000);
         },
 
