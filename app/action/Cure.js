@@ -1,4 +1,4 @@
-define(['bs', 'action/Base', 'Sound'], function($, ActionBase, Sound) {
+define(['bs', 'action/Base', 'Sound', 'UI'], function($, ActionBase, Sound, UI) {
 
     function ActionCure(user, game, poiData, marker) {
         ActionBase.call(this, user, game, poiData, marker);
@@ -21,7 +21,8 @@ define(['bs', 'action/Base', 'Sound'], function($, ActionBase, Sound) {
 
         // Once we have the header we concat the body and resolve the renderer promise.
         headerPromise.done(function(html) {
-            html = html + '<div class="info-box"><p>Hey amigo! Your health has been restored, enjoy your day and behave!</p></div>';
+            html = html + '<div class="info-box"><p>Hey amigo! Your health has been restored, enjoy your day and behave!</p></div>' +
+                UI.renderOkButton('Continue', 'btn btn-warning');
             rendererPromise.resolve(html);
 
             Sound.play('heal');
@@ -38,6 +39,12 @@ define(['bs', 'action/Base', 'Sound'], function($, ActionBase, Sound) {
         }.bind(this));
 
         return rendererPromise;
+    };
+
+    ActionCure.prototype.rendered = function() {
+        $('#ok').on('click', function(ev) {
+            $('#text-action').modal('hide');
+        });
     };
 
     return ActionCure;
