@@ -45,6 +45,7 @@ define(['bs'], function($) {
 
             // We overwrite possible previous contents.
             $('#text-action-content').html(content);
+
             $('#text-action').modal('show');
 
             if (okButton) {
