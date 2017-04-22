@@ -15,7 +15,7 @@ define(['bs', 'story/Free', 'UI', 'Icon', 'InfoWindow', 'Mission', 'Foe'], funct
         return '<div>A quest <i class="fa fa-map-o"></i> ' +
             'to release your inner badass <i class="fa fa-hand-rock-o" style="color: #B58A3F;"></i> ' +
             'in real world locations <i class="fa fa-map-marker" style="color: #e15c5c"></i></div>' +
-            '<div><input id="place-input" class="form-control"/></div>';
+            '<div><input id="place-input" class="form-control" placeholder="Enter a city"/></div>';
     };
 
     return ForPresident;

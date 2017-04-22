@@ -12,7 +12,7 @@ define(['bs', 'Map', 'story/Base'], function($, Map, StoryBase) {
     };
 
     Free.prototype.getIntro = function() {
-        return '<div>Terrorize the city.</div><div><input id="place-input" class="form-control"/></div>';
+        return '<div>Terrorize the city.</div><div><input id="place-input" class="form-control" placeholder="Enter a city"/></div>';
     };
 
     Free.prototype.getPosition = function(map, initialPositionPromise, callback) {
