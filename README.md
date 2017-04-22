@@ -6,6 +6,8 @@
 
 # Development
 
+No i18n, no i10n, no a11y.
+
 ## Requirements
 * NPM
 * Bower installed globally
