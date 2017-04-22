@@ -12,7 +12,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         this.state = {
             cHealth: Const.initHealth,
             cFood: Const.initFood,
-            cWealth: 20,
+            cWealth: Const.initWealth,
             experience: 10,
             level: 1
         };
