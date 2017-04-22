@@ -2,9 +2,12 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
 
     // This contains the game instructions, ordered by how important they are to understand how the game works.
     var instructions = [
-        '<i class="fa fa-circle-o" aria-hidden="true"></i> Click on the map to move around and to reveal new places',
-        '<i class="fa fa-circle-o" aria-hidden="true"></i> Zoom out to see more nearby places. Center the map with <i style="color: black;" class="fa fa-fw fa-arrows"></i>',
-        '<i class="fa fa-circle-o" aria-hidden="true"></i> Gain control of city areas by extorting people or buying places',
+        '<i class="fa fa-circle-o" aria-hidden="true"></i> Gain experience and reputation by being a badass <img src="img/trump.png" class="img-circle notification-img">.',
+        '<i class="fa fa-circle-o" aria-hidden="true"></i> Control city areas <i class="fa fa-flag" style="color: #95c355;"></i> by extorting businessmen or buying places <i class="fa fa-home" style="color: #95c355;"></i>.',
+        '<i class="fa fa-circle-o" aria-hidden="true"></i> Click on the map to move around the city.',
+        '<i class="fa fa-circle-o" aria-hidden="true"></i> Zoom out <i class="fa fa-fw fa-minus"></i> to see more nearby places <i class="fa fa-map-marker" style="color: #e15c5c"></i>. Center the map with <i style="color: black;" class="fa fa-fw fa-arrows"></i>.',
+        '<i class="fa fa-circle-o" aria-hidden="true"></i> You can change the map view by pressing <i class="fa fa-fw fa-map-o"></i>.',
+        '<i class="fa fa-circle-o" aria-hidden="true"></i> Eat regularly <i class="fa fa-cutlery" style="color: grey;"></i> or your life <i class="fa fa-heart" style="color: #e15c5c;"></i> will start decreasing.'
     ];
 
     var initPromise = $.Deferred();
@@ -24,7 +27,7 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
         // Show intro text.
         var content = '<h1 class="story-name">' + this.story.getTitle() + '</h1>' +
             '<div class="story-intro">' + this.story.getIntro() + '</div>' +
-            '<img src="' + this.user.photo + '" class="big-centered-img img-responsive img-circle"/>';
+            '<img title="Such a badass" alt="Badass picture" src="' + this.user.photo + '" class="big-centered-img img-responsive img-circle"/>';
         UI.showModal(content);
 
         // Set the story initial position.

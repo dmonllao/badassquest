@@ -68,7 +68,7 @@ define(['bs', 'Sound'], function($, Sound) {
         initHealth: function(state, attrs) {
             var healthDiv = document.createElement('div');
             healthDiv.setAttribute('id', 'health');
-            healthDiv.innerHTML = '<pre class="control"><i style="color: red;" class="fa fa-heart"></i><span>' + this.round(state.cHealth) + ' / ' + this.round(attrs.tHealth) + '</span></pre>';
+            healthDiv.innerHTML = '<pre title="Health" class="control"><i style="color: #e15c5c;" class="fa fa-heart"></i><span>' + this.round(state.cHealth) + ' / ' + this.round(attrs.tHealth) + '</span></pre>';
 
             this.controls[google.maps.ControlPosition.LEFT_TOP].push(healthDiv);
         },
@@ -76,21 +76,21 @@ define(['bs', 'Sound'], function($, Sound) {
         initFood: function(state, attrs) {
             var foodDiv = document.createElement('div');
             foodDiv.setAttribute('id', 'food');
-            foodDiv.innerHTML = '<pre class="control"><i style="color: #8397D2;" class="fa fa-cutlery"></i><span>' + this.round(state.cFood) + ' / ' + this.round(attrs.tFood) + '</span></pre>';
+            foodDiv.innerHTML = '<pre title="Energy" class="control"><i style="color: #8397D2;" class="fa fa-cutlery"></i><span>' + this.round(state.cFood) + ' / ' + this.round(attrs.tFood) + '</span></pre>';
             this.controls[google.maps.ControlPosition.LEFT_TOP].push(foodDiv);
         },
 
         initWealth: function(state, attrs) {
             var wealthDiv = document.createElement('div');
             wealthDiv.setAttribute('id', 'wealth');
-            wealthDiv.innerHTML = '<pre class="control"><i style="color: green;" class="fa fa-usd"></i><span>' + this.round(state.cWealth) + '</span></pre>';
+            wealthDiv.innerHTML = '<pre title="Cash" class="control"><i style="color: green;" class="fa fa-usd"></i><span>' + this.round(state.cWealth) + '</span></pre>';
             this.controls[google.maps.ControlPosition.LEFT_TOP].push(wealthDiv);
         },
 
         initLevel: function(state, attrs) {
             var levelDiv = document.createElement('div');
             levelDiv.setAttribute('id', 'level');
-            levelDiv.innerHTML = '<pre class="control"><i style="color: #FFCC00;" class="fa fa-trophy"></i><span id="level-text">Level ' + state.level + '</span></pre>';
+            levelDiv.innerHTML = '<pre title="Level" class="control"><i style="color: #FFCC00;" class="fa fa-trophy"></i><span id="level-text">Level ' + state.level + '</span></pre>';
             this.controls[google.maps.ControlPosition.LEFT_TOP].push(levelDiv);
         },
 
@@ -101,11 +101,13 @@ define(['bs', 'Sound'], function($, Sound) {
             zoomDiv.setAttribute('class', 'zoom');
 
             var zoomPlus = document.createElement('pre');
+            zoomPlus.setAttribute('title', 'Zoom in');
             zoomPlus.setAttribute('class', 'control-combo-top control actionable-control');
             zoomPlus.innerHTML = '<i class="fa fa-fw fa-plus"></i>';
             zoomDiv.appendChild(zoomPlus);
 
             var zoomMinus = document.createElement('pre');
+            zoomMinus.setAttribute('title', 'Zoom out');
             zoomMinus.setAttribute('class', 'control-combo-bottom control actionable-control');
             zoomMinus.innerHTML = '<i class="fa fa-fw fa-minus"></i>';
             zoomDiv.appendChild(zoomMinus);
@@ -124,7 +126,7 @@ define(['bs', 'Sound'], function($, Sound) {
         initCenter: function() {
             var centerDiv = document.createElement('div');
             centerDiv.setAttribute('id', 'center');
-            centerDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-arrows"></i></pre>';
+            centerDiv.innerHTML = '<pre title="Center the map" class="control actionable-control"><i class="fa fa-fw fa-arrows"></i></pre>';
 
             google.maps.event.addDomListener(centerDiv, 'click', function() {
                 user.map.panTo(user.marker.getPosition());
@@ -143,7 +145,7 @@ define(['bs', 'Sound'], function($, Sound) {
 
             // Defaults.
             var mapView = 'roadmap';
-            mapViewDiv.innerHTML = '<pre class="control actionable-control">' + mapViewHybridHtml + '</pre>';
+            mapViewDiv.innerHTML = '<pre title="Change map view" class="control actionable-control">' + mapViewHybridHtml + '</pre>';
 
             // Rotate between the 3 formats.
             google.maps.event.addDomListener(mapViewDiv, 'click', function() {
@@ -197,7 +199,7 @@ define(['bs', 'Sound'], function($, Sound) {
             var musicOffHtml = '<i class="fa fa-fw fa-volume-off"></i>';
 
             // Sound is enabled by default, so we initially show mute button.
-            musicDiv.innerHTML = '<pre class="control actionable-control">' + musicOffHtml + '</pre>';
+            musicDiv.innerHTML = '<pre title="Message box" class="control actionable-control">' + musicOffHtml + '</pre>';
 
             google.maps.event.addDomListener(musicDiv, 'click', function() {
                 var soundOn = Sound.toggle();
@@ -214,7 +216,7 @@ define(['bs', 'Sound'], function($, Sound) {
         initNotifications: function() {
             var notificationsDiv = document.createElement('div');
             notificationsDiv.setAttribute('id', 'notifications');
-            notificationsDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-tablet"></i></pre>';
+            notificationsDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-envelope"></i></pre>';
 
             google.maps.event.addDomListener(notificationsDiv, 'click', function() {
                 $('#map').trigger('notification:toggle');
