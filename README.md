@@ -1,8 +1,8 @@
 # Play it
 
-[http://www.davidmonllao.com/badassquest](http://www.davidmonllao.com/badassquest)
+[http://www.davidmonllao.com/badassquest](http://www.davidmonllao.com/badassquest/)
 
-[![Play it](https://dmonllao.github.io/badassquest/img/readme-img1.png)](http://www.davidmonllao.com/badassquest)
+[![Play it](https://dmonllao.github.io/badassquest/img/readme-img1.png)](http://www.davidmonllao.com/badassquest/)
 
 # Development
 
