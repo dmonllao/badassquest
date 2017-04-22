@@ -21,7 +21,8 @@ define(['bs', 'Const', 'InfoWindow', 'fontawesomeMarkers', 'Router'], function($
                 fillColor: '#E43D17',
                 fillOpacity: 1,
             },
-            zIndex: 8
+            zIndex: 8,
+            optimized: false,
         });
 
         this.router = new Router(this.map);

@@ -124,7 +124,8 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
                     url: 'img/chuck.jpg',
                     scaledSize: new google.maps.Size(40, 40),
                 },
-                zIndex: 7
+                zIndex: 7,
+                optimized: false,
             });
             marker.setAnimation(google.maps.Animation.BOUNCE);
 

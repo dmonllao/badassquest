@@ -110,7 +110,8 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
                     scaledSize: new google.maps.Size(40, 40),
                 },
                 title: this.playerName,
-                zIndex: 9
+                zIndex: 9,
+                optimized: false,
             });
             google.maps.event.addListener(this.marker, 'click', function() {
 

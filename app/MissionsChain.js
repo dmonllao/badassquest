@@ -110,7 +110,8 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'Map'], function($, External, Ic
                 title: mission.name,
                 position: mission.position,
                 icon: mission.icon,
-                zIndex: 7
+                zIndex: 7,
+                optimized: false,
             });
             marker.setAnimation(google.maps.Animation.BOUNCE);
 
