@@ -190,7 +190,7 @@ define(['bs', 'Const', 'UI', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSe
         locationTypeRole: function(locationType) {
             switch (locationType) {
                 case 'locality':
-                    return 'major';
+                    return 'mayor';
                 case 'administrative_area_level_3':
                     return 'governor';
                 case 'administrative_area_level_2':
