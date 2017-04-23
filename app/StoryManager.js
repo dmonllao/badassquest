@@ -206,6 +206,7 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
                         $('#text-action #skip').addClass('btn-success');
                         $('#text-action #skip').removeClass('btn-danger');
                         $('#text-action #skip').html('<i class="fa fa-gamepad"></i> Play');
+                        $('#text-action #skip').focus();
                         $('#text-action #next').remove();
                     }
 
