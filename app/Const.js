@@ -19,7 +19,7 @@ define(function() {
         userAttackTime: 2000,
         foeAttackTime: 2000,
         defaultFoePic: 'img/foe.png',
-        chaseStartDelay: 3000,
+        chaseStartDelay: 8000,
         // Var below used to calculate foe's power.
         maxReasonableLevel: 20,
         maxChaseDuration: 15,
