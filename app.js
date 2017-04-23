@@ -3,7 +3,6 @@ requirejs.config({
     paths: {
         fontawesomeMarkers: '../bower_components/fontawesome-markers/fontawesome-markers.min',
         jquery: '../bower_components/jquery/dist/jquery',
-        jqueryShake: '../vendor/others/jquery-shake',
         bs: '../bower_components/bootstrap/dist/js/bootstrap',
         Phaser: '../bower_components/phaser/build/phaser',
         async: '../bower_components/requirejs-plugins/src/async',
@@ -11,12 +10,8 @@ requirejs.config({
         infobox: '../vendor/google/infobox',
     },
     shim: {
-        jqueryShake: {
-            deps: ['jquery'],
-            exports: "$"
-        },
         bs: {
-            deps: ['jquery', 'jqueryShake'],
+            deps: ['jquery'],
             exports: "$"
         },
         infobox: {
