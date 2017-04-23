@@ -1,8 +1,8 @@
 # Play it
 
-[http://www.davidmonllao.com/badassquest](http://www.davidmonllao.com/badassquest/)
+[http://badassquest.davidmonllao.com](http://badassquest.davidmonllao.com)
 
-[![Play it](https://dmonllao.github.io/badassquest/img/readme-img1.png)](http://www.davidmonllao.com/badassquest/)
+[![Play it](http://badassquest.davidmonllao.com/img/readme-img1.png)](http://badassquest.davidmonllao.com)
 
 # Development
 
@@ -27,7 +27,7 @@ No i18n, no i10n, no a11y.
 You just need to start grunt to watch for CSS changes, it autocompiles and minifies it.
 
     grunt watch
-    google-chrome /somewhere/in/www/index.html
+    whatever-browser-you-use /somewhere/in/www/index.html
 
 ## Other stuff
 
