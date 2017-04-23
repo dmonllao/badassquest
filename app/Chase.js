@@ -102,10 +102,16 @@ define(['bs', 'Const', 'InfoWindow', 'fontawesomeMarkers', 'Router'], function($
         },
 
         stop: function() {
-            this.infoWindow.close();
-            this.infoWindow.setMap(null);
-            this.infoWindow = null;
-            this.marker.setMap(null);
+            // Defensive programming as we can easily have race conditions when
+            // multiple cops chase the user.
+            if (this.infoWindow) {
+                this.infoWindow.close();
+                this.infoWindow.setMap(null);
+                this.infoWindow = null;
+            }
+            if (this.marker) {
+                this.marker.setMap(null);
+            }
             this.router.stop();
         },
 

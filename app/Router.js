@@ -91,7 +91,9 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
             // it is fine to stop the visible animation only once a destination is
             // reached, not when another location is clicked while moving to a
             // destination.
-            this.marker.setAnimation(null);
+            if (this.marker) {
+                this.marker.setAnimation(null);
+            }
 
             this.moving = false;
 

@@ -457,7 +457,7 @@ define(['Const'], function(Const) {
 
         getRandomReward: function(user) {
             // TODO Too lazy to think about this now :P
-            return user.state.level * 10;
+            return user.state.level * 100;
         }
     };
 });

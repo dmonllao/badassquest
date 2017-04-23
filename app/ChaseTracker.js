@@ -36,7 +36,7 @@ define(['bs', 'Chase', 'UI'], function($, Chase, UI) {
 
             if (chaseInfoShown === false) {
                 var content = '<h1>Tip</h1><p>Police <i class="fa fa-shield" style="color: #4169E1;"></i> is coming to chase you, ' +
-                    'better go far from here as soon as possible. You need to level up to run faster.</p>' + UI.renderOkButton('Continue', 'btn btn-warning');
+                    'better go far from here as soon as possible. The more you level up the faster you will run.</p>' + UI.renderOkButton('Continue', 'btn btn-warning');
                 UI.showModal(content);
 
                 $('#ok').on('click', function(ev) {
@@ -44,12 +44,28 @@ define(['bs', 'Chase', 'UI'], function($, Chase, UI) {
                     this.add(chaseData);
                 }.bind(this));
 
-                chaseInfoShown = true;
-            } else {
+                chaseInfoShown = Date.now();
+
+            } else if (Date.now() - 1000 > chaseInfoShown) {
+                // We will reach this point for each chase but the first one (we see
+                // tips above before the first one).
+
+                // This condition dirty hack prevents the chase info window to be
+                // closed when multiple guards follow you.
 
                 // Ensure modal window is closed at this stage.
                 $('#text-action').modal('hide');
                 this.add(chaseData);
+            } else {
+                // Add the chase (related with condition above).
+
+                // We get into this condition when the first time the user is chased is chased by more
+                // than 1 cop.
+
+                // Don't add the chase until the user accepts the tip.
+                $('#ok').on('click', function(ev) {
+                    this.add(chaseData);
+                }.bind(this));
             }
 
         },
