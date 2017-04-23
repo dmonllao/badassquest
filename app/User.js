@@ -340,6 +340,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
                 // popover if energy starts draining.
                 if (foodWarningShown === false && this.state.cFood < 200) {
                     $('#food').popover({
+                        placement: 'bottom',
                         delay: {show: 500, hide: 100},
                         html: true,
                         trigger: 'manual',
@@ -365,6 +366,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
                 if (healthWarningShown === false && this.state.cHealth < 40) {
                     $('#health').popover({
                         delay: {show: 500, hide: 100},
+                        placement: 'bottom',
                         html: true,
                         trigger: 'manual',
                         content: 'You are seriously injured. Go to the hospital <i class="fa fa-h-square" style="color: #e15c5c;"></i>, ' +

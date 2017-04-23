@@ -57,6 +57,11 @@ body {
 }
 
 /** Game controls */
+
+.control-wrapper {
+    opacity: 0.7;
+}
+
 button.btn,
 .control {
     font-weight: bolder;
@@ -77,6 +82,22 @@ button.btn,
 }
 
 /* For icon with text */
+.control-wrapper pre.state {
+    padding: 5px 9.5px;
+}
+
+@media screen and (max-width : 576px) {
+    .control-wrapper pre.state {
+        margin: 10px 4px 10px 4px;
+    }
+}
+
+@media screen and (max-width : 350px) {
+    .control-wrapper pre.state {
+        margin: 10px 1px 10px 1px;
+    }
+}
+
 pre.control span {
     margin-left: 10px;
 }
@@ -252,7 +273,7 @@ pre.control span.badge {
 .badge {
     margin: 0;
     position: absolute;
-    bottom: 0;
+    top: 0;
     left: 0;
     min-width: 10px;
     padding: 3px 7px;
