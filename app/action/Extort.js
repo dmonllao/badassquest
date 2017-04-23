@@ -2,6 +2,9 @@ define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], functio
 
     function ActionExtort(user, game, poiData, marker) {
         ActionBase.call(this, user, game, poiData, marker);
+
+        this.extortText = null;
+
         return this;
     }
     ActionExtort.prototype = Object.create(ActionBase.prototype);
@@ -54,6 +57,8 @@ define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], functio
 
     ActionExtort.prototype.rendered = function() {
 
+        this.extortText = $('#text-action-content').html();
+
         // Only useful for canIntimidate == true.
         $('#ok').on('click', function(ev) {
             $('#text-action').modal('hide');
@@ -72,6 +77,7 @@ define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], functio
                 foes: foes,
                 location: this.poiData.vicinity,
                 wonCallback: function() {
+                    $('#text-action-content').html(this.extortText);
                     $('#extort-info').html(this.getIntimidatedText());
                     UI.showModal($('#text-action-content').html(), 'Continue', 'btn btn-warning');
                     this.extorted();
@@ -79,8 +85,6 @@ define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], functio
                 }.bind(this)
             };
             this.game.state.start('Fight', true, false, args);
-            $('#text-action').modal('hide');
-            $('#game-action').modal('show');
 
         }.bind(this));
 

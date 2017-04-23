@@ -1,4 +1,6 @@
-define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound'], function(Phaser, Const, Generator, Util, External, Sound) {
+define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI'], function(Phaser, Const, Generator, Util, External, Sound, UI) {
+
+    var fightInfoShown = false;
 
     var game = null;
 
@@ -122,8 +124,26 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound'], function(P
                 foeX = foeX + foeSpacing;
             }
 
-            // Start the next turn.
-            this.getNextTurn();
+            if (fightInfoShown === false) {
+                var content = '<h1>Tip</h1><p>You need to be quick at hitting your enemies once your turn starts. You can escape the fight by clicking out of the fight area.</p>' + UI.renderOkButton('Continue', 'btn btn-warning');
+                UI.showModal(content);
+
+                $('#ok').on('click', function(ev) {
+                    // Start the next turn.
+                    $('#text-action').modal('hide');
+                    $('#game-action').modal('show');
+                    this.getNextTurn();
+                }.bind(this));
+
+                fightInfoShown = true;
+
+            } else {
+                // Start the next turn.
+                this.getNextTurn();
+                $('#text-action').modal('hide');
+                $('#game-action').modal('show');
+            }
+
         },
 
         getNextTurn: function() {

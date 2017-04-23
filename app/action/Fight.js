@@ -38,8 +38,6 @@ define(['bs', 'Generator', 'Icon', 'Foe', 'action/Base'], function($, Generator,
             };
             this.game.state.start('Fight', true, false, args);
 
-            $('#game-action').modal('show');
-
         }.bind(this));
     };
 
