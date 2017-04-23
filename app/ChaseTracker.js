@@ -1,4 +1,4 @@
-define(['bs', 'Chase'], function($, Chase) {
+define(['bs', 'Chase', 'UI'], function($, Chase, UI) {
 
     /**
      * Static var to identify chases.
@@ -8,6 +8,8 @@ define(['bs', 'Chase'], function($, Chase) {
      * @type {User}
      */
     var index = 0;
+
+    var chaseInfoShown = false;
 
     function ChaseTracker(map, user) {
         this.map = map;
@@ -31,6 +33,28 @@ define(['bs', 'Chase'], function($, Chase) {
          * @param {Object} chaseData Should include a speed and (duration or reRouteLimit) + a callback if the user is caught.
          */
         addChase: function(ev, chaseData) {
+
+            if (chaseInfoShown === false) {
+                var content = '<h1>Tip</h1><p>Police <i class="fa fa-shield" style="color: #4169E1;"></i> is coming to chase you, ' +
+                    'better go far from here as soon as possible. You need to level up to run faster.</p>' + UI.renderOkButton('Continue', 'btn btn-warning');
+                UI.showModal(content);
+
+                $('#ok').on('click', function(ev) {
+                    $('#text-action').modal('hide');
+                    this.add(chaseData);
+                }.bind(this));
+
+                chaseInfoShown = true;
+            } else {
+
+                // Ensure modal window is closed at this stage.
+                $('#text-action').modal('hide');
+                this.add(chaseData);
+            }
+
+        },
+
+        add: function(chaseData) {
 
             if (typeof chaseData.speed === "undefined") {
                 console.error('Chase data should include the speed.');

@@ -18,7 +18,7 @@ define(['bs', 'Const', 'InfoWindow', 'fontawesomeMarkers', 'Router'], function($
                 strokeWeight: 0.2,
                 strokeColor: 'white',
                 strokeOpacity: 1,
-                fillColor: '#E43D17',
+                fillColor: '#4169E1',
                 fillOpacity: 1,
             },
             zIndex: 8,

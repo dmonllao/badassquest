@@ -1,13 +1,13 @@
 define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindow', 'PissedPeople', 'ControlledAreas', 'Icon'], function($, Const, Generator, Router, Controls, Notifier, InfoWindow, PissedPeople, ControlledAreas, Icon) {
 
+    var healthWarningShown = false;
+    var foodWarningShown = false;
+
     function User(map, playerName, playerPhoto) {
 
         this.map = map;
         this.playerName = playerName;
         this.photo = playerPhoto;
-
-        this.healthWarningShown = false;
-        this.foodWarningShown = false;
 
         this.state = {
             cHealth: Const.initHealth,
@@ -87,9 +87,6 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         taxes: {},
 
         timers: {},
-
-        healthWarningShown: null,
-        foodWarningShown: null,
 
         setPosition: function(position) {
             if (this.marker === null) {
@@ -341,7 +338,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
                     this.state.cFood = this.attrs.tFood;
                 }
                 // popover if energy starts draining.
-                if (this.foodWarningShown === false && this.state.cFood < 200) {
+                if (foodWarningShown === false && this.state.cFood < 200) {
                     $('#food').popover({
                         delay: {show: 500, hide: 100},
                         html: true,
@@ -353,7 +350,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
                     setTimeout(function() {
                         $('#food').popover('destroy');
                     }, 5000);
-                    this.foodWarningShown = true;
+                    foodWarningShown = true;
                 }
             }
 
@@ -365,7 +362,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
                 }
 
                 // popover if life starts draining.
-                if (this.healthWarningShown === false && this.state.cHealth < 40) {
+                if (healthWarningShown === false && this.state.cHealth < 40) {
                     $('#health').popover({
                         delay: {show: 500, hide: 100},
                         html: true,
@@ -378,7 +375,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
                     setTimeout(function() {
                         $('#health').popover('destroy');
                     }, 5000);
-                    this.healthWarningShown = true;
+                    healthWarningShown = true;
                 }
 
             }

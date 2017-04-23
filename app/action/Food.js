@@ -38,6 +38,8 @@ define(['bs', 'UI', 'action/Base', 'Generator', 'Sound'], function($, UI, Action
     function ActionFood(user, game, poiData, marker) {
         ActionBase.call(this, user, game, poiData, marker);
 
+        this.foodText = null;
+
         this.food = Generator.getRandomElement(randomFood);
 
         return this;
@@ -112,6 +114,9 @@ define(['bs', 'UI', 'action/Base', 'Generator', 'Sound'], function($, UI, Action
 
     ActionFood.prototype.rendered = function() {
 
+        // Grab a copy as we later need the header again.
+        this.foodText = $('#text-action-content').html();
+
         // We will need it later to assign experience or possible chase against it.
         var foodImportance = this.getFoodImportance(this.food.price);
 
@@ -159,9 +164,6 @@ define(['bs', 'UI', 'action/Base', 'Generator', 'Sound'], function($, UI, Action
                 return;
             }
 
-            // Close it while the user is being chased.
-            $('#text-action').modal('hide');
-
             // Start a chase, the insistence depends on the item price.
             var chaseData = Generator.chaseData(
                 foodImportance,
@@ -190,6 +192,7 @@ define(['bs', 'UI', 'action/Base', 'Generator', 'Sound'], function($, UI, Action
         });
 
         // Show the results in a modal window.
+        $('#text-action-content').html(this.foodText);
         $('#food-info').html("<p>I've caught you mate! You will swallow this punch!<br/>(They punched you and stole some of your money)</p>");
         UI.showModal($('#text-action-content').html(), 'Continue', 'btn btn-warning');
     };

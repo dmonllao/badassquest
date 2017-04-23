@@ -21,6 +21,8 @@ define(['bs', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], function($, Gen
 
         this.scenario = Generator.getRandomElement(randomScenarios);
 
+        this.stealText = null;
+
         return this;
     }
     ActionSteal.prototype = Object.create(ActionBase.prototype);
@@ -54,6 +56,10 @@ define(['bs', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], function($, Gen
     };
 
     ActionSteal.prototype.rendered = function() {
+
+        // Grab a copy as we later need the header again.
+        this.stealText = $('#text-action-content').html();
+
         $('#cancel').on('click', function(ev) {
             $('#text-action').modal('hide');
         });
@@ -68,8 +74,6 @@ define(['bs', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], function($, Gen
             this.user.updateState({
                 cWealth: this.user.state.cWealth + this.scenario.loot
             });
-
-            $('#text-action').modal('hide');
 
             for(var i = 0; i < this.scenario.guards.length; i++) {
 
@@ -98,6 +102,7 @@ define(['bs', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], function($, Gen
             cHealth: this.user.state.cHealth - this.scenario.guardsDamage
         });
 
+        $('#text-action-content').html(this.stealText);
         $('#steal-info').html("<p>I've caught you mate! You will swallow this punch!<br/>" +
             "(They punched you and recovered the money you have stolen them)</p>");
 
