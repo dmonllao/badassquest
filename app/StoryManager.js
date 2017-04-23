@@ -2,12 +2,11 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
 
     // This contains the game instructions, ordered by how important they are to understand how the game works.
     var instructions = [
-        '<i class="fa fa-circle-o" aria-hidden="true"></i> Gain experience and reputation by being a badass <img src="img/trump.png" class="img-circle notification-img">.',
-        '<i class="fa fa-circle-o" aria-hidden="true"></i> Control city areas <i class="fa fa-flag" style="color: #95c355;"></i> by extorting businessmen or buying places <i class="fa fa-home" style="color: #95c355;"></i>.',
-        '<i class="fa fa-circle-o" aria-hidden="true"></i> Click on the map to move around the city.',
-        '<i class="fa fa-circle-o" aria-hidden="true"></i> Zoom out <i class="fa fa-fw fa-minus"></i> to see more nearby places <i class="fa fa-map-marker" style="color: #e15c5c"></i>. Center the map with <i style="color: black;" class="fa fa-fw fa-arrows"></i>.',
-        '<i class="fa fa-circle-o" aria-hidden="true"></i> You can change the map view by pressing <i class="fa fa-fw fa-map-o"></i>.',
-        '<i class="fa fa-circle-o" aria-hidden="true"></i> Eat regularly <i class="fa fa-cutlery" style="color: grey;"></i> or your life <i class="fa fa-heart" style="color: #e15c5c;"></i> will start decreasing.'
+        'Gain experience and reputation by being a badass <img src="img/trump.png" class="img-circle notification-img">.',
+        'Control city areas <i class="fa fa-flag" style="color: #95c355;"></i> by extorting businessmen or buying places <i class="fa fa-home" style="color: #95c355;"></i>.',
+        'Click on the map <i class="fa fa-mouse-pointer"></i> or on markers <i class="fa fa-hand-pointer-o"></i> to move around the city.',
+        'Zoom out <i class="fa fa-fw fa-minus"></i> to see more nearby places <i class="fa fa-map-marker" style="color: #e15c5c"></i>. Center the map with <i style="color: black;" class="fa fa-fw fa-arrows"></i>. You can change the map view by pressing <i class="fa fa-fw fa-map-o"></i>.',
+        'Eat regularly <i class="fa fa-cutlery" style="color: grey;"></i> or your life <i class="fa fa-heart" style="color: #e15c5c;"></i> will start decreasing.'
     ];
 
     var initPromise = $.Deferred();
@@ -179,10 +178,40 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
 
         addGameTips: function() {
 
+            var lastInstruction = 0;
             setTimeout(function() {
+
                 var content = '<h1>How to play</h1>' +
-                    '<div class="text-left"><ul class="list-unstyled"><li>' + instructions.join('</li><li>') + '</li></ul></div>';
-                UI.showModal(content, '<i class="fa fa-gamepad"></i>');
+                    '<p id="instruction">' + instructions[0] + '</p>';
+
+                var nextButton = {
+                    id: 'next',
+                    text: '<i class="fa fa-arrow-right"></i> Next'
+                };
+                var skipButton = {
+                    id: 'skip',
+                    text: 'Skip'
+                };
+                var buttons = UI.renderActionButtons([nextButton, skipButton]);
+                UI.showModal(content + buttons);
+
+                $('#skip').on('click', function(ev) {
+                    $('#text-action').modal('hide');
+                });
+
+                $('#next').on('click', function(ev) {
+                    if (lastInstruction + 2 === instructions.length) {
+                        // Update button text (we keep skip because it already has the
+                        // close modal listener attached.
+                        $('#text-action #skip').addClass('btn-success');
+                        $('#text-action #skip').removeClass('btn-danger');
+                        $('#text-action #skip').html('<i class="fa fa-gamepad"></i> Play');
+                        $('#text-action #next').remove();
+                    }
+
+                    $('#instruction').html(instructions[lastInstruction + 1]);
+                    lastInstruction++;
+                });
             }, 2000);
         },
 
