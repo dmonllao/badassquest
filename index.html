@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>Badass quest</title>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
         <meta charset="utf-8">
-        <title>Badass quest</title>
+        <meta name="description" content="RPG / GTA-style web game using real world locations"/>
+        <meta name="keywords" content="rpg, adventure, game, google maps, javascript, real world locations"/>
         <link rel="stylesheet" href="styles.min.css">
         <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+        <meta property="og:url"           content="http://badassquest.davidmonllao.com" />
+        <meta property="og:type"          content="website" />
+        <meta property="og:title"         content="Badass Quest" />
+        <meta property="og:description"   content="RPG / GTA-style web game using real world locations" />
+        <meta property="og:image"         content="http://badassquest.davidmonllao.com/img/trump.png" />
         <script async defer data-main="app" src="bower_components/requirejs/require.js"></script>
     </head>
     <body>
@@ -28,6 +35,37 @@
                 <div class="modal-content modal-body text-center" data-backdrop="static" data-keyboard="false">
                     <h3 id="status-title"></h3>
                     <div id="status-content"></div>
+                </div>
+            </div>
+        </div>
+        <div id="share-text" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content modal-body text-center" data-backdrop="static" data-keyboard="false">
+
+                    <div class="share-links">
+                        <!-- Twitter -->
+                        <a id="share-twitter" style="background-color: #55acee;color: #ffffff;" class="btn" target="_blank"
+                                href="https://twitter.com/intent/tweet?text=RPG%20%2F%20GTA-style%20web%20game%20using%20real%20world%20locations%20http%3A%2F%2Fbadassquest.davidmonllao.com%20%23badassquest">
+                            <i class="fa fa-twitter"></i> Tweet
+                        </a>
+
+                        <!-- Facebook -->
+                        <a id="share-facebook" style="background-color: #3b5998;color: #ffffff;" class="btn" target="_blank"
+                                href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fbadassquest.davidmonllao.com&t=RPG%20%2F%20GTA-style%20web%20game%20using%20real%20world%20locations%20%23badassquest">
+                            <i class="fa fa-facebook"></i> Share on facebook
+                        </a>
+
+                        <!-- Email -->
+                        <a id="share-email" style="background-color: #d14836;color: #ffffff;" class="btn" target="_blank"
+                                href="https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1&body=Checkout%20http%3A%2F%2Fbadassquest.davidmonllao.com%20%23badassquest&su=RPG%20%2F%20GTA-style%20web%20game%20using%20real%20world%20locations">
+                            <i class="fa fa-envelope-o"></i> Email
+                        </a>
+
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="return-game" class="btn btn-warning">Return to the game</button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 {
   "name": "badassquest",
   "version": "0.0.1",
-  "description": "A bad ass game",
+  "description": "A bad ass game engine",
   "main": "app.js",
   "dependencies": {
     "grunt": "~0.4.5",

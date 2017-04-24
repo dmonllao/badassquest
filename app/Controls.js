@@ -241,15 +241,33 @@ define(['bs', 'Sound'], function($, Sound) {
             githubDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-github-alt"></i></pre>';
 
             google.maps.event.addDomListener(githubDiv, 'click', function() {
-                 var form = document.createElement("form");
-                 form.method = "GET";
-                 form.action = "https://github.com/dmonllao/badassquest";
-                 form.target = "_blank";
-                 document.body.appendChild(form);
-                 form.submit();
+                var form = document.createElement("form");
+                form.method = "GET";
+                form.action = "https://github.com/dmonllao/badassquest";
+                form.target = "_blank";
+                document.body.appendChild(form);
+                form.submit();
             });
 
             this.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(githubDiv);
+
+            // Share.
+            var shareDiv = document.createElement('div');
+            shareDiv.setAttribute('id', 'share');
+            shareDiv.setAttribute('class', 'control-wrapper');
+
+            shareDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-share-alt"></i></pre>';
+
+            google.maps.event.addDomListener(shareDiv, 'click', function() {
+                $('#share-text').modal('show');
+
+				$('#share-text #return-game').on('click', function() {
+                    $('#share-text').modal('hide');
+                });
+            });
+
+            this.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(shareDiv);
+
         },
 
         /**
