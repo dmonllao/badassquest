@@ -125,7 +125,7 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI'], func
             }
 
             if (fightInfoShown === false) {
-                var content = '<h1>Tip</h1><p>You need to be quick at hitting your enemies once your turn starts. You can escape the fight by clicking out of the fight area.</p>' + UI.renderOkButton('Continue', 'btn btn-warning');
+                var content = '<h1>Fights tip</h1><p>Tap quickly over your enemies to kill them once your turn starts. You can escape the fight by clicking out of the fight area.</p>' + UI.renderOkButton('Continue', 'btn btn-warning');
                 UI.showModal(content);
 
                 $('#ok').on('click', function(ev) {
