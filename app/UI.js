@@ -107,6 +107,8 @@ define(['bs'], function($) {
         showShare: function() {
             $('#share-text').modal('show');
 
+            ga('send', 'event', 'share', 'open dialog');
+
             $('#share-text #return-game').on('click', function() {
                 $('#share-text').modal('hide');
             });

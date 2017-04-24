@@ -57,6 +57,9 @@ define(['bs', 'Const', 'UI', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSe
                     });
 
                     setTimeout(function() {
+
+                        ga('send', 'event', 'achievement', 'politic missions completed', politic.role);
+
                         Sound.play('achievement');
                         var content = 'Congratulations! You now rule over ' + politic.location + '. You are the ' + politic.role + '.';
                         if (politic.locationImage) {

@@ -27,6 +27,9 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'Foe', 'story
         var resumeGame = localStorage.getItem('userPosition');
 
         if (resumeGame) {
+
+            ga('send', 'event', 'game', 'resume');
+
             var content = '<h1 class="story-name">' + this.story.getTitle() + '</h1>' + UI.renderActionButtons([
                 {
                     id: 'resume',
@@ -37,6 +40,9 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'Foe', 'story
                 }
             ], 'continue-buttons') + UI.getIntroFooter();
         } else {
+
+            ga('send', 'event', 'game', 'new game');
+
             // Show intro text.
 
             var alertStyles = "background-color: #e74c3c;margin: 15px; border: 1px solid transparent; border-radius: 4px;color:white;font-weight: bold;";
@@ -107,7 +113,10 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'Foe', 'story
             this.story.getPosition(this.map, initPromise, function(locationCoords, locationName) {
                 // Callback once a location is selected.
 
+                ga('send', 'event', 'game', 'location', locationName);
+
                 $('#newgame').on('click', function() {
+                    ga('send', 'event', 'game', 'start');
                     this.setPosition(locationCoords);
                     $('#text-action').modal('hide');
                 }.bind(this));

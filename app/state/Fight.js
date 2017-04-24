@@ -142,6 +142,8 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI', 'Heal
             this.userHealthBar = new HealthBar(game, barMargin, barMargin,
                 Util.getGameHealthBarWidth(), Util.getGameHealthBarHeight(), 'healthBarPlayer', true);
 
+            ga('send', 'event', 'fight', 'start');
+
             if (fightInfoShown === false) {
                 var content = '<h1>Fights tip</h1><p>Tap quickly' + UI.getPunch() + 'over your enemies to kill them ' +
                     '<i class="fa fa-heartbeat" style="color: #e15c5c"></i> once your turn starts. ' +
@@ -329,6 +331,8 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI', 'Heal
          * Show you won + add experience.
          */
         userWins: function() {
+
+            ga('send', 'event', 'fight', 'won');
 
             var experience = 0;
             for (var i in this.foes) {

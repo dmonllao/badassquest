@@ -34,6 +34,8 @@ define(['bs', 'Chase', 'UI'], function($, Chase, UI) {
          */
         addChase: function(ev, chaseData) {
 
+            ga('send', 'event', 'chase', 'start');
+
             if (chaseInfoShown === false) {
                 var content = '<h1>Chasing tip</h1><p>Police <i class="fa fa-shield" style="color: #4169E1;"></i> is coming to chase you, ' +
                     'better go far from here as soon as possible. The more you level up the faster you will run.</p>' + UI.renderOkButton('Continue', 'btn btn-warning');
@@ -118,6 +120,8 @@ define(['bs', 'Chase', 'UI'], function($, Chase, UI) {
 
                 // Stop and remove all chases.
                 this.user.router.stop();
+
+                ga('send', 'event', 'chase', 'caught');
             }
         }
     };

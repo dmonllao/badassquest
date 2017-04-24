@@ -150,6 +150,8 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'Map'], function($, External, Ic
                     // is not available in the mission nor outside this context.
                     var missionCompleteCallback = function(mission) {
 
+                        ga('send', 'event', 'achievement', 'mission completed', mission.name);
+
                         marker.setAnimation(null);
 
                         // The mission can decide whether the marker is removed or not.

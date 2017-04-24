@@ -82,16 +82,19 @@ define(['bs', 'UI', 'Util'], function($, UI, Util) {
                 UI.showModal(content);
 
                 $('#login-facebook').on('click', function() {
+                    ga('send', 'event', 'login', 'start');
                     FB.login(function(response) {
                        ProgressTracker.getFacebookToken(response);
                     }, {scope: 'public_profile,email'});
                 });
                 $('#no-login').on('click', function() {
+                    ga('send', 'event', 'nologin');
                     progressTracking = false;
                     $('#text-action').modal('hide');
                 });
 
             } else {
+                ga('send', 'event', 'login', 'connected');
                 userID = response.authResponse.userID;
                 token = response.authResponse.accessToken;
                 $('#text-action').modal('hide');

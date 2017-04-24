@@ -46,6 +46,8 @@ define(['bs', 'Generator', 'Icon'], function($, Generator, Icon) {
 
         start: function(doneCallback) {
 
+            ga('send', 'event', this.getName(), 'start');
+
             // It does not necessarily has a value.
             if (doneCallback) {
                 this.doneCallback = doneCallback;
@@ -115,6 +117,8 @@ define(['bs', 'Generator', 'Icon'], function($, Generator, Icon) {
          * @param {bool} clearPoi
          */
         markAsDone: function(pissed, icon, clearPoi) {
+
+            ga('send', 'event', this.getName(), 'done');
 
             // The marker might be null if this action is part of a mission.
             if (!this.marker) {

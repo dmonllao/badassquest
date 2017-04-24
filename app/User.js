@@ -583,6 +583,8 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
 
         unconscious: function() {
 
+            ga('send', 'event', 'player', 'unconscious');
+
             this.router.stop();
 
             this.clearIntervals();
@@ -617,12 +619,18 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
             $('#status').modal('show');
 
             $('#unconscious-recover').on('click', function() {
+
+                ga('send', 'event', 'game', 'recover');
+
                 $('#status').modal('hide');
                 this.unconsciousRecover();
                 this.startIntervals();
             }.bind(this));
 
             $('#unconscious-newgame').on('click', function() {
+
+                ga('send', 'event', 'game', 'restart');
+
                 this.clearGame();
                 location.reload();
             }.bind(this));
@@ -682,6 +690,7 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
         clearGame: function() {
             this.router.clearRoute();
             this.clearSavedGame();
+
             this.clearIntervals();
 
             $('#map').trigger('game:clear');
