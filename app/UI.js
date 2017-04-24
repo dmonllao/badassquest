@@ -114,22 +114,26 @@ define(['bs'], function($) {
             $('#share-twitter').on('click', function(ev) {
                 ev.preventDefault();
                 window.open(this.href, 'twitter', 'height=250, width=400');
+                ga('send', 'social', 'twitter', 'tweet');
             });
 
             $('#share-facebook').on('click', function(ev) {
                 ev.preventDefault();
                 window.open(this.href, 'facebook', 'height=400, width=700');
+                ga('send', 'social', 'facebook', 'send');
             });
 
             $('#share-google-plus').on('click', function(ev) {
                 ev.preventDefault();
                 window.open(this.href,
                   '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+                ga('send', 'social', 'google-plus', 'share');
             });
 
             $('#share-email').on('click', function(ev) {
                 ev.preventDefault();
                 window.open(this.href, 'email', 'height=400, width=550');
+                ga('send', 'social', 'email', 'send');
             });
 
         },

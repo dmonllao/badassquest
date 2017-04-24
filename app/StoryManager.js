@@ -74,7 +74,6 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'Foe', 'story
         }.bind(this));
         $('#share').on('click', function(shareEv) {
             shareEv.preventDefault();
-
             UI.showShare();
         });
 
