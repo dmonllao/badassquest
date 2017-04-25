@@ -41,6 +41,7 @@ You just need to start grunt to watch for CSS changes, it autocompiles and minif
 * http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js
 
 ## Credits
+* Fonts: https://fonts.google.com/?selection.family=Graduate|Passion+One|UnifrakturCook:700&category=Display
 * Characted pictures: http://vis-www.cs.umass.edu/lfw/
 * ROADMAP styles: http://www.mapstylr.com/style/retro/
 * Badass picture: http://www.memegenerator.es

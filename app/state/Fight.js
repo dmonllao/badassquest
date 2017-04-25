@@ -338,7 +338,7 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI'], func
             text.align = 'center';
 
             // Font style
-            text.font = 'Arial Black';
+            text.font = 'Graduate';
             text.fontSize = size;
             text.fontWeight = 'bold';
 

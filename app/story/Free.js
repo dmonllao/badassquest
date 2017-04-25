@@ -8,11 +8,11 @@ define(['bs', 'Map', 'story/Base'], function($, Map, StoryBase) {
 
     Free.prototype.getTitle = function() {
         var spinningMoney = '<i class="fa fa-money fa-spin fa-lg" style="color: green;"></i>';
-        return spinningMoney + '&nbsp;Badass Quest&nbsp;' + spinningMoney;
+        return spinningMoney + '&nbsp;&nbsp;&nbsp;Badass Quest&nbsp;&nbsp;&nbsp;' + spinningMoney;
     };
 
     Free.prototype.getIntro = function() {
-        return '<div>Terrorize the city.</div><div><input id="place-input" autofocus class="form-control" placeholder="Enter a city"/></div>';
+        return '<div class="intro-text">Terrorize the city.</div><div><input id="place-input" autofocus class="form-control" placeholder="Enter a city"/></div>';
     };
 
     Free.prototype.getPosition = function(map, initialPositionPromise, callback) {

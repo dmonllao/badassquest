@@ -2,6 +2,7 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+    font-family: 'Graduate', cursive;
 }
 body {
     background-color: #474747;
@@ -100,6 +101,7 @@ button.btn,
 
 pre.control span {
     margin-left: 10px;
+    font-family: 'Graduate', cursive;
 }
 
 pre.control span.badge {
@@ -125,7 +127,7 @@ pre.control span.badge {
 .infoBox {
     max-width: 60%;
     min-width: 30%;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Graduate', cursive;
     font-size: 12px;
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
@@ -242,15 +244,34 @@ pre.control span.badge {
 
 .story-name {
     margin-bottom: 20px;
-    font-size: x-large;
+    font-size: 3em;
     font-weight:700;
-    color: #e15c5c;
+    font-family: 'Passion One', cursive;
+    -webkit-text-stroke: 1px black;
+    color: white;
+    text-shadow:
+        3px 3px 0 #000,
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
 }
 
-.story-intro>div {
+@media only screen and (max-width: 576px) {
+    .story-name {
+        font-size: 1.5em;
+    }
+}
+
+.story-intro > div.intro-text {
     margin-top: 15px;
     margin-bottom: 15px;
     font-weight: bold;
+    font-family: 'UnifrakturCook', cursive;
+}
+
+.pac-item {
+    font-family: 'Graduate', cursive;
 }
 
 .big-centered-img {
