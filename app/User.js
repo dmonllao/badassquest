@@ -3,6 +3,20 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
     var healthWarningShown = false;
     var foodWarningShown = false;
 
+    // We need vars for visibilityChange and hidden as there is
+    // no standard for all browsers versions.
+    var hidden, visibilityChange;
+    if (typeof document.hidden !== "undefined") {
+        // Opera 12.10 and Firefox 18 and later support.
+        hidden = "hidden";
+        visibilityChange = "visibilitychange";
+    } else if (typeof document.msHidden !== "undefined") {
+        hidden = "msHidden";
+        visibilityChange = "msvisibilitychange";
+    } else if (typeof document.webkitHidden !== "undefined") {
+        hidden = "webkitHidden";
+        visibilityChange = "webkitvisibilitychange";
+    }
     function User(map, playerName, playerPhoto) {
 
         this.map = map;
@@ -42,14 +56,17 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         // Manages the pois and areas the user controls.
         this.controlledAreas = new ControlledAreas(this.map);
 
-        // TODO A pause feature should stop this timer.
-        this.timers.dropFood = setInterval(this.breathDropFood.bind(this), Const.breathDropInterval);
+        this.startIntervals();
 
-        // TODO A pause feature should stop this timer.
-        this.timers.revenues = setInterval(this.collectRevenues.bind(this), Const.revenuesInterval);
-
-        // TODO A pause feature should stop this timer.
-        this.timers.taxes = setInterval(this.collectTaxes.bind(this), Const.taxesInterval);
+        document.addEventListener(visibilityChange, function(ev) {
+            if (document[hidden]) {
+                this.clearIntervals();
+                console.log('clearint');
+            } else {
+                this.startIntervals();
+                console.log('starintervals');
+            }
+        }.bind(this));
     }
 
     User.prototype = {
@@ -411,14 +428,24 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
             return false;
         },
 
-        dead: function() {
-            this.router.clearRoute();
+        startIntervals: function() {
+            this.timers.dropFood = setInterval(this.breathDropFood.bind(this), Const.breathDropInterval);
+            this.timers.revenues = setInterval(this.collectRevenues.bind(this), Const.revenuesInterval);
+            this.timers.taxes = setInterval(this.collectTaxes.bind(this), Const.taxesInterval);
+        },
 
+        clearIntervals: function() {
             for (var i in this.timers) {
                 if (this.timers.hasOwnProperty(i)) {
                     clearInterval(this.timers[i]);
                 }
             }
+        },
+
+        dead: function() {
+            this.router.clearRoute();
+
+            this.clearIntervals();
 
             $('#text-action').modal('hide');
             $('#game-action').modal('hide');
