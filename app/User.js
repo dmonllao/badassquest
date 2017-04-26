@@ -61,10 +61,8 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         document.addEventListener(visibilityChange, function(ev) {
             if (document[hidden]) {
                 this.clearIntervals();
-                console.log('clearint');
             } else {
                 this.startIntervals();
-                console.log('starintervals');
             }
         }.bind(this));
     }
