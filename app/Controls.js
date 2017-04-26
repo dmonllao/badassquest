@@ -261,7 +261,7 @@ define(['bs', 'Sound'], function($, Sound) {
             google.maps.event.addDomListener(shareDiv, 'click', function() {
                 $('#share-text').modal('show');
 
-				$('#share-text #return-game').on('click', function() {
+                $('#share-text #return-game').on('click', function() {
                     $('#share-text').modal('hide');
                 });
             });
