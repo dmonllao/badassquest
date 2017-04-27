@@ -2,6 +2,10 @@ define(['bs'], function($) {
 
     var mute = false;
 
+    var musicNode = null;
+
+    var musicInterval = null;
+
     function Sound() {
         return this;
     }
@@ -14,14 +18,29 @@ define(['bs'], function($) {
             $('#map').on('user:levelup', function(ev, newLevel) {
                 Sound.play('achievement');
             });
+
+            musicNode = $('#soundcloud');
+
+            Sound.addInterval();
+        },
+
+        addInterval: function() {
+            musicInterval = setInterval(function() {
+                musicNode.remove();
+                $('#body').append(musicNode);
+            }, 322000);
         },
 
         toggle: function() {
 
             if (mute === true) {
                 mute = false;
+                $('#body').append(musicNode);
+                Sound.addInterval();
             } else {
                 mute = true;
+                musicNode.remove();
+                clearInterval(musicInterval);
             }
 
             // Returns sound yes or no.
