@@ -9,9 +9,27 @@ define(['bs', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], function($, Gen
             guards: ['Yosu', 'Ramon']
         },
         {
+            difficulty: 'hard',
+            loot: 150,
+            guardsDamage: 70,
+            guards: ['Ramon']
+        },
+        {
+            difficulty: 'medium',
+            loot: 100,
+            guardsDamage: 50,
+            guards: ['Yosu', 'Ramon']
+        },
+        {
+            difficulty: 'medium',
+            loot: 80,
+            guardsDamage: 40,
+            guards: ['Ramon']
+        },
+        {
             difficulty: 'easy',
             loot: 50,
-            guardsDamage: 50,
+            guardsDamage: 30,
             guards: ['Joselito']
         }
     ];
@@ -20,6 +38,10 @@ define(['bs', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], function($, Gen
         ActionBase.call(this, user, game, poiData, marker);
 
         this.scenario = Generator.getRandomElement(randomScenarios);
+
+        // It should depend on the level.
+        this.scenario.loot = this.scenario.loot * (this.user.state.level / 2);
+        this.scenario.guardsDamage = this.scenario.guardsDamage + (this.user.state.level * 5);
 
         this.stealText = null;
 
