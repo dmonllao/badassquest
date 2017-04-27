@@ -4,7 +4,7 @@ define(function() {
         characterPic: 'img/trump.png',
         initFood: 4000,
         initHealth: 100,
-        initWealth: 20,
+        initWealth: 100,
         initSpeed: 4,
         initAttack: 4,
         initDefense: 5,
