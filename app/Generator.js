@@ -17,10 +17,10 @@ define(['Const'], function(Const) {
      * Keep them short, should fit in 1 line even in mobile window size.
      */
     var badMoodLines = [
-        'Look what you have done! You will burn in hell',
-        'Hey hey look at him! You should be ashamed!',
-        'I will tell your mother you like to destroy people\'s lives',
-        'He who laughs last laughs best, we will see you dead!',
+        'You will burn in hell',
+        'You should be ashamed!',
+        'I will tell your mother',
+        'We will see you dead!',
     ];
 
     /**
@@ -32,8 +32,9 @@ define(['Const'], function(Const) {
         'you badass',
         'look at that stallion',
         'hey you macho man',
-        'run Johnny boy run, that guy looks dangerous',
-        'don\'t stare at him Sheila, you eyes will burn if you do',
+        'run Johnny boy run',
+        'that guy looks dangerous',
+        'don\'t stare at him Sheila',
         'such a stallion',
         'penetrator',
         'what an alpha male',
@@ -47,7 +48,7 @@ define(['Const'], function(Const) {
         'make me a baby papi',
         'badass style === tiny Willy',
         'where are your sunglasses terminator',
-        'arrrggg he looked at me! pressure in my heart! I\'m dying...',
+        'arrrggg he looked at me! I\'m dying...',
         'I\'ve just peed myself',
         'he saw me, I\'m frozen, I can\'t move',
         'uhhh papitooo, big size menu for me please',

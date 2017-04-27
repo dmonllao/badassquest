@@ -181,7 +181,7 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
                         this.shout();
                         this.shoutInterval = setInterval(this.shout.bind(this), Const.passingByLapse);
                     }
-                }.bind(this), 1000);
+                }.bind(this), 2000);
             }
 
             // Flag this route as active.

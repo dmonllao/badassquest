@@ -38,6 +38,6 @@ define(function() {
         },
         pissedPassingByLapse: 10,
         pissedPassingByRampUp: 2,
-        passingByLapse: 3000,
+        passingByLapse: 5000,
     };
 });
