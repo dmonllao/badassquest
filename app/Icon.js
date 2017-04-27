@@ -31,7 +31,7 @@ define(['fontawesomeMarkers'], function(fontawesomeMarkers) {
         },
         shop: {
             icon: fontawesome.markers.SHOPPING_CART,
-            color: '#3b5998'
+            color: '#2196f3'
         },
         wealth: {
             icon: fontawesome.markers.MONEY,

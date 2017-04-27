@@ -4,6 +4,8 @@ define(['action/Cure', 'action/Food', 'action/Steal', 'action/Hack', 'action/Fig
         hospital: 'health',
         doctor: 'health',
         shopping_mall: 'shop',
+        jewelry_store: 'shop',
+        electronics_store: 'shop',
         bank: 'wealth',
         atm: 'hackable',
         restaurant: 'food',
@@ -65,7 +67,7 @@ define(['action/Cure', 'action/Food', 'action/Steal', 'action/Hack', 'action/Fig
             // This list should be short as there is 1 place API query for each element.
             return [
                 ['hospital', 'doctor', 'bank', 'atm'],
-                ['restaurant', 'bar']
+                ['restaurant', 'bar', 'jewelry_store', 'electronics_store', 'shopping_mall']
             ];
         },
 
