@@ -27,9 +27,12 @@ define(['bs', 'action/Base', 'Sound', 'UI'], function($, ActionBase, Sound, UI) 
 
             Sound.play('heal');
 
-            // Update the user state.
+            // Update the user state the price is the health points that were restored,
+            // they still heal you even if you don't have money.
+            var healed = this.user.attrs.tHealth - this.user.state.cHealth;
             this.user.updateState({
-                cHealth: this.user.attrs.tHealth
+                cHealth: this.user.attrs.tHealth,
+                cWealth: this.user.state.cWealth - healed
             });
 
             this.user.addExperience(5);
