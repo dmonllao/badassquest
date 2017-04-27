@@ -21,9 +21,11 @@ define(function() {
                 pixelOffset: new google.maps.Size(-123, 0),
                 boxStyle: {
                     background: "rgb(255, 255, 255)",
-                    opacity: 0.8
+                    opacity: 0.8,
+                    maxWidth: '150px',
+                    minWidth: '70px',
                 },
-                closeBoxURL: ""
+                closeBoxURL: "",
             };
         },
 
