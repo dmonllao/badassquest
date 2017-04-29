@@ -15,11 +15,12 @@ define(function() {
         taxesInterval: 5000,
         revenuesInterval: 10000,
         breathDropInterval: 3000,
+        saveInterval: 10000,
         breathDropAmount: 10,
         userAttackTime: 2000,
         foeAttackTime: 2000,
         defaultFoePic: 'img/foe.png',
-        chaseStartDelay: 8000,
+        chaseStartDelay: 5000,
         // Var below used to calculate foe's power.
         maxReasonableLevel: 20,
         maxChaseDuration: 15,

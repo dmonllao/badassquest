@@ -21,9 +21,14 @@ define(['bs', 'Const', 'InfoWindow', 'fontawesomeMarkers', 'Router'], function($
                 fillColor: '#4169E1',
                 fillOpacity: 1,
             },
+            animation: google.maps.Animation.DROP,
             zIndex: 8,
             optimized: false,
         });
+
+        setTimeout(function() {
+            this.marker.setAnimation(google.maps.Animation.BOUNCE);
+        }.bind(this), 2000);
 
         this.router = new Router(this.map);
     }
