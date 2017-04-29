@@ -28,7 +28,7 @@ define(['bs'], function($) {
             musicInterval = setInterval(function() {
                 musicNode.remove();
                 $('#body').append(musicNode);
-            }, 322000);
+            }, 110000);
         },
 
         toggle: function() {

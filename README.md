@@ -47,4 +47,4 @@ You just need to start grunt to watch for CSS changes, it autocompiles and minif
 * Badass picture: http://www.memegenerator.es
 * "Chuck Norris May 2015" by Staff Sgt. Tony Foster - https://www.dvidshub.net/image/1915215/fort-hood-camp-mabry-soldiers-attend-texas-state-prayer-breakfast. Licensed under Public Domain via Commons - https://commons.wikimedia.org/wiki/File:Chuck_Norris_May_2015.jpg#/media/File:Chuck_Norris_May_2015.jpg
 * Sounds: https://github.com/mozilla/BrowserQuest - Content is licensed under CC-BY-SA 3.0
-* Music: John Okely (pianokely) https://soundcloud.com/pianokely
+* Music: Friggo Cz (Sophomore Makeout - Silent Partner https://soundcloud.com/friggo-cz/sophomore-makeout)
