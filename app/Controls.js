@@ -264,6 +264,23 @@ define(['bs', 'Sound'], function($, Sound) {
                 $('#share-text #return-game').on('click', function() {
                     $('#share-text').modal('hide');
                 });
+
+                $('#share-twitter').on('click', function(ev) {
+                    ev.preventDefault();
+                    window.open(this.href, 'twitter', 'height=180, width=240');
+                });
+
+                $('#share-facebook').on('click', function(ev) {
+                    ev.preventDefault();
+                    window.open(this.href, 'facebook', 'height=400, width=600');
+                });
+
+                $('#share-email').on('click', function(ev) {
+                    ev.preventDefault();
+                    window.open(this.href, 'email', 'height=400, width=550');
+                });
+
+
             });
 
             this.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(shareDiv);
