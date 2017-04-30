@@ -21,6 +21,13 @@ define(['bs', 'PoiTypes', 'Map', 'Const', 'UI', 'Util', 'InfoWindow', 'External'
 
         $('#map').on('move:finished', this.getNearbyPois.bind(this));
 
+        // Add existing markers to the markers list.
+        for (var i in this.user.properties) {
+            this.markers[i] = this.user.properties[i].marker;
+        }
+        for (var i in this.user.taxes) {
+            this.markers[i] = this.user.taxes[i].marker;
+        }
         return this;
     }
 

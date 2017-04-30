@@ -32,11 +32,13 @@ define(['bs', 'Const', 'Map', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'P
         user.moveTo(e.latLng);
     });
 
-    // Once we get user input we start filling the map
+    // Once we get user input we start filling the map.
     storyInit.done(function(position) {
 
         // Search nearby pois and display them on map.
         poisManager.addNearbyPois(position);
+
+        user.gameStarted();
 
         // Add listeners to user actions for politic-related events.
         politicsManager.setPolitics(position);

@@ -1,5 +1,7 @@
 define(['bs', 'Const', 'MissionsChain', 'Mission', 'InfoWindow', 'Generator', 'PoiTypes'], function($, Const, MissionsChain, Mission, InfoWindow, Generator, PoiTypes) {
 
+    var usedPlaces = {};
+
     function MissionsSetGenerator(map, game, user, employer, completedCallback) {
         this.map = map;
         this.game = game;
@@ -19,18 +21,43 @@ define(['bs', 'Const', 'MissionsChain', 'Mission', 'InfoWindow', 'Generator', 'P
         employer: null,
         completedCallback : null,
 
-        create: function(pois) {
+        create: function(pois, ongoing = false) {
+
+            // The length depends on the level where the politician contacts you.
+            var limits = PoiTypes.getMissionLimits(this.employer.locationType);
 
             var missions = [];
+            var missionNum = 0;
             for (var i = 0; i < pois.length; i++) {
-                var mission = this.createMission(pois[i], (i + 1));
-                if (mission) {
-                    missions.push(mission);
+                if (missionNum === limits) {
+                    break;
+                }
+
+                // Skip already used pois.
+                if (typeof usedPlaces[pois[i].place_id] !== 'undefined') {
+                    continue;
+                }
+
+                if (ongoing !== false && i < ongoing) {
+                    // If we are creating missions for a resumed game we only create
+                    // the remaining missions.
+                    // Increase missionNum as well because these missions are already finished.
+                    missionNum++;
+                } else {
+                    var mission = this.createMission(pois[i], (i + 1));
+                    // We check that a mission for this poi can be created, if there
+                    // are no remaining missions for this poi types we fetch another poi.
+                    if (mission) {
+
+                        usedPlaces[pois[i].place_id] = pois[i].place_id;
+                        missions.push(mission);
+                        missionNum++;
+                    }
                 }
             }
 
             // Set the chain of missions and start showing the first one.
-            var missionsChain = new MissionsChain(this.map, this.game, this.user, missions, this.completedCallback);
+            var missionsChain = new MissionsChain(this.map, this.game, this.user, this.employer, missions, this.completedCallback);
             missionsChain.setMissionLocation();
 
         },
@@ -48,7 +75,7 @@ define(['bs', 'Const', 'MissionsChain', 'Mission', 'InfoWindow', 'Generator', 'P
             // - A reward (integer).
             var missionData = Generator.getRandomMission(this.user, actionType);
             if (!missionData) {
-                // Stop if no remaining missions.
+                // False if no remaining missions.
                 return;
             }
 

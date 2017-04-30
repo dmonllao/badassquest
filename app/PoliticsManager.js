@@ -11,6 +11,8 @@ define(['bs', 'Const', 'UI', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSe
         this.geocoder = Map.getGeocoder();
 
         $('#map').on('user:levelup', this.checkPolitics.bind(this));
+        $('#map').on('game:save', this.savePolitics.bind(this));
+        $('#map').on('game:clear', this.clearSavedPolitics.bind(this));
 
         return this;
     }
@@ -34,12 +36,25 @@ define(['bs', 'Const', 'UI', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSe
             for (var i in this.politics[newLevel]) {
 
                 var politic = this.politics[newLevel][i];
+
+                if (this.user.achievements.politics && this.user.achievements.politics[politic.id]) {
+                    // Skip already achieved political stuff.
+                    continue;
+                }
+
                 var completedCallback = function() {
                     // Notification and modal for congrats.
                     $('#map').trigger('notification:add', {
                         from: '<img src="' + politic.image + '" class="img-circle notification-img"> ' + politic.name,
                         message: 'Hey badass, I am getting old and grumpy. I want you to be my successor, you deserve it. See you around.'
                     }, 2000);
+
+                    // Save the achievement.
+                    this.user.addAchievement({
+                        category: 'politics',
+                        id: politic.id,
+                        title: politic.location + ' ' + politic.role
+                    });
 
                     setTimeout(function() {
                         Sound.play('achievement');
@@ -49,23 +64,32 @@ define(['bs', 'Const', 'UI', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSe
                         }
                         UI.showModal(content, '<i class="fa fa-thumbs-o-up"></i>');
                     }, 4000);
-                };
+                }.bind(this);
 
                 // Too many binds required.
                 var self = this;
 
+
                 this.getPlaces(newLevel).done(function(places) {
-                    // Long wait so that the message does not interfere with the action that lead to the level up.
-                    setTimeout(function() {
-                        $('#map').trigger('notification:add', {
-                            from: '<img src="' + politic.image + '" class="img-circle notification-img"> ' + politic.name + ' - ' + politic.location + ' ' + politic.role,
-                            message: 'Hi, I\'ve heard you are a badass, you should secretly work for me. Reply as soon as possible.',
-                            callback: function() {
-                                var missionsGenerator = new MissionsSetGenerator(self.map, self.game, self.user, politic, completedCallback.bind(self));
-                                missionsGenerator.create(places);
-                            }
-                        });
-                    }, 7000);
+
+                    var missionsGenerator = new MissionsSetGenerator(self.map, self.game, self.user, politic, completedCallback.bind(self));
+
+                    if (typeof self.user.ongoingMissions[politic.id] !== 'undefined') {
+                        missionsGenerator.create(places, self.user.ongoingMissions[politic.id]);
+                    } else {
+                        // Require the player to contact the politic if no previous ongoing missions have been found.
+
+                        // Long wait so that the message does not interfere with the action that lead to the level up.
+                        setTimeout(function() {
+                            $('#map').trigger('notification:add', {
+                                from: '<img src="' + politic.image + '" class="img-circle notification-img"> ' + politic.name + ' - ' + politic.location + ' ' + politic.role,
+                                message: 'Hi, I\'ve heard you are a badass, you should secretly work for me. Reply as soon as possible.',
+                                callback: function() {
+                                    missionsGenerator.create(places);
+                                }
+                            });
+                        }, 7000);
+                    }
                 })
                 .fail(function() {
                     return;
@@ -76,9 +100,11 @@ define(['bs', 'Const', 'UI', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSe
         getPlaces: function(level) {
             var promise = $.Deferred();
 
+            // Depends on the level.
+            var radius = 4000 * level;
             this.placesService.nearbySearch({
                 location: this.user.marker.getPosition(),
-                radius: 4000,
+                radius: radius,
                 types: PoiTypes.getMissionsTypes()
             }, function(places, status) {
                 if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
@@ -91,11 +117,8 @@ define(['bs', 'Const', 'UI', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSe
                     return;
                 }
 
-                // The length depends on the level where the politician contacts you.
-                var limits = PoiTypes.getMissionLimits(level);
-                for (var i in places) {
-                    // TODO Apply limits. 
-                }
+                // At this stage we return all places we found, MissionsSetGenerator will limit which
+                // missions are created.
                 promise.resolve(places);
 
             }.bind(this));
@@ -104,6 +127,19 @@ define(['bs', 'Const', 'UI', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSe
         },
 
         setPolitics: function(position) {
+
+            var politics = localStorage.getItem('politics');
+            if (politics) {
+                // Retrieve saved politics and mission chains.
+                this.politics = JSON.parse(politics);
+
+                // Load politic missions up to the user current level.
+                for (var level = 1; level <= this.user.state.level; level++) {
+                    this.checkPolitics(null, level);
+                }
+                return;
+            }
+
             this.geocoder.geocode({location: position}, function(results, status) {
                 if (status !== google.maps.GeocoderStatus.OK) {
                     console.error('Geocoder error: ' + status);
@@ -161,6 +197,7 @@ define(['bs', 'Const', 'UI', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSe
          */
         addPolitic: function(locationType, location) {
             var politic = {
+                id: Math.round(Math.random() * 100),
                 name: Generator.getRandomName(),
                 locationType: locationType,
                 role: this.locationTypeRole(locationType),
@@ -205,6 +242,14 @@ define(['bs', 'Const', 'UI', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSe
             console.warn('Couldn\'t determine the role for ' + locationType + ' location type');
             return 'manager';
         },
+
+        savePolitics: function() {
+            localStorage.setItem('politics', JSON.stringify(this.politics));
+        },
+
+        clearSavedPolitics: function() {
+            localStorage.removeItem('politics');
+        }
 
     };
 

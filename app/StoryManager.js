@@ -23,16 +23,41 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
         //this.story = new StoryFree(this.user, this.game);
         this.story = new StoryForPresident(this.user, this.game);
 
-        // Show intro text.
-        var content = '<h1 class="story-name">' + this.story.getTitle() + '</h1>' +
-            '<div class="story-intro">' + this.story.getIntro() + '</div>' +
-            '<img title="Such a badass" alt="Badass picture" src="' + this.user.photo + '" class="big-centered-img img-responsive img-circle"/>';
+        var resumeGame = localStorage.getItem('userPosition');
+
+        if (resumeGame) {
+            var content = '<h1 class="story-name">' + this.story.getTitle() + '</h1>' + UI.renderActionButtons([
+                {
+                    id: 'resume',
+                    text: 'Resume'
+                }, {
+                    id: 'newgame',
+                    text: 'New game'
+                }
+            ]);
+        } else {
+            // Show intro text.
+            var content = '<h1 class="story-name">' + this.story.getTitle() + '</h1>' +
+                '<div class="story-intro">' + this.story.getIntro() + '</div>' +
+                '<img title="Such a badass" alt="Badass picture" src="' + this.user.photo + '" class="big-centered-img img-responsive img-circle"/>';
+        }
         UI.showModal(content);
+
+        $('#resume').on('click', function() {
+            $('#text-action').modal('hide');
+        });
+        $('#newgame').on('click', function() {
+            this.user.clearGame();
+            location.reload();
+        }.bind(this));
 
         // Set the story initial position.
         this.map.setZoom(this.story.zoom);
-        if (this.story.initialPosition) {
-            this.setPosition(new google.maps.LatLng(this.story.initialPosition));
+        if (resumeGame) {
+            var coords = JSON.parse(resumeGame);
+            this.setPosition(new google.maps.LatLng(coords), false);
+        } else if (this.story.initialPosition) {
+            this.setPosition(new google.maps.LatLng(this.story.initialPosition), true);
         } else {
             // Set a nice background while the user selects a position.
             this.map.setCenter(Const.defaultMapCenterBackground);
@@ -41,6 +66,7 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
         }
 
         if (this.story.missions.length > 0) {
+            // TODO Story missions state should be saved.
             var missionsChain = new MissionsChain(this.map, this.game, this.user,
                 this.story.missions, this.gameCompleted.bind(this));
             missionsChain.setMissionLocation();
@@ -78,7 +104,7 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
          * Sets the inital game position. This is when the game really starts.
          * @param {google.maps.LatLng} LatLng, would not work using {lat:, lng}.
          */
-        setPosition: function(position) {
+        setPosition: function(position, showTips) {
 
             // Set the user position and center there the map.
             this.user.setPosition(position);
@@ -96,7 +122,9 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
                 });
             }.bind(this));
 
-            this.addGameTips();
+            if (showTips) {
+                this.addGameTips();
+            }
 
             // Let other components know that we already have the position.
             initPromise.resolve(position);

@@ -1,10 +1,11 @@
 define(['bs', 'External', 'Icon', 'InfoWindow', 'Map'], function($, External, Icon, InfoWindow, Map) {
 
-    function MissionsChain(map, game, user, missions, completedCallback) {
+    function MissionsChain(map, game, user, employer, missions, completedCallback) {
         this.placesService = Map.getPlacesService();
         this.map = map;
         this.game = game;
         this.user = user;
+        this.employer = employer;
         this.missions = missions;
         this.completedCallback = completedCallback;
         return this;
@@ -51,10 +52,20 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'Map'], function($, External, Ic
 
         getNextMission: function() {
             if (this.currentMission === null) {
-                this.currentMission = 0;
+
+                // Preexisting ongoing mission.
+                if (this.user.ongoingMissions[this.employer.id]) {
+                    this.currentMission = this.user.ongoingMissions[this.employer.id];
+                } else {
+                    // Fallback to new game and first mission.
+                    this.currentMission = 0;
+                }
             } else {
                 this.currentMission++;
             }
+
+            // Current mission number to storage.
+            this.user.ongoingMissions[this.employer.id] = this.currentMission;
 
             if (typeof this.missions[this.currentMission] === "undefined") {
                 return false;

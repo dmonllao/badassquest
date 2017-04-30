@@ -49,13 +49,28 @@ define(['action/Cure', 'action/Food', 'action/Steal', 'action/Hack', 'action/Fig
             return missionTypes;
         },
 
-        getMissionLimits: function(level) {
-            return {
-                ActionSteal: 2 * level,
-                ActionFight: 2 * level,
-                ActionExtort: 2 * level,
-                ActionBuy: 1 * level
-            };
+        getMissionLimits: function(locationType) {
+
+            var multiplier = 1;
+            switch (locationType) {
+                case 'locality':
+                    multiplier = 1;
+                    break;
+                case 'administrative_area_level_3':
+                    multiplier = 2;
+                    break;
+                case 'administrative_area_level_2':
+                    multiplier = 2;
+                    break;
+                case 'administrative_area_level_1':
+                    multiplier = 3;
+                    break;
+                case 'country':
+                    multiplier = 4;
+                    break;
+            }
+
+            return 3 * multiplier;
         },
 
         /**

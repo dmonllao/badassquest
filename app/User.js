@@ -23,21 +23,46 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         this.playerName = playerName;
         this.photo = playerPhoto;
 
-        this.state = {
-            cHealth: Const.initHealth,
-            cFood: Const.initFood,
-            cWealth: Const.initWealth,
-            experience: 10,
-            level: 1
-        };
+        this.state = localStorage.getItem('userState');
+        if (this.state) {
+            this.state = JSON.parse(this.state);
+        } else {
+            // New state.
+            this.state = {
+                cHealth: Const.initHealth,
+                cFood: Const.initFood,
+                cWealth: Const.initWealth,
+                experience: 10,
+                level: 1
+            };
+        }
 
-        this.attrs = {
-            tHealth: Const.initHealth,
-            tFood: Const.initFood,
-            speed: Const.initSpeed,
-            attack: Const.initAttack,
-            defense: Const.initDefense
-        };
+        this.attrs = localStorage.getItem('userAttrs');
+        if (this.attrs) {
+            this.attrs = JSON.parse(this.attrs);
+        } else {
+            this.attrs = {
+                tHealth: Const.initHealth,
+                tFood: Const.initFood,
+                speed: Const.initSpeed,
+                attack: Const.initAttack,
+                defense: Const.initDefense
+            };
+        }
+
+        this.achievements = localStorage.getItem('userAchievements');
+        if (this.achievements) {
+            this.achievements = JSON.parse(this.achievements);
+        } else {
+            this.achievements = {};
+        }
+
+        this.ongoingMissions = localStorage.getItem('userOngoingMissions');
+        if (this.ongoingMissions) {
+            this.ongoingMissions = JSON.parse(this.ongoingMissions);
+        } else {
+            this.ongoingMissions = {};
+        }
 
         this.router = new Router(this.map, true);
 
@@ -56,15 +81,20 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         // Manages the pois and areas the user controls.
         this.controlledAreas = new ControlledAreas(this.map);
 
-        this.startIntervals();
-
-        document.addEventListener(visibilityChange, function(ev) {
-            if (document[hidden]) {
-                this.clearIntervals();
-            } else {
-                this.startIntervals();
+        var properties = null;
+        if (properties = localStorage.getItem('userProperties')) {
+            properties = JSON.parse(properties)
+            if (!$.isEmptyObject(properties)) {
+                this.restoreElement(properties, 'properties', 'home', false);
             }
-        }.bind(this));
+        }
+        var taxes = null;
+        if (taxes = localStorage.getItem('userTaxes')) {
+            taxes = JSON.parse(taxes)
+            if (!$.isEmptyObject(taxes)) {
+                this.restoreElement(taxes, 'taxes', 'done', true);
+            }
+        }
     }
 
     User.prototype = {
@@ -96,9 +126,13 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         // @type {PissedPeople}
         pissed: null,
 
+        // @type {ControlledAreas}
         controlledAreas: null,
 
+        achievements: {},
+
         properties: {},
+
         taxes: {},
 
         timers: {},
@@ -110,6 +144,19 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
                 return;
             }
             this.marker.setPosition(position);
+        },
+
+        gameStarted: function() {
+
+            this.startIntervals();
+
+            document.addEventListener(visibilityChange, function(ev) {
+                if (document[hidden]) {
+                    this.clearIntervals();
+                } else {
+                    this.startIntervals();
+                }
+            }.bind(this));
         },
 
         createMarker: function(position) {
@@ -279,6 +326,10 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
             this.properties[property.poiData.place_id] = property;
         },
 
+        addAchievement: function(achievement) {
+            this.achievement[achievement.category] = achievement;
+        },
+
         getProperties: function() {
             return this.properties;
         },
@@ -430,6 +481,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
             this.timers.dropFood = setInterval(this.breathDropFood.bind(this), Const.breathDropInterval);
             this.timers.revenues = setInterval(this.collectRevenues.bind(this), Const.revenuesInterval);
             this.timers.taxes = setInterval(this.collectTaxes.bind(this), Const.taxesInterval);
+            this.timers.saveGame = setInterval(this.saveGame.bind(this), Const.saveInterval);
         },
 
         clearIntervals: function() {
@@ -440,10 +492,80 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
             }
         },
 
-        dead: function() {
-            this.router.clearRoute();
+        saveGame: function() {
+            localStorage.setItem('userState', JSON.stringify(this.state));
+            localStorage.setItem('userAttrs', JSON.stringify(this.attrs));
+            localStorage.setItem('userAchievements', JSON.stringify(this.achievements));
+            localStorage.setItem('userOngoingMissions', JSON.stringify(this.ongoingMissions));
+            localStorage.setItem('userPosition', JSON.stringify({
+                lat: this.marker.getPosition().lat(),
+                lng: this.marker.getPosition().lng()
+            }));
 
+            // We need to get rid of properties and taxes markers.
+            this.saveElement('properties', 'userProperties');
+            this.saveElement('taxes', 'userTaxes');
+
+            $('#map').trigger('game:save');
+        },
+
+        saveElement: function(attributeName, itemName) {
+            var stored = {};
+            for (var i in this[attributeName]) {
+                stored[i] = $.extend({}, this[attributeName][i]);
+                var markerPosition = stored[i].marker.getPosition()
+                stored[i].marker = {
+                    lat: markerPosition.lat(),
+                    lng: markerPosition.lng()
+                };
+            }
+            localStorage.setItem(itemName, JSON.stringify(stored));
+        },
+
+        restoreElement: function(data, attributeName, iconType, pissed) {
+
+            for (var i in data) {
+                var position = new google.maps.LatLng(data[i].marker.lat, data[i].marker.lng);
+
+                data[i].marker = new google.maps.Marker({
+                    map: this.map,
+                    title: data[i].poiData.name,
+                    position: position,
+                    icon: Icon.getByType(iconType, 0.5),
+                    zIndex: 1
+                });
+                data[i].marker.setClickable(false);
+
+                this.controlledAreas.addPoi(data[i]);
+
+                if (pissed) {
+                    this.pissed.add(data[i]);
+                }
+            }
+            this[attributeName] = data;
+        },
+
+        clearSavedGame: function() {
+            localStorage.removeItem('userState');
+            localStorage.removeItem('userAttrs');
+            localStorage.removeItem('userProperties');
+            localStorage.removeItem('userTaxes');
+            localStorage.removeItem('userPosition');
+            localStorage.removeItem('userAchievements');
+            localStorage.removeItem('userOngoingMissions');
+        },
+
+        clearGame: function() {
+            this.router.clearRoute();
+            this.clearSavedGame();
             this.clearIntervals();
+
+            $('#map').trigger('game:clear');
+        },
+
+        dead: function() {
+
+            this.clearGame();
 
             $('#text-action').modal('hide');
             $('#game-action').modal('hide');

@@ -19,6 +19,7 @@ define(['Const'], function(Const) {
     var badMoodLines = [
         'You will burn in hell',
         'You should be ashamed!',
+        'You ruined our lives!',
         'I will tell your mother',
         'We will see you dead!',
     ];
@@ -74,6 +75,22 @@ define(['Const'], function(Const) {
     var missions = {
         ActionSteal: [
             {
+                title: 'King\'s crown',
+                infoMessage: 'My birds located the king\'s crown, go and get it for me you badass',
+                doneMessage: 'I am now the king.',
+            }, {
+                title: 'Sweet potatoes',
+                infoMessage: 'I have a critical mission for you... go and steal some sweet potatoes.',
+                doneMessage: 'Nice, I can start cooking my tortilla now.',
+            }, {
+                title: 'Competition dog',
+                infoMessage: 'I\'m into races...dog races. I want you to steal a Yorkshire for me, I will make a champion out of it.',
+                doneMessage: 'Woff woff!',
+            }, {
+                title: 'Ex-partner sex toy',
+                infoMessage: 'I\'ve heard that my ex replaced my by a sex toy! How can this be! Go and steal it now.',
+                doneMessage: 'Pfff, I\'m much better than this.',
+            }, {
                 title: 'Pink underwear',
                 infoMessage: 'I need underwear for...a friend! Go and steal it for me, I will pay you.',
                 doneMessage: 'So naughty... this is exactly what I wanted.',
@@ -92,6 +109,14 @@ define(['Const'], function(Const) {
                 title: 'Defense',
                 infoMessage: 'I\'ve heard that Joselito the owner wants to kill me, I need you to kill him before me.',
                 doneMessage: 'Yeah, that was close...'
+            }, {
+                title: 'Ronny boy',
+                infoMessage: 'Ronny boy got pissed off at a party and started talking shit about me. Kill him slowly.',
+                doneMessage: 'Byeee Ronny booyyy...'
+            }, {
+                title: 'Samantha',
+                infoMessage: 'Have you heard about Samantha the ninja killer? Japanese mafia contracts her to get rid of people, I\'ve been told I\'m her next target, please please kill her!',
+                doneMessage: 'It wasn\'t that hard, was it?'
             }
         ],
         ActionExtort: [
@@ -103,6 +128,14 @@ define(['Const'], function(Const) {
                 title: 'Protection',
                 infoMessage: 'I offered them protection and they refused, I think that we should be more persuasive, do you understand me?...',
                 doneMessage: 'This is what I meant :)'
+            }, {
+                title: 'Not satisfied with the service',
+                infoMessage: 'There is an establishment I am not satisfied with, go an extort them.',
+                doneMessage: 'Nice, you are a good badass mate.'
+            }, {
+                title: 'Influence',
+                infoMessage: 'Extorsion is my main source of income, go an extort them',
+                doneMessage: 'Well done, such a badass.'
             }
         ],
         ActionBuy: [
@@ -114,10 +147,30 @@ define(['Const'], function(Const) {
                 title: 'Expanding the area',
                 infoMessage: 'I want to expand my influence in this area, go and buy this for me.',
                 doneMessage: 'Good good good, see you around.'
+            }, {
+                title: 'Good fit',
+                infoMessage: 'Look at this place, it will be a good fit for my collection.',
+                doneMessage: 'Nice, thanks.'
+            }, {
+                title: 'For the kids',
+                infoMessage: 'My kids need a place to play around, go and buy this for me please.',
+                doneMessage: 'Well done, say thanks kids.'
             }
         ],
         ActionHack: [
             {
+                title: 'ATM Hacking',
+                infoMessage: 'I need you to hack an ATM',
+                doneMessage: 'Thanks mate'
+            }, {
+                title: 'ATM Hacking',
+                infoMessage: 'I need you to hack an ATM',
+                doneMessage: 'Thanks mate'
+            }, {
+                title: 'ATM Hacking',
+                infoMessage: 'I need you to hack an ATM',
+                doneMessage: 'Thanks mate'
+            }, {
                 title: 'ATM Hacking',
                 infoMessage: 'I need you to hack an ATM',
                 doneMessage: 'Thanks mate'
