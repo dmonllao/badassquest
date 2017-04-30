@@ -101,7 +101,7 @@ define(['bs', 'Const', 'UI', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSe
             var promise = $.Deferred();
 
             // Depends on the level.
-            var radius = 4000 * level;
+            var radius = 3000 + (1000 * level);
             this.placesService.nearbySearch({
                 location: this.user.marker.getPosition(),
                 radius: radius,
