@@ -1,4 +1,4 @@
-define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI'], function(Phaser, Const, Generator, Util, External, Sound, UI) {
+define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI', 'HealthBar'], function(Phaser, Const, Generator, Util, External, Sound, UI, HealthBar) {
 
     var fightInfoShown = false;
 
@@ -7,6 +7,8 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI'], func
     var particlesManager = null;
     var foesEmitter = null;
     var userEmitter = null;
+
+    var barMargin = 10;
 
     function StateFight(appGame) {
         game = appGame;
@@ -19,6 +21,10 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI'], func
         foeSprites: {},
 
         finished: false,
+
+        userHealthBar: null,
+
+        foesHealthBars: {},
 
         init: function(args) {
 
@@ -111,8 +117,9 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI'], func
             var foeX = foeSpacing / 2;
 
             // Some top spacing.
-            var foeY = 150;
+            var foeY = Util.getGameHealthBarHeight() + 70;
 
+            var foesHealthBarY = barMargin;
             for (var i in this.foes) {
                 var foeSprite = this.foes[i].createSprite(game, foeX, foeY);
 
@@ -122,7 +129,14 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI'], func
                 this.foeSprites[i] = foeSprite;
 
                 foeX = foeX + foeSpacing;
+
+                var xPosition = game.world.width - barMargin - Util.getGameHealthBarWidth();
+                var yPosition = foesHealthBarY;
+                this.foesHealthBars[i] = new HealthBar(game, xPosition, yPosition, Util.getGameHealthBarWidth(), Util.getGameHealthBarHeight());
+                foesHealthBarY = foesHealthBarY + (Util.getGameHealthBarHeight() * 2);
             }
+
+            this.userHealthBar = new HealthBar(game, barMargin, barMargin, Util.getGameHealthBarWidth(), Util.getGameHealthBarHeight());
 
             if (fightInfoShown === false) {
                 var content = '<h1>Fights tip</h1><p>Tap quickly over your enemies to kill them once your turn starts. You can escape the fight by clicking out of the fight area.</p>' + UI.renderOkButton('Continue', 'btn btn-warning');
@@ -215,8 +229,8 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI'], func
             }
 
             // Notify that your turn starts.
-            var text = game.add.text(game.world.centerX, 50, 'Your turn! Hit them!');
-            this.formatText(text);
+            var text = game.add.text(game.world.centerX, Util.getGameHealthBarHeight() + 50, 'Your turn! Hit them!');
+            this.formatText(text, Util.getGameFontSize());
 
             // Show it while the user can attack.
             setTimeout(function() {
@@ -236,10 +250,16 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI'], func
 
         update: function() {
             for (var i in this.foes) {
+
+                // Redraw to new position.
                 if (!this.foes[i].isDead()) {
                     this.foes[i].updateCanvas(game);
                 }
+
+                // Update health bar.
+                this.foesHealthBars[i].update();
             }
+            this.userHealthBar.update();
         },
 
         userHit: function(damage) {
@@ -259,6 +279,9 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI'], func
             text.fill = '#FF2821';
 
             Sound.play('hurt');
+
+            updatedHealth = ((this.user.state.cHealth - damage) / this.user.attrs.tHealth) * 100;
+            this.userHealthBar.updateHealth(updatedHealth);
 
             // Show it while the user can attack.
             setTimeout(function() {
@@ -285,6 +308,9 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI'], func
             } else {
                 Sound.play('hit');
             }
+
+            updatedHealth = ((this.foes[foeIndex].state.cHealth - damagePoints) / this.foes[foeIndex].attrs.tHealth) * 100;
+            this.foesHealthBars[foeIndex].updateHealth(updatedHealth);
 
             // Show it while the user can attack.
             setTimeout(function() {
