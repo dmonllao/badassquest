@@ -104,7 +104,7 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
          * Sets the inital game position. This is when the game really starts.
          * @param {google.maps.LatLng} LatLng, would not work using {lat:, lng}.
          */
-        setPosition: function(position, showTips) {
+        setPosition: function(position, showTips = true) {
 
             // Set the user position and center there the map.
             this.user.setPosition(position);
