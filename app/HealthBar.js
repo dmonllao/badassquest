@@ -1,6 +1,6 @@
-define(function() {
+define(['Util'], function(Util) {
 
-    function HealthBar(game, xPosition, yPosition, barWidth, barHeight) {
+    function HealthBar(game, xPosition, yPosition, barWidth, barHeight, imageName, left) {
 
         this.game = game;
 
@@ -26,6 +26,19 @@ define(function() {
         this.life = this.game.add.sprite(xPosition, yPosition, bmd);
         this.life.cropEnabled = true;
         this.life.crop(this.widthLife);
+
+        var imageSprite = this.game.add.sprite(xPosition + 2, yPosition + 10, imageName);
+        //imageSprite.scale.setTo(0.2,0.2);
+        imageSprite.width = Util.getGameHealthBarImageSize();
+        imageSprite.height = Util.getGameHealthBarImageSize();
+
+        if (left === false) {
+            this.life.anchor.x = 1;
+            this.life.position.x = this.life.position.x + barWidth;
+
+            imageSprite.anchor.x = 1;
+            imageSprite.x = imageSprite.x + this.life.width;
+        }
     }
 
     HealthBar.prototype = {

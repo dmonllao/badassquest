@@ -8,7 +8,7 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI', 'Heal
     var foesEmitter = null;
     var userEmitter = null;
 
-    var barMargin = 10;
+    var barMargin = 20;
 
     function StateFight(appGame) {
         game = appGame;
@@ -84,6 +84,8 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI', 'Heal
 
             // Same size than the whole game canvas.
             game.load.image('background', this.getBackground());
+
+            game.load.image('healthBarPlayer', this.user.photo);
         },
 
         getBackground: function() {
@@ -132,11 +134,13 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI', 'Heal
 
                 var xPosition = game.world.width - barMargin - Util.getGameHealthBarWidth();
                 var yPosition = foesHealthBarY;
-                this.foesHealthBars[i] = new HealthBar(game, xPosition, yPosition, Util.getGameHealthBarWidth(), Util.getGameHealthBarHeight());
+                this.foesHealthBars[i] = new HealthBar(game, xPosition, yPosition,
+                    Util.getGameHealthBarWidth(), Util.getGameHealthBarHeight(), 'healthBarFoe' + this.foes[i].id, false);
                 foesHealthBarY = foesHealthBarY + (Util.getGameHealthBarHeight() * 2);
             }
 
-            this.userHealthBar = new HealthBar(game, barMargin, barMargin, Util.getGameHealthBarWidth(), Util.getGameHealthBarHeight());
+            this.userHealthBar = new HealthBar(game, barMargin, barMargin,
+                Util.getGameHealthBarWidth(), Util.getGameHealthBarHeight(), 'healthBarPlayer', true);
 
             if (fightInfoShown === false) {
                 var content = '<h1>Fights tip</h1><p>Tap quickly over your enemies to kill them once your turn starts. You can escape the fight by clicking out of the fight area.</p>' + UI.renderOkButton('Continue', 'btn btn-warning');

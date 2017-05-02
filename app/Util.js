@@ -51,10 +51,21 @@ define(['bs'], function($) {
             var size = 300;
             if (window.innerWidth < 480) {
                 size = 120;
-            } else if (window.innerWidth <= 768) {
+            } else if (window.innerWidth <= 992) {
                 size = 200;
             }
             return size;
         },
+
+        getGameHealthBarImageSize: function() {
+            var size = 40;
+            if (window.innerWidth < 480) {
+                size = 20;
+            } else if (window.innerWidth <= 992) {
+                size = 30;
+            }
+            return size;
+        },
+
     };
 });

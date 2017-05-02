@@ -84,6 +84,7 @@ define(['bs', 'Const', 'Generator'], function($, Const, Generator) {
 
         preloadAssets: function(game) {
             game.load.image('face' + this.id, this.image);
+            game.load.image('healthBarFoe' + this.id, this.image);
 
             // TODO This should be a foe constructor attribute.
             // Include the foe id as it should be unique.
