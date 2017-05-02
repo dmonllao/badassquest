@@ -1,7 +1,31 @@
 define(['bs'], function($) {
 
-
     return {
+
+        init: function() {
+
+            var canvas = document.createElement("canvas");
+            canvas.width = 24;
+            canvas.height = 24;
+
+            var ctx = canvas.getContext("2d");
+            ctx.fillStyle = "#ffcc99";
+            ctx.font = "24px FontAwesome";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("\uf111", 12, 12);
+
+            var ctx = canvas.getContext("2d");
+            ctx.fillStyle = "#333333";
+            ctx.font = "24px FontAwesome";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("\uf255", 12, 12);
+
+            var dataURL = canvas.toDataURL('image/png');
+
+            $('#game-action').css('cursor', 'url('+dataURL+'), auto');
+        },
 
         getActionButtonStyle: function(index) {
             var styles = ['btn-success', 'btn-danger', 'btn-warning', 'btn-primary', 'btn-info'];

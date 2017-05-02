@@ -1,9 +1,12 @@
-define(['bs', 'Const', 'Map', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManager', 'PoliticsManager'], function($, Const, Map, User, Game, StoryManager, ChaseTracker, PoisManager, PoliticsManager) {
+define(['bs', 'Const', 'Map', 'UI', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManager', 'PoliticsManager'], function($, Const, Map, UI, User, Game, StoryManager, ChaseTracker, PoisManager, PoliticsManager) {
 
     // JS console message.
     console.log('%c Hello! Feel free to hack the game. All user attributes and states are in app/User.js ', 'background: #222; color: #bada55');
     // @param {google.maps.Map}
     var map = Map.init();
+
+    // Initialise UI stuff.
+    UI.init();
 
     // @type {User} The current user.
     var user = new User(map, 'Badass', Const.characterPic);
