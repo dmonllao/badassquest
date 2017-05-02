@@ -143,9 +143,7 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI', 'Heal
                 Util.getGameHealthBarWidth(), Util.getGameHealthBarHeight(), 'healthBarPlayer', true);
 
             if (fightInfoShown === false) {
-                var attackFont = '<span class="fa-stack"><i class="fa fa-circle fa-stack-1x" style="color: #ffcc99;"></i>' +
-                    '<i class="fa fa-hand-rock-o fa-stack-1x" style="#333333"></i></span>';
-                var content = '<h1>Fights tip</h1><p>Tap quickly' + attackFont + 'over your enemies to kill them ' +
+                var content = '<h1>Fights tip</h1><p>Tap quickly' + UI.getPunch() + 'over your enemies to kill them ' +
                     '<i class="fa fa-heartbeat" style="color: #e15c5c"></i> once your turn starts. ' +
                     'You can escape the fight by clicking out of the fight area.</p>' +
                     UI.renderOkButton('Continue', 'btn btn-warning');

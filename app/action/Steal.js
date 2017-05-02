@@ -125,8 +125,8 @@ define(['bs', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], function($, Gen
         });
 
         $('#text-action-content').html(this.stealText);
-        $('#steal-info').html("<p>I've caught you mate! You will swallow this punch!<br/>" +
-            "(They punched you and recovered the money you have stolen them)</p>");
+        $('#steal-info').html("<p>I've caught you mate! You will swallow this punch!" + UI.getPunch() + "<br/>" +
+            "(They punched you and recovered the money <i class=\"fa fa-money\" style=\"color: #95c355;\"></i> you have stolen them)</p>");
 
         UI.showModal($('#text-action-content').html(), 'Continue', 'btn btn-warning');
     };

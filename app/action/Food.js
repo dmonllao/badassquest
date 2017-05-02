@@ -193,7 +193,8 @@ define(['bs', 'UI', 'action/Base', 'Generator', 'Sound'], function($, UI, Action
 
         // Show the results in a modal window.
         $('#text-action-content').html(this.foodText);
-        $('#food-info').html("<p>I've caught you mate! You will swallow this punch!<br/>(They punched you and stole some of your money)</p>");
+        $('#food-info').html("<p>I've caught you mate! You will swallow this punch!" + UI.getPunch() + "<br/>" +
+            "(They punched you and stole some of your money <i class=\"fa fa-money\" style=\"color: #95c355;\"></i>)</p>");
         UI.showModal($('#text-action-content').html(), 'Continue', 'btn btn-warning');
     };
 

@@ -77,6 +77,11 @@ define(['bs'], function($) {
                     $('#text-action').modal('hide');
                 });
             }
-        }
+        },
+
+        getPunch: function() {
+            return '<span class="fa-stack"><i class="fa fa-circle fa-stack-1x" style="color: #ffcc99;"></i>' +
+                '<i class="fa fa-hand-rock-o fa-stack-1x" style="#333333"></i></span>'
+        },
     }
 });
