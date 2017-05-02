@@ -238,7 +238,7 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI', 'Heal
             }
 
             // Notify that your turn starts.
-            var text = game.add.text(game.world.centerX, Util.getGameHealthBarHeight() + 50, 'Your turn! Hit them!');
+            var text = game.add.text(game.world.centerX, (Util.getGameHealthBarHeight() * 2) + 80, 'Your turn! Hit them!');
             this.formatText(text, Util.getGameFontSize());
 
             // Show it while the user can attack.
