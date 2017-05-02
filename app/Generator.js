@@ -354,7 +354,7 @@ define(['Const'], function(Const) {
 
                 // Banks can't be intimidated.
                 if (type === "bank" || type === 'atm') {
-                    foesN = this.randomInteger(3, 1);
+                    foesN = this.randomInteger(2, 1);
                     importance = 10;
                 }
 
@@ -365,7 +365,7 @@ define(['Const'], function(Const) {
                 }
 
                 if (type === 'shopping_mall') {
-                    foesN = this.randomInteger(3, 1);
+                    foesN = this.randomInteger(2, 1);
                     importance = 6;
                 }
             }
