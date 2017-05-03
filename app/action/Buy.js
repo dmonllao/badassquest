@@ -80,6 +80,16 @@ define(['bs', 'Const', 'Util', 'Icon', 'Generator', 'UI', 'action/Base', 'Sound'
                     revenue: this.poiRevenue
                 });
 
+                if (localStorage.getItem('achievementBuy1') === null) {
+                    this.user.addAchievement({
+                        category: 'basics',
+                        id: 'buy-1',
+                        title: 'Property owner',
+                        image: '<i class="fa fa-home" style="color: #95c355;"></i>'
+                    });
+                    localStorage.getItem('achievementBuy1')
+                }
+
                 this.markAsDone(false, Icon.getByType('home', 0.5));
             }
 

@@ -233,23 +233,22 @@ define(['bs', 'Sound'], function($, Sound) {
 
         initStatics: function() {
 
-            // Github.
-            var githubDiv = document.createElement('div');
-            githubDiv.setAttribute('id', 'github');
-            githubDiv.setAttribute('class', 'control-wrapper');
+            // Achievements.
+            var achievementsDiv = document.createElement('div');
+            achievementsDiv.setAttribute('id', 'achievements');
+            achievementsDiv.setAttribute('class', 'control-wrapper');
 
-            githubDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-github-alt"></i></pre>';
+            achievementsDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-trophy"></i></pre>';
 
-            google.maps.event.addDomListener(githubDiv, 'click', function() {
-                var form = document.createElement("form");
-                form.method = "GET";
-                form.action = "https://github.com/dmonllao/badassquest";
-                form.target = "_blank";
-                document.body.appendChild(form);
-                form.submit();
+            google.maps.event.addDomListener(achievementsDiv, 'click', function() {
+                $('#achievements-text').modal('show');
+
+                $('#achievements-text #ok').on('click', function(ev) {
+                    $('#achievements-text').modal('hide');
+                });
             });
 
-            this.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(githubDiv);
+            this.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(achievementsDiv);
 
             // Share.
             var shareDiv = document.createElement('div');

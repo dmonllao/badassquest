@@ -239,6 +239,14 @@ pre.control span.badge {
     }
 }
 
+.achievements-title {
+    margin-bottom: 1em;
+}
+
+.continue-buttons {
+    margin-top: 2em;
+}
+
 .info-box {
     text-align: center;
     margin: 20px auto 10px auto;
@@ -308,6 +316,39 @@ pre.control span.badge {
     vertical-align: middle;
     background-color: #d9534f;
     border-radius: 10px;
+}
+
+.links {
+    margin-top: 2em;
+    display: inline-block;
+    width: 100%;
+}
+
+.links a.left {
+    float: left;
+}
+
+.links a.right {
+    float: right;
+}
+
+.links a i {
+    font-size: 35px;
+    color: #333333;
+}
+
+.links a img {
+    height: 35px;
+}
+
+@media only screen and (max-width: 576px) {
+    .links a i {
+        font-size: 25px;
+    }
+
+    .links a img {
+        height: 25px;
+    }
 }
 
 .levelup-attr {

@@ -337,6 +337,16 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI', 'Heal
             }
             this.user.addExperience(experience);
 
+            if (localStorage.getItem('achievementFight1') === null) {
+                this.user.addAchievement({
+                    category: 'basics',
+                    id: 'fight-1',
+                    title: 'Street fighter',
+                    image: UI.getPunch()
+                });
+                localStorage.setItem('achievementFight1', true)
+            }
+
             // You won info.
             setTimeout(function() {
                 var text = game.add.text(game.world.centerX, game.world.centerY - 50, 'You won!');

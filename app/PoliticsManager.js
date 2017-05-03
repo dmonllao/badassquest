@@ -37,7 +37,7 @@ define(['bs', 'Const', 'UI', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSe
 
                 var politic = this.politics[newLevel][i];
 
-                if (this.user.achievements.politics && this.user.achievements.politics[politic.id]) {
+                if (this.user.achievements['politics-' + politic.id]) {
                     // Skip already achieved political stuff.
                     continue;
                 }
@@ -52,7 +52,7 @@ define(['bs', 'Const', 'UI', 'Icon', 'Generator', 'PoiTypes', 'Map', 'MissionsSe
                     // Save the achievement.
                     this.user.addAchievement({
                         category: 'politics',
-                        id: politic.id,
+                        id: 'politics-' + politic.id,
                         title: politic.location + ' ' + politic.role
                     });
 

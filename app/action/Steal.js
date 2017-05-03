@@ -92,6 +92,16 @@ define(['bs', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], function($, Gen
 
             Sound.play('achievement');
 
+            if (localStorage.getItem('achievementSteal1') === null) {
+                this.user.addAchievement({
+                    category: 'basics',
+                    id: 'steal-1',
+                    title: 'Pickpocket noob',
+                    image: '<i class=\"fa fa-money\" style=\"color: #95c355;\"></i>'
+                });
+                localStorage.setItem('achievementSteal1', true)
+            }
+
             // Get the loot.
             this.user.updateState({
                 cWealth: this.user.state.cWealth + this.scenario.loot

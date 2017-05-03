@@ -104,6 +104,16 @@ define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], functio
 
         Sound.play('achievement');
 
+        if (localStorage.getItem('achievementExtort1') === null) {
+            this.user.addAchievement({
+                category: 'basics',
+                id: 'extorsion-1',
+                title: 'businessman extorsion',
+                image: '<i class="fa fa-hand-paper-o" style="color: #ffcc99"></i>'
+            });
+            localStorage.setItem('achievementExtort1', true)
+        }
+
         this.doneCallback();
 
         // Only if there is a marker.

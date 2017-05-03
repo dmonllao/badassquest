@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindow', 'PissedPeople', 'ControlledAreas', 'Icon'], function($, Const, Generator, Router, Controls, Notifier, InfoWindow, PissedPeople, ControlledAreas, Icon) {
+define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindow', 'PissedPeople', 'ControlledAreas', 'Icon'], function($, Const, UI, Generator, Router, Controls, Notifier, InfoWindow, PissedPeople, ControlledAreas, Icon) {
 
     var healthWarningShown = false;
     var foodWarningShown = false;
@@ -56,6 +56,7 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         } else {
             this.achievements = {};
         }
+        this.refreshAchievementsList();
 
         this.ongoingMissions = localStorage.getItem('userOngoingMissions');
         if (this.ongoingMissions) {
@@ -327,7 +328,8 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
         },
 
         addAchievement: function(achievement) {
-            this.achievement[achievement.category] = achievement;
+            this.achievements[achievement.id] = achievement;
+            this.refreshAchievementsList();
         },
 
         getProperties: function() {
@@ -553,6 +555,11 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
             localStorage.removeItem('userPosition');
             localStorage.removeItem('userAchievements');
             localStorage.removeItem('userOngoingMissions');
+
+            localStorage.removeItem('achievementExtort1');
+            localStorage.removeItem('achievementBuy1');
+            localStorage.removeItem('achievementSteal1');
+            localStorage.removeItem('achievementFight1');
         },
 
         clearGame: function() {
@@ -581,8 +588,48 @@ define(['bs', 'Const', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindo
             }
             $('#status-content').html(content);
             $('#status').modal('show');
-        }
+        },
 
+        refreshAchievementsList: function() {
+            var content = '';
+
+            if ($.isEmptyObject(this.achievements)) {
+                content += '<p>What do you expect? You have done nothing yet.</p>'
+
+            } else {
+
+                for (var i in this.achievements) {
+
+                    var image = null;
+                    if (typeof this.achievements[i].image !== 'undefined') {
+                        image = this.achievements[i].image;
+                    } else {
+
+                        switch (this.achievements[i].category) {
+                            case 'basics':
+                                image = '<i class="fa fa-check" style="color: green;"></i>';
+                                break;
+                            case 'politics':
+                                image = '<i class="fa fa-building-o"></i>';
+                                break;
+                            default:
+                                image = '<i class="fa fa-check" style="color: green;"></i>';
+                                break;
+                        }
+                    }
+
+                    content +=
+                        '<div class="row">' +
+                            '<div class="col-xs-10 text-left"><i class="fa fa-circle-o"></i> ' + this.achievements[i].title + '</div>' +
+                            '<div class="col-xs-2">' + image + '</div>' +
+                        '</div>';
+                }
+            }
+
+            content += UI.renderOkButton('Return to game', 'btn btn-warning');
+
+            $('#achievements-content').html(content);
+        }
     };
 
     return User;

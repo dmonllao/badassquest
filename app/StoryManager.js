@@ -34,12 +34,12 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
                     id: 'newgame',
                     text: 'New game'
                 }
-            ]);
+            ], 'continue-buttons') + UI.getIntroFooter();
         } else {
             // Show intro text.
             var content = '<h1 class="story-name">' + this.story.getTitle() + '</h1>' +
                 '<div class="story-intro">' + this.story.getIntro() + '</div>' +
-                '<img title="Such a badass" alt="Badass picture" src="' + this.user.photo + '" class="big-centered-img img-responsive img-circle"/>';
+                '<img title="Such a badass" alt="Badass picture" src="' + this.user.photo + '" class="big-centered-img img-responsive img-circle"/>' + UI.getIntroFooter();
         }
         UI.showModal(content);
 
