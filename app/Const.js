@@ -11,6 +11,7 @@ define(function() {
         firstLevelUpExp: 50,
         levelUpAttrsIncrement: 1.1,
         poisRadius: 750,
+        clearPoisRadius: 1200,
         // Different intervals to make it more real.
         taxesInterval: 5000,
         revenuesInterval: 10000,

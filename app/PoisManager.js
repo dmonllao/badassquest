@@ -69,10 +69,32 @@ define(['bs', 'PoiTypes', 'Map', 'Const', 'UI', 'Util', 'InfoWindow', 'External'
             // Add new POIs if the current position and the previous one are far enough.
             // Better to update it more frequently than what we should strictly do.
             if (distance > Const.poisRadius / 2) {
+                this.clearFarPois(userPosition);
                 this.addNearbyPois(userPosition);
                 this.lastAddPoisPosition = userPosition;
             }
 
+        },
+
+        clearFarPois: function(position) {
+            for (var place_id in this.markers) {
+                if (this.markers.hasOwnProperty(place_id)) {
+
+                    // Can't remove properties and taxes.
+                    if (typeof this.user.taxes[place_id] !== 'undefined' || typeof this.user.properties[place_id] !== 'undefined') {
+                        continue;
+                    }
+
+                    var distance = google.maps.geometry.spherical.computeDistanceBetween(this.markers[place_id].marker.getPosition(), position).toFixed();
+                    if (distance > Const.clearPoisRadius / 2) {
+                        // Remove the marker.
+                        google.maps.event.clearInstanceListeners(this.markers[place_id].marker);
+                        this.markers[place_id].marker.setMap(null);
+                        this.markers[place_id].marker = null;
+                        delete this.markers[place_id];
+                    }
+                }
+            }
         },
 
         addNearbyPois: function(position) {
@@ -114,6 +136,11 @@ define(['bs', 'PoiTypes', 'Map', 'Const', 'UI', 'Util', 'InfoWindow', 'External'
 
             // Check that it is not already on the map.
             if (typeof this.markers[data.place_id] !== "undefined") {
+                return;
+            }
+
+            // Check that it is not already a property or someone paying taxes.
+            if (typeof this.user.taxes[data.place_id] !== 'undefined' || typeof this.user.properties[data.place_id] !== 'undefined') {
                 return;
             }
 

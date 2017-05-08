@@ -116,6 +116,7 @@ define(['bs', 'Const', 'InfoWindow', 'fontawesomeMarkers', 'Router'], function($
             }
             if (this.marker) {
                 this.marker.setMap(null);
+                this.marker = null;
             }
             this.router.stop();
         },
