@@ -620,8 +620,8 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
 
                     content +=
                         '<div class="row">' +
-                            '<div class="col-xs-10 text-left"><i class="fa fa-circle-o"></i> ' + this.achievements[i].title + '</div>' +
-                            '<div class="col-xs-2">' + image + '</div>' +
+                            '<div class="col-xs-8 text-left">' + this.achievements[i].title + '</div>' +
+                            '<div class="col-xs-4">' + image + '</div>' +
                         '</div>';
                 }
             }

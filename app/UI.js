@@ -90,10 +90,11 @@ define(['bs'], function($) {
         },
 
         getIntroFooter: function() {
-			return '<div class="links">' +
-				'<a class="left" href="https://github.com/dmonllao/badassquest" target="_blank"><i class="fa fa-2x fa-github-alt"></i></a>' +
-				'<a class="right" href="https://soundcloud.com/friggo-cz/sophomore-makeout" target="_blank"><img src="img/soundcloud.png"/></a>' +
-				'</div>';
+            return '<div class="links">' +
+                '<a class="left" href="https://github.com/dmonllao/badassquest" target="_blank"><i class="fa fa-2x fa-github-alt"></i></a>' +
+                '<a class="center" id="share" href="#" target="_blank"><i class="fa fa-2x fa-fw fa-share-alt"></i></a>' +
+                '<a class="right" href="https://soundcloud.com/friggo-cz/sophomore-makeout" target="_blank"><img src="img/soundcloud.png"/></a>' +
+                '</div>';
         }
     }
 });

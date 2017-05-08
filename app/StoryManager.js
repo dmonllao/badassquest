@@ -5,7 +5,7 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
         'Gain experience and reputation by being a badass <img src="img/trump.png" class="img-circle notification-img">.',
         'Control city areas <i class="fa fa-flag" style="color: #95c355;"></i> by extorting businessmen or buying places <i class="fa fa-home" style="color: #95c355;"></i>.',
         'Click on the map <i class="fa fa-mouse-pointer"></i> or on markers <i class="fa fa-hand-pointer-o"></i> to move around the city.',
-        'Zoom out <i class="fa fa-fw fa-minus"></i> to see more nearby places <i class="fa fa-map-marker" style="color: #e15c5c"></i>. Center the map with <i style="color: black;" class="fa fa-fw fa-arrows"></i>. You can change the map view by pressing <i class="fa fa-fw fa-map-o"></i>.',
+        'Zoom out <i class="fa fa-fw fa-minus"></i> to see more nearby places <i class="fa fa-map-marker" style="color: #e15c5c"></i>. You can change the map view by pressing <i class="fa fa-fw fa-map-o"></i>.',
         'Eat regularly <i class="fa fa-cutlery" style="color: grey;"></i> or your life <i class="fa fa-heart" style="color: #e15c5c;"></i> will start decreasing.'
     ];
 
@@ -50,6 +50,30 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
             this.user.clearGame();
             location.reload();
         }.bind(this));
+        $('#share').on('click', function(shareEv) {
+            shareEv.preventDefault();
+
+            $('#share-text').modal('show');
+
+            $('#share-text #return-game').on('click', function() {
+                $('#share-text').modal('hide');
+            });
+
+            $('#share-twitter').on('click', function(ev) {
+                ev.preventDefault();
+                window.open(this.href, 'twitter', 'height=250, width=400');
+            });
+
+            $('#share-facebook').on('click', function(ev) {
+                ev.preventDefault();
+                window.open(this.href, 'facebook', 'height=400, width=700');
+            });
+
+            $('#share-email').on('click', function(ev) {
+                ev.preventDefault();
+                window.open(this.href, 'email', 'height=400, width=550');
+            });
+        });
 
         // Set the story initial position.
         this.map.setZoom(this.story.zoom);

@@ -17,23 +17,23 @@ define(['bs', 'Sound'], function($, Sound) {
 
             this.controls[google.maps.ControlPosition.LEFT_TOP] = [];
             this.controls[google.maps.ControlPosition.RIGHT_TOP] = [];
-            this.controls[google.maps.ControlPosition.LEFT_BOTTOM] = [];
             this.controls[google.maps.ControlPosition.RIGHT_BOTTOM] = [];
-            this.controls[google.maps.ControlPosition.BOTTOM_CENTER] = [];
+            this.controls[google.maps.ControlPosition.RIGHT_CENTER] = [];
+            this.controls[google.maps.ControlPosition.LEFT_BOTTOM] = [];
+            this.controls[google.maps.ControlPosition.BOTTOM_RIGHT] = [];
             this.controls[google.maps.ControlPosition.TOP_CENTER] = [];
 
             this.initHealth(user.state, user.attrs);
             this.initFood(user.state, user.attrs);
             this.initWealth(user.state, user.attrs);
             this.initLevel(user.state, user.attrs);
+            this.initAchievements();
 
             this.initZoom();
-            this.initCenter();
             this.initMapView();
-            this.initNotifications();
             this.initSound();
+            this.initNotifications();
 
-            this.initStatics();
 
             // My default to the hybrid view.
             this.setControls(user.map);
@@ -84,7 +84,8 @@ define(['bs', 'Sound'], function($, Sound) {
             var wealthDiv = document.createElement('div');
             wealthDiv.setAttribute('id', 'wealth');
             wealthDiv.setAttribute('class', 'control-wrapper');
-            wealthDiv.innerHTML = '<pre title="Cash" class="control state"><i style="color: green;" class="fa fa-usd"></i><span>' + this.round(state.cWealth) + '</span></pre>';
+            wealthDiv.innerHTML = '<pre title="Cash" class="control state"><i style="color: green;" class="fa fa-usd"></i>' +
+                '<span>' + this.round(state.cWealth) + '</span></pre>';
             this.controls[google.maps.ControlPosition.TOP_CENTER].push(wealthDiv);
         },
 
@@ -92,8 +93,32 @@ define(['bs', 'Sound'], function($, Sound) {
             var levelDiv = document.createElement('div');
             levelDiv.setAttribute('id', 'level');
             levelDiv.setAttribute('class', 'control-wrapper');
-            levelDiv.innerHTML = '<pre title="Level" class="control state"><i style="color: #FFCC00;" class="fa fa-trophy"></i><span id="level-text">Level ' + state.level + '</span></pre>';
+            levelDiv.innerHTML = '<pre title="Level" class="control state"><i style="color: #FFAF30;" class="fa fa-level-up">' +
+                '</i><span id="level-text">Level ' + state.level + '</span></pre>';
             this.controls[google.maps.ControlPosition.TOP_CENTER].push(levelDiv);
+        },
+
+        initAchievements: function() {
+
+            // Achievements.
+            var achievementsDiv = document.createElement('div');
+            achievementsDiv.setAttribute('id', 'achievements');
+            achievementsDiv.setAttribute('class', 'control-wrapper');
+
+            // Force left margin to 0 to overwrite control > span.
+            achievementsDiv.innerHTML = '<pre class="control state actionable-control">' +
+                '<i style="color: #FFCC00;" class="fa fa-fw fa-trophy"></i>' +
+                '<span style="margin-left: 0"/></pre>';
+
+            google.maps.event.addDomListener(achievementsDiv, 'click', function() {
+                $('#achievements-text').modal('show');
+
+                $('#achievements-text #ok').on('click', function(ev) {
+                    $('#achievements-text').modal('hide');
+                });
+            });
+
+            this.controls[google.maps.ControlPosition.TOP_CENTER].push(achievementsDiv);
         },
 
         initZoom: function() {
@@ -104,13 +129,13 @@ define(['bs', 'Sound'], function($, Sound) {
 
             var zoomPlus = document.createElement('pre');
             zoomPlus.setAttribute('title', 'Zoom in');
-            zoomPlus.setAttribute('class', 'control-combo-top control actionable-control');
+            zoomPlus.setAttribute('class', 'control-combo-top control vertical-right-control actionable-control');
             zoomPlus.innerHTML = '<i class="fa fa-fw fa-plus"></i>';
             zoomDiv.appendChild(zoomPlus);
 
             var zoomMinus = document.createElement('pre');
             zoomMinus.setAttribute('title', 'Zoom out');
-            zoomMinus.setAttribute('class', 'control-combo-bottom control actionable-control');
+            zoomMinus.setAttribute('class', 'control-combo-bottom control vertical-right-control actionable-control');
             zoomMinus.innerHTML = '<i class="fa fa-fw fa-minus"></i>';
             zoomDiv.appendChild(zoomMinus);
 
@@ -122,20 +147,7 @@ define(['bs', 'Sound'], function($, Sound) {
                 user.map.setZoom(user.map.getZoom() - 1);
             });
 
-            this.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(zoomDiv);
-        },
-
-        initCenter: function() {
-            var centerDiv = document.createElement('div');
-            centerDiv.setAttribute('id', 'center');
-            centerDiv.setAttribute('class', 'control-wrapper');
-            centerDiv.innerHTML = '<pre title="Center the map" class="control actionable-control"><i class="fa fa-fw fa-arrows"></i></pre>';
-
-            google.maps.event.addDomListener(centerDiv, 'click', function() {
-                user.map.panTo(user.marker.getPosition());
-            });
-
-            this.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(centerDiv);
+            this.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(zoomDiv);
         },
 
         initMapView: function() {
@@ -149,7 +161,7 @@ define(['bs', 'Sound'], function($, Sound) {
 
             // Defaults.
             var mapView = 'roadmap';
-            mapViewDiv.innerHTML = '<pre title="Change map view" class="control actionable-control">' + mapViewHybridHtml + '</pre>';
+            mapViewDiv.innerHTML = '<pre title="Change map view" class="control vertical-right-control actionable-control">' + mapViewHybridHtml + '</pre>';
 
             // Rotate between the 3 formats.
             google.maps.event.addDomListener(mapViewDiv, 'click', function() {
@@ -189,7 +201,7 @@ define(['bs', 'Sound'], function($, Sound) {
                 }
             }.bind(this));
 
-            this.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(mapViewDiv);
+            this.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(mapViewDiv);
         },
 
         initSound: function() {
@@ -204,7 +216,7 @@ define(['bs', 'Sound'], function($, Sound) {
             var musicOffHtml = '<i class="fa fa-fw fa-volume-off"></i>';
 
             // Sound is enabled by default, so we initially show mute button.
-            musicDiv.innerHTML = '<pre title="Message box" class="control actionable-control">' + musicOffHtml + '</pre>';
+            musicDiv.innerHTML = '<pre title="Message box" class="control vertical-left-control actionable-control">' + musicOffHtml + '</pre>';
 
             google.maps.event.addDomListener(musicDiv, 'click', function() {
                 var soundOn = Sound.toggle();
@@ -215,75 +227,20 @@ define(['bs', 'Sound'], function($, Sound) {
                 }
             });
 
-            this.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(musicDiv);
+            this.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(musicDiv);
         },
 
         initNotifications: function() {
             var notificationsDiv = document.createElement('div');
             notificationsDiv.setAttribute('id', 'notifications');
             notificationsDiv.setAttribute('class', 'control-wrapper');
-            notificationsDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-envelope"></i></pre>';
+            notificationsDiv.innerHTML = '<pre class="control vertical-left-control actionable-control"><i class="fa fa-fw fa-envelope"></i></pre>';
 
             google.maps.event.addDomListener(notificationsDiv, 'click', function() {
                 $('#map').trigger('notification:toggle');
             });
 
-            this.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(notificationsDiv);
-        },
-
-        initStatics: function() {
-
-            // Achievements.
-            var achievementsDiv = document.createElement('div');
-            achievementsDiv.setAttribute('id', 'achievements');
-            achievementsDiv.setAttribute('class', 'control-wrapper');
-
-            achievementsDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-trophy"></i></pre>';
-
-            google.maps.event.addDomListener(achievementsDiv, 'click', function() {
-                $('#achievements-text').modal('show');
-
-                $('#achievements-text #ok').on('click', function(ev) {
-                    $('#achievements-text').modal('hide');
-                });
-            });
-
-            this.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(achievementsDiv);
-
-            // Share.
-            var shareDiv = document.createElement('div');
-            shareDiv.setAttribute('id', 'share');
-            shareDiv.setAttribute('class', 'control-wrapper');
-
-            shareDiv.innerHTML = '<pre class="control actionable-control"><i class="fa fa-fw fa-share-alt"></i></pre>';
-
-            google.maps.event.addDomListener(shareDiv, 'click', function() {
-                $('#share-text').modal('show');
-
-                $('#share-text #return-game').on('click', function() {
-                    $('#share-text').modal('hide');
-                });
-
-                $('#share-twitter').on('click', function(ev) {
-                    ev.preventDefault();
-                    window.open(this.href, 'twitter', 'height=180, width=240');
-                });
-
-                $('#share-facebook').on('click', function(ev) {
-                    ev.preventDefault();
-                    window.open(this.href, 'facebook', 'height=400, width=600');
-                });
-
-                $('#share-email').on('click', function(ev) {
-                    ev.preventDefault();
-                    window.open(this.href, 'email', 'height=400, width=550');
-                });
-
-
-            });
-
-            this.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(shareDiv);
-
+            this.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(notificationsDiv);
         },
 
         /**

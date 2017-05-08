@@ -24,7 +24,7 @@ define(['bs'], function($) {
             $('#notifications').popover({
                 delay: {show: 500, hide: 100},
                 html: true,
-                placement: 'top',
+                placement: 'right',
                 title: 'Messages',
                 content: emptyBoxText,
                 trigger: 'manual'
