@@ -1,10 +1,13 @@
 define(['bs', 'Const', 'Generator'], function($, Const, Generator) {
 
     // Sprite hardcoded values.
-    var bodyScale = 2;
+    var bodyScale = 0.8;
 
     // They are 250x250.
     var headScale = 0.33;
+
+    var spriteWidth = 99;
+    var spriteHeight = 65;
 
     function Foe(attrs) {
 
@@ -21,10 +24,12 @@ define(['bs', 'Const', 'Generator'], function($, Const, Generator) {
             }
         }
 
-        // Weirdest thing I've seen in last months. I just give up. If I remove this {} assign
-        // looks like this.state is shared accross all Foe instances...
+        // Initialise instance.
+        this.spriteData = {};
         this.state = {};
+
         this.state['cHealth'] = this.attrs.tHealth;
+
 
         // Default one.
         this.image = this.setFaceImage(Const.defaultFoePic);
@@ -40,14 +45,15 @@ define(['bs', 'Const', 'Generator'], function($, Const, Generator) {
             attack: null,
             defense: null
         },
-        state: {},
+        state: null,
         image: null,
 
         user: null,
 
         bounceCounter: 0,
+        direction: 'right',
 
-        spriteData: {},
+        spriteData: null,
 
         generateId: function() {
             return Math.floor(Math.random() * 1000) * Math.floor(Date.now() / 1000);
@@ -88,14 +94,14 @@ define(['bs', 'Const', 'Generator'], function($, Const, Generator) {
 
             // TODO This should be a foe constructor attribute.
             // Include the foe id as it should be unique.
-            game.load.spritesheet('body' + this.id, 'img/foe1_f_40_30.png', 40, 30, 2);
+            game.load.spritesheet('body' + this.id, 'img/foe-body-sprites.png', spriteWidth, spriteHeight, 6);
         },
 
         createSprite: function(game, x, y) {
 
             this.spriteData.sprite = game.add.sprite(x, y);
 
-            // Body and legs scaled at half size and head size doubled.
+            // Body and legs scaled at 1/2 size and head size doubled.
             this.spriteData.body = this.spriteData.sprite.addChild(game.make.sprite(0, 0, 'body' + this.id));
             this.spriteData.body.scale.setTo(bodyScale, bodyScale);
 
@@ -116,10 +122,16 @@ define(['bs', 'Const', 'Generator'], function($, Const, Generator) {
             // Set the head above the body.
             this.spriteData.head.y = this.spriteData.head.y - (this.spriteData.head.getBounds().height * headScale);
 
-            // Bouncing foes test.
             game.physics.enable(this.spriteData.sprite, Phaser.Physics.ARCADE);
+
             //  This gets it moving
-            this.spriteData.sprite.body.velocity.setTo(200, 200);
+            var yVelocity = Generator.getRandomIndex(200);
+            this.spriteData.sprite.body.velocity.setTo(200, yVelocity);
+            // Only sometimes.
+            if (Generator.getRandomIndex(2)) {
+                this.spriteData.sprite.body.velocity.x *= -1;
+            }
+
             //  This makes the game world bounce-able
             this.spriteData.sprite.body.collideWorldBounds = true;
             //  This sets the image bounce energy for the horizontal and vertical vectors
@@ -139,14 +151,38 @@ define(['bs', 'Const', 'Generator'], function($, Const, Generator) {
             // Check that the spriteData is available.
             if (this.spriteData.sprite.body) {
 
-                // Bounce again if the sprite is on the floor.
-                if (this.spriteData.sprite.y > game.world.width - this.spriteData.sprite.height) {
-                    this.bounceCounter++;
+                var currentDirection = null;
+                if (this.spriteData.sprite.body.velocity.x > 0) {
+                    currentDirection = 'right';
+                } else {
+                    currentDirection = 'left';
                 }
 
-                // If the foe has been on the floor for 10 updates means that it is fixed there.
-                if (this.bounceCounter !== 0 && this.bounceCounter % 10 === 0) {
+                if (this.direction !== currentDirection) {
+                    this.spriteData.body.scale.x *= -1;
+                    this.spriteData.head.scale.x *= -1;
+                }
+                this.direction = currentDirection;
+
+                // Make the sprite bounce again if it is close to the bottom for a while.
+                if (this.spriteData.sprite.body.y > (game.world.height - 15)) {
+                    this.bounceCounter++;
+                } else {
+                    // If it gets out of the bottom area is because it is still jumping too high.
+                    this.bounceCounter = 0;
+                }
+
+                if (this.bounceCounter !== 0 && this.bounceCounter % 20 === 0) {
+                    // Make the sprite bounce.
+
                     this.spriteData.sprite.body.velocity.setTo(200, 200);
+                    // Only sometimes.
+                    if (Generator.getRandomIndex(2)) {
+                        this.spriteData.sprite.body.velocity.x *= -1;
+                    }
+
+                    this.spriteData.sprite.body.bounce.set(0.8);
+                    this.bounceCounter = 0;
                 }
             }
 

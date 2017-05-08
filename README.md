@@ -45,6 +45,7 @@ You just need to start grunt to watch for CSS changes, it autocompiles and minif
 * Characted pictures: http://vis-www.cs.umass.edu/lfw/
 * ROADMAP styles: http://www.mapstylr.com/style/retro/
 * Badass picture: http://www.memegenerator.es
+* Foes body: https://opengameart.org/content/red-haired-run-and-jump-sprite-sheets - CC0 1.0 Universal (CC0 1.0) license
 * "Chuck Norris May 2015" by Staff Sgt. Tony Foster - https://www.dvidshub.net/image/1915215/fort-hood-camp-mabry-soldiers-attend-texas-state-prayer-breakfast. Licensed under Public Domain via Commons - https://commons.wikimedia.org/wiki/File:Chuck_Norris_May_2015.jpg#/media/File:Chuck_Norris_May_2015.jpg
 * Sounds: https://github.com/mozilla/BrowserQuest - Content is licensed under CC-BY-SA 3.0
 * Music: Friggo Cz (Sophomore Makeout - Silent Partner https://soundcloud.com/friggo-cz/sophomore-makeout)
