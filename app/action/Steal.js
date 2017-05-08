@@ -15,13 +15,13 @@ define(['bs', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], function($, Gen
             guards: ['Ramon']
         },
         {
-            difficulty: 'medium',
+            difficulty: 'feasible',
             loot: 100,
             guardsDamage: 50,
             guards: ['Yosu', 'Ramon']
         },
         {
-            difficulty: 'medium',
+            difficulty: 'feasible',
             loot: 80,
             guardsDamage: 40,
             guards: ['Ramon']
