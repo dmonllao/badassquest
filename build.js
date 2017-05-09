@@ -7,13 +7,7 @@
         Phaser: '../bower_components/phaser/build/phaser',
     },
     include: ['Const', 'Map', 'UI', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManager', 'PoliticsManager', 'InfoWindow', '../app'],
-    shim: {
-        bs: {
-            deps: ['jquery'],
-            exports: "$"
-        },
-    },
-    wrapShim: true,
+    mainConfigFile: 'app.js',
     name: 'main',
     out: 'built.js'
 })
