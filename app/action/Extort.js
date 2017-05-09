@@ -104,7 +104,7 @@ define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], functio
 
     ActionExtort.prototype.extorted = function() {
         this.user.addExperience(this.tax * 2);
-        this.markAsDone(true, true);
+        this.markAsDone(true, true, true);
 
         Sound.play('achievement');
 

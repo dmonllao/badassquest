@@ -22,9 +22,8 @@ define(['bs', 'PoiTypes', 'Map', 'Const', 'UI', 'Util', 'InfoWindow', 'External'
         $('#map').on('move:finished', this.getNearbyPois.bind(this));
 
         // Add existing markers to the markers list.
-        for (var i in this.user.properties) {
-            this.markers[i] = this.user.properties[i].marker;
-        }
+        // We don't include properties here, we will later add the click
+        // listener so users can eat at their properties.
         for (var i in this.user.taxes) {
             this.markers[i] = this.user.taxes[i].marker;
         }
@@ -140,17 +139,32 @@ define(['bs', 'PoiTypes', 'Map', 'Const', 'UI', 'Util', 'InfoWindow', 'External'
             }
 
             // Check that it is not already a property or someone paying taxes.
-            if (typeof this.user.taxes[data.place_id] !== 'undefined' || typeof this.user.properties[data.place_id] !== 'undefined') {
+            if (typeof this.user.taxes[data.place_id] !== 'undefined') {
                 return;
             }
 
-            var marker = new google.maps.Marker({
-                map: this.map,
-                title: data.name,
-                position: data.geometry.location,
-                icon: Icon.get(data.types, PoiTypes.get(), 0.5),
-                zIndex: 1
-            });
+            var marker = null;
+            if (typeof this.user.properties[data.place_id] !== 'undefined') {
+                // Reference to the existing one.
+                // We only reach this point after restoring the property, once
+                // we add click listeners it is part of this.markers and next
+                // places load will be skipped.
+                marker = this.user.properties[data.place_id].marker;
+                marker.setClickable(true);
+            }
+
+            // Create the marker.
+            if (marker === null) {
+                // If it is an existing property we already have a marker.
+                marker = new google.maps.Marker({
+                    map: this.map,
+                    title: data.name,
+                    position: data.geometry.location,
+                    icon: Icon.get(data.types, PoiTypes.get(), 0.5),
+                    zIndex: 1
+                });
+            }
+
             this.markers[data.place_id] = {
                 marker: marker
             };

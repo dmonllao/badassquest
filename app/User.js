@@ -536,7 +536,12 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
                     icon: Icon.getByType(iconType, 0.5),
                     zIndex: 1
                 });
+
+                // We don't make it clickable until we load the place details.
+                // TODO Improve this, restored pois should work as when just marked as done.
                 data[i].marker.setClickable(false);
+                // Mark it as restored so we later can make this clickable.
+                data[i].restored = true;
 
                 this.controlledAreas.addPoi(data[i]);
 
