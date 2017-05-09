@@ -202,7 +202,7 @@ define(['bs', 'PoiTypes', 'Map', 'Const', 'UI', 'Util', 'InfoWindow', 'External'
 
                         // Only some actions are available once the property was bought.
                         // In future there might be actions available only once the property is bought.
-                        if (!owned || propertyActions.indexOf(actions[i].constructor.name) !== -1) {
+                        if (!owned || propertyActions.indexOf(actions[i].getName()) !== -1) {
                             var id = 'id-action-' + i;
                             var buttonClass = 'start-action btn ' + UI.getActionButtonStyle(i);
                             content = content + '<button id="' + id + '" class="' + buttonClass + '">' +

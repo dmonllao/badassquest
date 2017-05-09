@@ -32,6 +32,13 @@ define(['bs', 'Generator', 'Icon'], function($, Generator, Icon) {
          */
         doneIcon: Icon.getByType('angry', 0.5),
 
+        getName: function() {
+            // Important to set it to ActionXXX because optimization process
+            // renames classes.
+            console.error('Base class should be extended');
+            return '';
+        },
+
         getVisibleName: function() {
             console.error('Base class should be extended');
             return '';

@@ -53,6 +53,10 @@ define(['bs', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], function($, Gen
     // This holds the randomly selected scenario.
     ActionSteal.prototype.scenario = null;
 
+    ActionSteal.prototype.getName = function() {
+        return 'ActionSteal';
+    }
+
     ActionSteal.prototype.getVisibleName = function() {
         return 'Steal';
     }

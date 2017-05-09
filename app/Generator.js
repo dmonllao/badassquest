@@ -490,16 +490,17 @@ define(['Const'], function(Const) {
         },
 
         getRandomMission: function(user, actionType) {
-            if (typeof missions[actionType.name] === "undefined") {
-                console.error('No missions available for ' + actionType.name + ' action');
+            var actionTypeName = actionType.prototype.getName();
+            if (typeof missions[actionTypeName] === "undefined") {
+                console.error('No missions available for ' + actionTypeName + ' action');
                 return null;
             }
 
-            if (missions[actionType.name].length === 0) {
+            if (missions[actionTypeName].length === 0) {
                 return null;
             }
 
-            var actionMissions = missions[actionType.name];
+            var actionMissions = missions[actionTypeName];
             var mission = this.getRandomElement(actionMissions);
 
             // Remove the mission from the list of available missions.

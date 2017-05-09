@@ -7,6 +7,10 @@ define(['bs', 'Const', 'Util', 'Icon', 'Generator', 'UI', 'action/Base', 'Sound'
     ActionBuy.prototype = Object.create(ActionBase.prototype);
     ActionBuy.prototype.constructor = ActionBuy;
 
+    ActionBuy.prototype.getName = function() {
+        return 'ActionBuy';
+    }
+
     ActionBuy.prototype.getVisibleName = function() {
         return 'Buy it';
     }

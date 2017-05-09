@@ -12,6 +12,10 @@ define(['bs', 'Util', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], functio
 
     ActionExtort.prototype.tax = null;
 
+    ActionExtort.prototype.getName = function() {
+        return 'ActionExtort';
+    }
+
     ActionExtort.prototype.getVisibleName = function() {
         return 'Extort them';
     }

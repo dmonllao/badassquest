@@ -7,6 +7,10 @@ define(['bs', 'action/Base', 'Sound', 'UI'], function($, ActionBase, Sound, UI) 
     ActionCure.prototype = Object.create(ActionBase.prototype);
     ActionCure.prototype.constructor = ActionCure;
 
+    ActionCure.prototype.getName = function() {
+        return 'ActionCure';
+    }
+
     ActionCure.prototype.getVisibleName = function() {
         return 'Visit the doctor';
     }

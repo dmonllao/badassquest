@@ -49,6 +49,10 @@ define(['bs', 'UI', 'action/Base', 'Generator', 'Sound'], function($, UI, Action
 
     ActionFood.prototype.food = null;
 
+    ActionFood.prototype.getName = function() {
+        return 'ActionFood';
+    }
+
     ActionFood.prototype.getVisibleName = function() {
         return 'Eat something';
     }

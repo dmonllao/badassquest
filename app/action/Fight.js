@@ -10,6 +10,10 @@ define(['bs', 'Generator', 'Icon', 'Foe', 'action/Base'], function($, Generator,
     ActionFight.prototype = Object.create(ActionBase.prototype);
     ActionFight.prototype.constructor = ActionFight;
 
+    ActionFight.prototype.getName = function() {
+        return 'ActionFight';
+    }
+
     ActionFight.prototype.getVisibleName = function() {
         return 'Kill\'em all';
     }

@@ -29,6 +29,10 @@ define(['bs', 'Generator', 'UI', 'Foe', 'action/Steal'], function($, Generator, 
     // This holds the randomly selected scenario.
     ActionHack.prototype.scenario = null;
 
+    ActionHack.prototype.getName = function() {
+        return 'ActionHack';
+    }
+
     ActionHack.prototype.getVisibleName = function() {
         return 'Hack it';
     }
