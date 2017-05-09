@@ -13,7 +13,7 @@ define(['action/Cure', 'action/Food', 'action/Steal', 'action/Hack', 'action/Fig
     };
 
     var typeActions = {
-        health: [ActionCure],
+        health: [ActionCure, ActionBuy],
         shop: [ActionSteal, ActionExtort, ActionBuy],
         wealth: [ActionSteal, ActionFight],
         hackable: [ActionHack],
