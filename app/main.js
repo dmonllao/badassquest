@@ -1,49 +1,60 @@
-define(['bs', 'Const', 'Map', 'UI', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManager', 'PoliticsManager'], function($, Const, Map, UI, User, Game, StoryManager, ChaseTracker, PoisManager, PoliticsManager) {
+define(['GoogleMapsLoader'], function(GoogleMapsLoader) {
 
     // JS console message.
     console.log('%c Hello! Feel free to hack the game. All user attributes and states are in app/User.js ', 'background: #222; color: #bada55');
-    // @param {google.maps.Map}
-    var map = Map.init();
 
-    // Initialise UI stuff.
-    UI.init();
+    var initGame = function(googleMaps) {
 
-    // @type {User} The current user.
-    var user = new User(map, 'Badass', Const.characterPic);
+        require(['bs', 'Const', 'Map', 'UI', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManager', 'PoliticsManager', '../vendor/google/infobox', '../vendor/blackpoolchurch/v3_epoly'], function($, Const, Map, UI, User, Game, StoryManager, ChaseTracker, PoisManager, PoliticsManager) {
 
-    // Start the game.
-    var appGame = new Game();
+            // @param {google.maps.Map}
+            var map = Map.init();
 
-    // @param {Phaser}
-    var game = appGame.getInstance();
+            // Initialise UI stuff.
+            UI.init();
 
-    // @type {StoryManager}
-    var storyManager = new StoryManager(map, game, user);
-    var storyInit = storyManager.init();
+            // @type {User} The current user.
+            var user = new User(map, 'Badass', Const.characterPic);
 
-    // @param {ChaseTracker}
-    var chaseTracker = new ChaseTracker(map, user);
+            // Start the game.
+            var appGame = new Game();
 
-    // @type {PoisManager}
-    var poisManager = new PoisManager(map, game, user);
+            // @param {Phaser}
+            var game = appGame.getInstance();
 
-    // @type {PoliticsManager}
-    var politicsManager = new PoliticsManager(map, game, user);
+            // @type {StoryManager}
+            var storyManager = new StoryManager(map, game, user);
+            var storyInit = storyManager.init();
 
-    // Move the user to a new position.
-    map.addListener('click', function(e) {
-        user.moveTo(e.latLng);
-    });
+            // @param {ChaseTracker}
+            var chaseTracker = new ChaseTracker(map, user);
 
-    // Once we get user input we start filling the map.
-    storyInit.done(function(position) {
+            // @type {PoisManager}
+            var poisManager = new PoisManager(map, game, user);
 
-        // Search nearby pois and display them on map.
-        poisManager.addNearbyPois(position);
+            // @type {PoliticsManager}
+            var politicsManager = new PoliticsManager(map, game, user);
 
-        user.gameStarted();
+            // Move the user to a new position.
+            map.addListener('click', function(e) {
+                user.moveTo(e.latLng);
+            });
 
-        // Add listeners to user actions for politic-related events.
-        politicsManager.setPolitics(position);
+            // Once we get user input we start filling the map.
+            storyInit.done(function(position) {
+
+                // Search nearby pois and display them on map.
+                poisManager.addNearbyPois(position);
+
+                user.gameStarted();
+
+                // Add listeners to user actions for politic-related events.
+                politicsManager.setPolitics(position);
+            });
+        });
+    };
+
+    GoogleMapsLoader.done(initGame).fail(function() {
+        console.error('Google maps can not be loaded');
     });
 });

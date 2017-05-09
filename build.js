@@ -1,4 +1,4 @@
-requirejs.config({
+({
     baseUrl: 'app',
     paths: {
         fontawesomeMarkers: '../bower_components/fontawesome-markers/fontawesome-markers.min',
@@ -6,12 +6,14 @@ requirejs.config({
         bs: '../bower_components/bootstrap/dist/js/bootstrap',
         Phaser: '../bower_components/phaser/build/phaser',
     },
+    include: ['Const', 'Map', 'UI', 'User', 'Game', 'StoryManager', 'ChaseTracker', 'PoisManager', 'PoliticsManager', 'InfoWindow', '../app'],
     shim: {
         bs: {
             deps: ['jquery'],
             exports: "$"
         },
-    }
-});
-
-requirejs(['main']);
+    },
+    wrapShim: true,
+    name: 'main',
+    out: 'built.js'
+})

@@ -1,4 +1,4 @@
-define(['MapOptions', 'InfoWindow', 'epoly', 'infobox'], function(MapOptions, InfoWindow) {
+define(['MapOptions', 'InfoWindow'], function(MapOptions, InfoWindow) {
 
     var map = null;
 

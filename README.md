@@ -13,7 +13,8 @@ No i18n, no i10n, no a11y.
 * Bower installed globally
 
 <!-- not displayed as a code block under a list unless we add something like this comment -->
-    npm install bower -g
+    npm install -g bower
+    npm install -g requirejs
 
 ## Install
 

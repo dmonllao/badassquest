@@ -36,7 +36,7 @@ define(['bs'], function($) {
             return styles[index % styles.length];
         },
 
-        renderActionButtons: function(buttons, extraClasses = false) {
+        renderActionButtons: function(buttons, extraClasses) {
 
             var classes = 'action-buttons';
             if (extraClasses) {

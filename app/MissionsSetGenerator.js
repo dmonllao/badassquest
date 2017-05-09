@@ -21,7 +21,7 @@ define(['bs', 'Const', 'MissionsChain', 'Mission', 'InfoWindow', 'Generator', 'P
         employer: null,
         completedCallback : null,
 
-        create: function(pois, ongoing = false) {
+        create: function(pois, ongoing) {
 
             // The length depends on the level where the politician contacts you.
             var limits = PoiTypes.getMissionLimits(this.employer.locationType);
@@ -38,7 +38,7 @@ define(['bs', 'Const', 'MissionsChain', 'Mission', 'InfoWindow', 'Generator', 'P
                     continue;
                 }
 
-                if (ongoing !== false && i < ongoing) {
+                if (ongoing && i < ongoing) {
                     // If we are creating missions for a resumed game we only create
                     // the remaining missions.
                     // Increase missionNum as well because these missions are already finished.
