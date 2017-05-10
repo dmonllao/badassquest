@@ -10,6 +10,11 @@ define(['bs'], function($) {
             var widthProportion = 0.5;
             var heightProportion = 0.5;
 
+            if (window.innerWidth < 480) {
+                // Extra width as otherwise it looks too slim using mobile + portrait.
+                widthProportion = 0.7;
+            }
+
             var size = {
                 width: Math.floor(window.innerWidth * widthProportion),
                 height: Math.floor(window.innerHeight * heightProportion)

@@ -457,7 +457,7 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
             }
             if (this.state.cHealth <= 0) {
                 this.state.cHealth = 0;
-                this.dead();
+                this.unconscious();
             }
 
             // Limited to 0.
@@ -552,6 +552,77 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
             this[attributeName] = data;
         },
 
+        unconscious: function() {
+
+            this.clearIntervals();
+
+            $('#text-action').modal('hide');
+            $('#game-action').modal('hide');
+
+            $('#status-title').html('You are unconscious! ' +
+                '<i style="color: #e15c5c;" class="fa fa-ambulance fa-6" aria-hidden="true"></i>');
+
+            var content = '';
+
+            if (this.state.cFood == 0) {
+                content = '<br/><div>You ran out of energy <i class="fa fa-cutlery" style="color: grey;"></i> and you fainted. Recover energy regularly in restaurants.</div>';
+            } else {
+                // We don't show this message if cFood == 0 because the user ran out of life because of ^.
+                content = '<br/><div>You ran out of life <i class="fa fa-heartbeat" style="color: #e15c5c"></i>. Remember to go to the doctor <i class="fa fa-h-square" style="color: #e15c5c;"></i> regularly.</div>';
+            }
+
+            content += UI.renderActionButtons([
+                {
+                    id: 'unconscious-recover',
+                    text: 'Recover'
+                },
+                {
+                    id: 'unconscious-newgame',
+                    text: 'New game'
+                }
+            ], 'continue-buttons');
+
+            $('#status-content').html(content);
+            $('#status').modal('show');
+
+            $('#unconscious-recover').on('click', function() {
+                $('#status').modal('hide');
+                this.unconsciousRecover();
+                this.startIntervals();
+            }.bind(this));
+
+            $('#unconscious-newgame').on('click', function() {
+                this.clearGame();
+                location.reload();
+            }.bind(this));
+        },
+
+        unconsciousRecover: function() {
+            this.updateState({
+                cHealth: Const.initHealth / 2,
+                cFood: Const.initFood / 4,
+                cWealth: 0
+            });
+
+            // Relocate the badass far away.
+            var relocation = google.maps.geometry.spherical.computeOffset(
+                this.marker.getPosition(),
+                Const.unconsciousRecoverDistance,
+                Generator.getRandomIndex(360)
+            );
+            var currentPosition = this.marker.getPosition();
+            this.marker.setPosition(relocation);
+
+            var bounds = new google.maps.LatLngBounds();
+            bounds.extend(relocation);
+            bounds.extend(currentPosition);
+            this.map.fitBounds(bounds);
+
+            var content = 'You wake up somewhere else and someone have stolen all your money ' +
+                '<i class="fa fa-money fa-spin fa-lg" style="color: green;"></i>';
+            UI.showModal(content, 'Continue', 'btn btn-success');
+        },
+
         clearSavedGame: function() {
             localStorage.removeItem('userState');
             localStorage.removeItem('userAttrs');
@@ -573,26 +644,6 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
             this.clearIntervals();
 
             $('#map').trigger('game:clear');
-        },
-
-        dead: function() {
-
-            this.clearGame();
-
-            $('#text-action').modal('hide');
-            $('#game-action').modal('hide');
-
-            $('#status-title').html('Game over');
-            var content = '<div>You died! <a href="' + window.location.href + '">Try again</a> loser.</div>';
-
-            if (this.state.cFood == 0) {
-                content = content + '<br/><div>(You ran out of energy <i class="fa fa-cutlery" style="color: grey;"></i>. Recover it in restaurants.)</div>'
-            } else {
-                // We don't show this message if cFood == 0 because the user probably died because of ^.
-                content = content + '<br/><div>(You ran out of life <i class="fa fa-heartbeat" style="color: #e15c5c"></i>. Remember to go regularly to the hospital <i class="fa fa-h-square" style="color: #e15c5c;"></i>.)</div>';
-            }
-            $('#status-content').html(content);
-            $('#status').modal('show');
         },
 
         refreshAchievementsList: function() {

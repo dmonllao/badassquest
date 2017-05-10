@@ -41,5 +41,6 @@ define(function() {
         pissedPassingByLapse: 10,
         pissedPassingByRampUp: 2,
         passingByLapse: 5000,
+        unconsciousRecoverDistance: 2000,
     };
 });
