@@ -34,7 +34,7 @@ define(['bs'], function($) {
             var size = 40;
 
             if (window.innerWidth < 480) {
-                size = 25;
+                size = 20;
             } else if (window.innerWidth <= 768) {
                 size = 30;
             }
