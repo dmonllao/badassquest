@@ -598,9 +598,12 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
         },
 
         unconsciousRecover: function() {
+
+            // It should be enough food to walk Const.unconsciousRecoverDistance meters back to
+            // the area where the user get unconscious.
             this.updateState({
                 cHealth: Const.initHealth / 2,
-                cFood: Const.initFood / 4,
+                cFood: Const.initFood / 2,
                 cWealth: 0
             });
 
@@ -612,6 +615,9 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
             );
             var currentPosition = this.marker.getPosition();
             this.marker.setPosition(relocation);
+
+            // This should force rendering, there is a problem with fitBounds that I need to investigate.
+            this.marker.setAnimation(google.maps.Animation.DROP);
 
             var bounds = new google.maps.LatLngBounds();
             bounds.extend(relocation);
