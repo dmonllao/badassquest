@@ -457,7 +457,13 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
             }
             if (this.state.cHealth <= 0) {
                 this.state.cHealth = 0;
-                this.unconscious();
+
+                // Some delay because when the player is caught #text-action
+                // appears with some delay and there are race conditions
+                // with more than 1 backdrop opened.
+                setTimeout(function() {
+                    this.unconscious();
+                }.bind(this), 1000);
             }
 
             // Limited to 0.
