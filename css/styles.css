@@ -160,6 +160,12 @@ pre.control-combo-top {
     box-shadow: 0 5px 10px rgba(0,0,0,.2);
 }
 
+@media only screen and (max-width : 480px) {
+    .infoBox {
+        max-width: 80%;
+    }
+}
+
 /** Includes .infowindow-wrapper margin-top. */
 .infoBox>img {
     top: 18px;
