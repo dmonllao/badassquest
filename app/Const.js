@@ -16,6 +16,7 @@ define(function() {
         taxesInterval: 5000,
         revenuesInterval: 10000,
         breathDropInterval: 3000,
+        refreshControlsInterval: 20000,
         saveInterval: 10000,
         breathDropAmount: 10,
         userAttackTime: 2000,

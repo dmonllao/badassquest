@@ -486,6 +486,7 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
         },
 
         startIntervals: function() {
+            this.timers.refreshControls = setInterval(this.controls.setControls.bind(this.controls), Const.refreshControlsInterval);
             this.timers.dropFood = setInterval(this.breathDropFood.bind(this), Const.breathDropInterval);
             this.timers.revenues = setInterval(this.collectRevenues.bind(this), Const.revenuesInterval);
             this.timers.taxes = setInterval(this.collectTaxes.bind(this), Const.taxesInterval);

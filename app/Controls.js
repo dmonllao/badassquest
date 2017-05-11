@@ -3,6 +3,8 @@ define(['bs', 'Sound'], function($, Sound) {
     var user = null;
     var panorama = null;
 
+    var mapView = 'roadmap';
+
     function Controls() {
         return this;
     }
@@ -36,7 +38,7 @@ define(['bs', 'Sound'], function($, Sound) {
 
 
             // My default to the hybrid view.
-            this.setControls(user.map);
+            this.setControls();
         },
 
         update: function(state, attrs) {
@@ -160,7 +162,6 @@ define(['bs', 'Sound'], function($, Sound) {
             var mapViewHybridHtml = '<i class="fa fa-fw fa-map"></i>';
 
             // Defaults.
-            var mapView = 'roadmap';
             mapViewDiv.innerHTML = '<pre title="Change map view" class="control vertical-right-control actionable-control">' + mapViewHybridHtml + '</pre>';
 
             // Rotate between the 3 formats.
@@ -178,8 +179,8 @@ define(['bs', 'Sound'], function($, Sound) {
                     panorama.setVisible(true);
 
                     // We need to refresh them. Apparently they get lost.
-                    this.setControls(user.map.getStreetView());
                     mapView = 'street';
+                    this.setControls();
                     $('#mapView pre').html(mapViewRoadHtml);
                 } else if (mapView === 'street') {
                     // Update the user position with the current panorama position.
@@ -189,7 +190,7 @@ define(['bs', 'Sound'], function($, Sound) {
                     panorama.setVisible(false);
 
                     // We need to refresh them. Apparently they get lost.
-                    this.setControls(user.map);
+                    this.setControls();
                     mapView = 'road';
                     user.map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
                     $('#mapView pre').html(mapViewHybridHtml);
@@ -246,7 +247,14 @@ define(['bs', 'Sound'], function($, Sound) {
         /**
          * Param name is map although it can be a {Map} or a {StreetViewPanorama}
          */
-        setControls: function(mapRef) {
+        setControls: function() {
+
+            var mapRef = null;
+            if (mapView === 'street') {
+                mapRef = user.map.getStreetView();
+            } else {
+                mapRef = user.map;
+            }
 
             // It is already structured by its position.
             for (var side in this.controls) {
