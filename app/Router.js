@@ -54,6 +54,9 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
         // @type {Boolean}
         moving: false,
 
+        // @type {Boolean}
+        destroyed: false,
+
         route: function(routeMarker, position, stepCallback, destinationCallback, stepLong) {
 
             this.marker = routeMarker;
@@ -101,9 +104,18 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
             this.clearRoute();
         },
 
+        destroy: function() {
+            // This should stop async calls not yet completed.
+            this.destroyed = true;
+        },
+
         routeCallback: function() {
 
             return function(response, status) {
+
+                if (this.destroyed === true) {
+                    return;
+                }
 
                 if (status !== google.maps.DirectionsStatus.OK) {
                     console.error('DirectionsService error: ' + status);
@@ -270,11 +282,7 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
             clearTimeout(this.animationTimer);
 
             // Clear shouting people.
-            setTimeout(function() {
-                // Same delay (+1) than in startAnimation, otherwise we may clear the route
-                // before the interval starts.
-                clearInterval(this.shoutInterval);
-            }.bind(this), 1001);
+            clearInterval(this.shoutInterval);
 
             if (this.polyline !== null) {
                 this.polyline.setMap(null);

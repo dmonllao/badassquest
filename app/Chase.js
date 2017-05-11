@@ -114,11 +114,17 @@ define(['bs', 'Const', 'InfoWindow', 'fontawesomeMarkers', 'Router'], function($
                 this.infoWindow.setMap(null);
                 this.infoWindow = null;
             }
+
+            this.router.stop();
+
             if (this.marker) {
                 this.marker.setMap(null);
                 this.marker = null;
             }
-            this.router.stop();
+        },
+
+        destroy: function() {
+            this.router.destroy();
         },
 
         /**
@@ -132,10 +138,11 @@ define(['bs', 'Const', 'InfoWindow', 'fontawesomeMarkers', 'Router'], function($
             // Visually these Const.closePosition meters in the map looks like really close.
             if (chasePosition.distanceFrom(userPosition) <= Const.closePosition) {
 
-                this.data.caughtCallback();
-
                 // Return false if the user has been caught.
                 $('#map').trigger('chase:caught');
+
+                this.data.caughtCallback();
+
                 return false;
             }
 

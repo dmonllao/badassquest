@@ -103,15 +103,21 @@ define(['bs', 'Chase', 'UI'], function($, Chase, UI) {
 
         caught: function(ev) {
 
-            // Stop and remove all chases.
-            this.user.router.stop();
+            // All ongoing chases are deleted once the player is caught
+            // so the player route will also be stopped.
+            if (this.chases) {
 
-            for(var id in this.chases) {
-                if (this.chases.hasOwnProperty(id)) {
-                    this.chases[id].stop();
-                    this.chases[id] = null;
-                    delete this.chases[id];
+                for(var id in this.chases) {
+                    if (this.chases.hasOwnProperty(id)) {
+                        this.chases[id].stop();
+                        this.chases[id].destroy();
+                        this.chases[id] = null;
+                        delete this.chases[id];
+                    }
                 }
+
+                // Stop and remove all chases.
+                this.user.router.stop();
             }
         }
     };
