@@ -629,6 +629,8 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
             bounds.extend(relocation);
             bounds.extend(currentPosition);
             this.map.fitBounds(bounds);
+            // No proper rendering without this (http://stackoverflow.com/questions/16317072/google-maps-api-v3-svg-markers-disappear#comment73825255_20072546)
+            this.map.panTo(this.map.getCenter());
 
             var content = 'You wake up somewhere else and someone have stolen all your money ' +
                 '<i class="fa fa-money fa-spin fa-lg" style="color: green;"></i>';

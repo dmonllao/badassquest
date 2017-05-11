@@ -238,6 +238,8 @@ define(['bs', 'External', 'Icon', 'InfoWindow', 'Map'], function($, External, Ic
                         bounds.extend(this.map.getCenter());
                         bounds.extend(position);
                         this.map.fitBounds(bounds);
+                        // No proper rendering without this (http://stackoverflow.com/questions/16317072/google-maps-api-v3-svg-markers-disappear#comment73825255_20072546)
+                        this.map.panTo(this.map.getCenter());
                     } else {
                         this.map.panTo(position);
                     }
