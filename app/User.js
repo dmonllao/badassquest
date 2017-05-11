@@ -634,7 +634,7 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
             this.map.panTo(this.map.getCenter());
 
             var content = 'You wake up somewhere else and someone have stolen all your money ' +
-                '<i class="fa fa-money fa-spin fa-lg" style="color: green;"></i>';
+                '<i class="fa fa-money fa-lg" style="color: green;"></i>';
             UI.showModal(content, 'Continue', 'btn btn-success');
         },
 
