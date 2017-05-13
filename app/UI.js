@@ -95,6 +95,30 @@ define(['bs'], function($) {
                 '<a class="center" id="share" href="#" target="_blank"><i class="fa fa-2x fa-fw fa-share-alt"></i></a>' +
                 '<a class="right" href="https://soundcloud.com/friggo-cz/sophomore-makeout" target="_blank"><img src="img/soundcloud.png"/></a>' +
                 '</div>';
-        }
+        },
+
+        showShare: function() {
+            $('#share-text').modal('show');
+
+            $('#share-text #return-game').on('click', function() {
+                $('#share-text').modal('hide');
+            });
+
+            $('#share-twitter').on('click', function(ev) {
+                ev.preventDefault();
+                window.open(this.href, 'twitter', 'height=250, width=400');
+            });
+
+            $('#share-facebook').on('click', function(ev) {
+                ev.preventDefault();
+                window.open(this.href, 'facebook', 'height=400, width=700');
+            });
+
+            $('#share-email').on('click', function(ev) {
+                ev.preventDefault();
+                window.open(this.href, 'email', 'height=400, width=550');
+            });
+
+        },
     }
 });

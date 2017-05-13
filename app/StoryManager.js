@@ -53,26 +53,7 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
         $('#share').on('click', function(shareEv) {
             shareEv.preventDefault();
 
-            $('#share-text').modal('show');
-
-            $('#share-text #return-game').on('click', function() {
-                $('#share-text').modal('hide');
-            });
-
-            $('#share-twitter').on('click', function(ev) {
-                ev.preventDefault();
-                window.open(this.href, 'twitter', 'height=250, width=400');
-            });
-
-            $('#share-facebook').on('click', function(ev) {
-                ev.preventDefault();
-                window.open(this.href, 'facebook', 'height=400, width=700');
-            });
-
-            $('#share-email').on('click', function(ev) {
-                ev.preventDefault();
-                window.open(this.href, 'email', 'height=400, width=550');
-            });
+            UI.showShare();
         });
 
         // Set the story initial position.

@@ -1,4 +1,4 @@
-define(['bs', 'Sound'], function($, Sound) {
+define(['bs', 'Sound', 'UI'], function($, Sound, UI) {
 
     var user = null;
     var panorama = null;
@@ -35,6 +35,7 @@ define(['bs', 'Sound'], function($, Sound) {
             this.initMapView();
             this.initSound();
             this.initNotifications();
+            this.initShare();
 
 
             // My default to the hybrid view.
@@ -242,6 +243,21 @@ define(['bs', 'Sound'], function($, Sound) {
             });
 
             this.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(notificationsDiv);
+        },
+
+        initShare: function() {
+            // Share.
+            var shareDiv = document.createElement('div');
+            shareDiv.setAttribute('id', 'share');
+            shareDiv.setAttribute('class', 'control-wrapper');
+
+            shareDiv.innerHTML = '<pre class="control vertical-left-control actionable-control"><i class="fa fa-fw fa-share-alt"></i></pre>';
+
+            google.maps.event.addDomListener(shareDiv, 'click', function() {
+                UI.showShare();
+            });
+
+            this.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(shareDiv);
         },
 
         /**
