@@ -67,7 +67,9 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
             // Set a nice background while the user selects a position.
             this.map.setCenter(Const.defaultMapCenterBackground);
             this.user.setPosition(Const.defaultMapCenterBackground);
-            this.story.getPosition(this.map, initPromise, this.setPosition.bind(this));
+            this.story.getPosition(this.map, initPromise, function(location) {
+                this.setPosition(location);
+            }.bind(this));
         }
 
         if (this.story.missions.length > 0) {
