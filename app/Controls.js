@@ -191,8 +191,8 @@ define(['bs', 'Sound', 'UI'], function($, Sound, UI) {
                     panorama.setVisible(false);
 
                     // We need to refresh them. Apparently they get lost.
-                    this.setControls();
                     mapView = 'road';
+                    this.setControls();
                     user.map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
                     $('#mapView pre').html(mapViewHybridHtml);
                 } else {
