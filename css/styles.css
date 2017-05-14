@@ -77,12 +77,13 @@ button.btn,
     color: #f5f5f5;
     background-color: #474747;
     border: 1px solid #f5f5f5;
-    margin: 20px 10px;
+    margin: 10px 5px;
 }
 
 /* For icon with text */
 .control-wrapper pre.state {
     padding: 5px 9.5px;
+    margin-bottom: 0;
 }
 
 @media screen and (max-width : 576px) {
