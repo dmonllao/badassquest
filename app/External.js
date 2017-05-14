@@ -44,6 +44,11 @@ define(['bs', 'Const', 'Util', 'Map'], function($, Const, Util, Map) {
                 } else {
                     // First picture of the first result, what is life without risk LOL.
                     var photoUrl = results[0].photos[0].getUrl({'maxWidth': 400});
+
+                    // No cross domain.
+                    var re = /^https:/g;
+                    photoUrl.replace(re, 'http:');
+
                     console.log(locationName + ' - ' + photoUrl);
                     promise.resolve(photoUrl);
                 }
