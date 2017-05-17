@@ -133,16 +133,23 @@ define(['bs', 'Generator', 'Foe', 'UI', 'action/Base', 'Sound'], function($, Gen
 
     ActionSteal.prototype.punish = function() {
 
-        $('#text-action-content').html(this.stealText);
-        $('#steal-info').html("<p>I've caught you mate! You will swallow this punch!" + UI.getPunch() + "<br/>" +
-            "(They punched you and recovered the money <i class=\"fa fa-money\" style=\"color: #95c355;\"></i> you have stolen them)</p>");
+        var isAlive = !this.user.isUnconscious();
 
-        UI.showModal($('#text-action-content').html(), 'Continue', 'btn btn-warning');
+        if (isAlive) {
+            var isAlive = this.user.updateState({
+                cWealth: this.user.state.cWealth - this.scenario.loot,
+                cHealth: this.user.state.cHealth - this.scenario.guardsDamage
+            });
+        }
 
-        this.user.updateState({
-            cWealth: this.user.state.cWealth - this.scenario.loot,
-            cHealth: this.user.state.cHealth - this.scenario.guardsDamage
-        });
+        if (isAlive) {
+            // Only show the modal if the user is still alive.
+            $('#text-action-content').html(this.stealText);
+            $('#steal-info').html("<p>I've caught you mate! You will swallow this punch!" + UI.getPunch() + "<br/>" +
+                "(They punched you and recovered the money <i class=\"fa fa-money\" style=\"color: #95c355;\"></i> you have stolen them)</p>");
+
+            UI.showModal($('#text-action-content').html(), 'Continue', 'btn btn-warning');
+        }
     };
 
     ActionSteal.prototype.getLootImportance = function(loot) {

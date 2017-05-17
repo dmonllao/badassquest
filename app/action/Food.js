@@ -189,17 +189,24 @@ define(['bs', 'UI', 'action/Base', 'Generator', 'Sound'], function($, UI, Action
 
     ActionFood.prototype.punish = function() {
 
-        // Show the results in a modal window.
-        $('#text-action-content').html(this.foodText);
-        $('#food-info').html("<p>I've caught you mate! You will swallow this punch!" + UI.getPunch() + "<br/>" +
-            "(They punched you and stole some of your money <i class=\"fa fa-money\" style=\"color: #95c355;\"></i>)</p>");
-        UI.showModal($('#text-action-content').html(), 'Continue', 'btn btn-warning');
+        var isAlive = !this.user.isUnconscious();
 
-        // Push the updated data. updateState() will limit the values.
-        this.user.updateState({
-            cHealth: this.user.state.cHealth - (this.food.health * 2),
-            cWealth: this.user.state.cWealth - (this.food.price * 2)
-        });
+        if (isAlive) {
+            // Push the updated data. updateState() will limit the values.
+            isAlive = this.user.updateState({
+                cHealth: this.user.state.cHealth - (this.food.health * 2),
+                cWealth: this.user.state.cWealth - (this.food.price * 2)
+            });
+        }
+
+        if (isAlive) {
+            // Only show the modal if the user is still alive.
+            $('#text-action-content').html(this.foodText);
+            $('#food-info').html("<p>I've caught you mate! You will swallow this punch!" + UI.getPunch() + "<br/>" +
+                "(They punched you and stole some of your money <i class=\"fa fa-money\" style=\"color: #95c355;\"></i>)</p>");
+            UI.showModal($('#text-action-content').html(), 'Continue', 'btn btn-warning');
+        }
+
     };
 
     return ActionFood;

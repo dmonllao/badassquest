@@ -396,6 +396,9 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
             return (Math.random() > 0.4);
         },
 
+        /**
+         * @return {Boolean} True if the player is alive, false if it is not.
+         */
         updateState: function(params) {
             // This updates the current values.
 
@@ -457,13 +460,8 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
             }
             if (this.state.cHealth <= 0) {
                 this.state.cHealth = 0;
-
-                // Some delay because when the player is caught #text-action
-                // appears with some delay and there are race conditions
-                // with more than 1 backdrop opened.
-                setTimeout(function() {
-                    this.unconscious();
-                }.bind(this), 1000);
+                this.unconscious();
+                return false;
             }
 
             // Limited to 0.
@@ -476,6 +474,15 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
             }
 
             this.controls.update(this.state, this.attrs);
+
+            return true;
+        },
+
+        /**
+         * Alias to keep isDead shared with Foe.
+         */
+        isUnconscious: function() {
+            return this.isDead();
         },
 
         isDead: function() {
@@ -560,6 +567,8 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
         },
 
         unconscious: function() {
+
+            this.router.stop();
 
             this.clearIntervals();
 
