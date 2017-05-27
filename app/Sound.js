@@ -2,9 +2,7 @@ define(['bs'], function($) {
 
     var mute = false;
 
-    var musicNode = null;
-
-    var musicInterval = null;
+    var soundCloudPlayer = null;
 
     function Sound() {
         return this;
@@ -19,28 +17,40 @@ define(['bs'], function($) {
                 Sound.play('achievement');
             });
 
-            musicNode = $('#soundcloud');
+            // Dependant on soundcloud availability. We don't want the whole game
+            // to break if SC is not available.
+            require(['no-sound-during-dev'], function() {
+                if (typeof SC !== 'undefined') {
+                    SC.initialize({
+                      client_id: ''
+                    });
 
-            Sound.addInterval();
-        },
-
-        addInterval: function() {
-            musicInterval = setInterval(function() {
-                musicNode.remove();
-                $('#body').append(musicNode);
-            }, 110000);
+                    SC.stream('/tracks/253089256').then(function(player){
+                        soundCloudPlayer = player;
+                        soundCloudPlayer.play();
+                        soundCloudPlayer.on('finish', function() {
+                            soundCloudPlayer.seek(0);
+                            soundCloudPlayer.play();
+                        }.bind(this));
+                    });
+                }
+            }, function(err) {
+                console.log('Not able to load soundcloud music');
+            });
         },
 
         toggle: function() {
 
             if (mute === true) {
                 mute = false;
-                $('#body').append(musicNode);
-                Sound.addInterval();
+                if (soundCloudPlayer) {
+                    soundCloudPlayer.play();
+                }
             } else {
                 mute = true;
-                musicNode.remove();
-                clearInterval(musicInterval);
+                if (soundCloudPlayer) {
+                    soundCloudPlayer.pause();
+                }
             }
 
             // Returns sound yes or no.
