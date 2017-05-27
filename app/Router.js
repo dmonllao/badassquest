@@ -28,6 +28,7 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
         polyline: null,
         animationTimer: null,
         shoutInterval: null,
+        shoutTimeout: null,
         current: null,
         eol: null,
         step: null,
@@ -185,7 +186,7 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
 
             // People shouting stuff as the badass walk.
             if (this.isPlayer) {
-                setTimeout(function() {
+                this.shoutTimeout = setTimeout(function() {
                     // We don't start shouting if the user already stopped.
                     if (this.moving) {
 
@@ -283,6 +284,8 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
 
             // Clear shouting people.
             clearInterval(this.shoutInterval);
+            // Avoid race conditions if clearRoute is called before the 2 sec timeout.
+            clearTimeout(this.shoutTimeout);
 
             if (this.polyline !== null) {
                 this.polyline.setMap(null);
