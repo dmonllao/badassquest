@@ -62,7 +62,7 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
             var coords = JSON.parse(resumeGame);
             this.setPosition(new google.maps.LatLng(coords), false);
         } else if (this.story.initialPosition) {
-            this.setPosition(new google.maps.LatLng(this.story.initialPosition), true);
+            this.setPosition(new google.maps.LatLng(this.story.initialPosition));
         } else {
             // Set a nice background while the user selects a position.
             this.map.setCenter(Const.defaultMapCenterBackground);
@@ -112,6 +112,10 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
          * @param {google.maps.LatLng} LatLng, would not work using {lat:, lng}.
          */
         setPosition: function(position, showTips) {
+
+            if (typeof showTips === 'undefined') {
+                showTips = true;
+            }
 
             // Set the user position and center there the map.
             this.user.setPosition(position);
