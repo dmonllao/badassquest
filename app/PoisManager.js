@@ -59,7 +59,6 @@ define(['bs', 'PoiTypes', 'Map', 'Const', 'UI', 'Util', 'InfoWindow', 'External'
             var distance;
             if (this.lastAddPoisPosition) {
                 distance = google.maps.geometry.spherical.computeDistanceBetween(this.lastAddPoisPosition, userPosition).toFixed();
-                console.log('Moved ' + distance + ' meters to ' + userPosition.toString() + '.');
             } else {
                 // More than Const.poisRadius for sure.
                 distance = 1000000;

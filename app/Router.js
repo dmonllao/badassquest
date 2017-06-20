@@ -80,34 +80,21 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
             }
             this.step = stepLong;
 
-            directionsService.route({
-                    origin: this.marker.getPosition(),
-                    destination: position,
-                    travelMode: google.maps.DirectionsTravelMode.WALKING
-                },
-                this.routeCallback()
-            );
-        },
+            if (google.maps.geometry.spherical.computeDistanceBetween(this.marker.getPosition(), position) < Const.skipDirectionsAPIDistance) {
+                // Just move it there no need to waste directions API quota.
+                this.marker.setPosition(position);
+                this.done();
 
-        stop: function() {
-
-            // Stop animation. This is done here rather than in clearRoute as
-            // it is fine to stop the visible animation only once a destination is
-            // reached, not when another location is clicked while moving to a
-            // destination.
-            if (this.marker) {
-                this.marker.setAnimation(null);
+            } else {
+                // Use google maps directions API.
+                directionsService.route({
+                        origin: this.marker.getPosition(),
+                        destination: position,
+                        travelMode: google.maps.DirectionsTravelMode.WALKING
+                    },
+                    this.routeCallback()
+                );
             }
-
-            this.moving = false;
-
-            // Clean up all other stuff.
-            this.clearRoute();
-        },
-
-        destroy: function() {
-            // This should stop async calls not yet completed.
-            this.destroyed = true;
         },
 
         routeCallback: function() {
@@ -271,6 +258,22 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
             }
         },
 
+        stop: function() {
+
+            // Stop animation. This is done here rather than in clearRoute as
+            // it is fine to stop the visible animation only once a destination is
+            // reached, not when another location is clicked while moving to a
+            // destination.
+            if (this.marker) {
+                this.marker.setAnimation(null);
+            }
+
+            this.moving = false;
+
+            // Clean up all other stuff.
+            this.clearRoute();
+        },
+
         /**
          * Clears the current route.
          */
@@ -295,6 +298,11 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
             this.eol = null;
             this.current = null;
             this.endLocation = {};
+        },
+
+        destroy: function() {
+            // This should stop async calls not yet completed.
+            this.destroyed = true;
         },
 
         shout: function() {
