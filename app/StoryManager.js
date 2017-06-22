@@ -2,7 +2,7 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
 
     // This contains the game instructions, ordered by how important they are to understand how the game works.
     var instructions = [
-        'Gain experience and reputation by being a badass <img src="img/trump.png" class="img-circle notification-img">.',
+        'Gain experience and reputation by being a badass <img src="CHARACTERPIC" class="img-circle notification-img">.',
         'Control city areas <i class="fa fa-flag" style="color: #95c355;"></i> by extorting businessmen or buying places <i class="fa fa-home" style="color: #95c355;"></i>.',
         'Click on the map <i class="fa fa-mouse-pointer"></i> or on markers <i class="fa fa-hand-pointer-o"></i> to move around the city.',
         'Zoom out <i class="fa fa-fw fa-minus"></i> to see more nearby places <i class="fa fa-map-marker" style="color: #e15c5c"></i>. You can change the map view by pressing <i class="fa fa-fw fa-map-o"></i>.',
@@ -39,7 +39,11 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
             // Show intro text.
             var content = '<h1 class="story-name">' + this.story.getTitle() + '</h1>' +
                 '<div class="story-intro">' + this.story.getIntro() + '</div>' +
-                '<img title="Such a badass" alt="Badass picture" src="' + this.user.photo + '" class="big-centered-img img-responsive img-circle"/>' + UI.getIntroFooter();
+                '<div class="row user-pic-selector">' +
+                '<div class="col-xs-6"><img title="I am what I am" id="trump-pic" alt="Donald Trump" src="img/trump.png" class="player-photo img-responsive img-circle"/></div>' +
+                '<div class="col-xs-6"><img title="Antes de morir prefiero la muerte" id="ramos-pic" alt="Sergio Ramos" src="img/ramos.png" class="other-players-photo img-responsive img-circle"/></div>' +
+                '</div>' +
+                UI.getIntroFooter();
         }
         UI.showModal(content);
 
@@ -55,6 +59,22 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
 
             UI.showShare();
         });
+
+        // Change player pic.
+        $('#ramos-pic').on('click', function(ev) {
+            this.user.updatePhoto(ev.currentTarget.src);
+            $('#ramos-pic').addClass('player-photo');
+            $('#ramos-pic').removeClass('other-players-photo');
+            $('#trump-pic').removeClass('player-photo');
+            $('#trump-pic').addClass('other-players-photo');
+        }.bind(this));
+        $('#trump-pic').on('click', function(ev) {
+            this.user.updatePhoto(ev.currentTarget.src);
+            $('#trump-pic').addClass('player-photo');
+            $('#trump-pic').removeClass('other-players-photo');
+            $('#ramos-pic').removeClass('player-photo');
+            $('#ramos-pic').addClass('other-players-photo');
+        }.bind(this));
 
         // Set the story initial position.
         this.map.setZoom(this.story.zoom);
@@ -220,6 +240,8 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
             var lastInstruction = 0;
             setTimeout(function() {
 
+                // [0] contains the character image, we need to replace the placeholder.
+                instructions[0] = instructions[0].replace('CHARACTERPIC', this.user.photo);
                 var content = '<h1>How to play</h1>' +
                     '<p id="instruction">' + instructions[0] + '</p>';
 
@@ -252,7 +274,7 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
                     $('#instruction').html(instructions[lastInstruction + 1]);
                     lastInstruction++;
                 });
-            }, 2000);
+            }.bind(this), 2000);
         },
 
         gameCompleted: function() {

@@ -21,7 +21,11 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
 
         this.map = map;
         this.playerName = playerName;
-        this.photo = playerPhoto;
+
+        this.photo = localStorage.getItem('userPhoto');
+        if (!this.photo) {
+            this.photo = playerPhoto;
+        }
 
         this.state = localStorage.getItem('userState');
         if (this.state) {
@@ -187,6 +191,14 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
         breathDropFood: function() {
             this.updateState({
                 cFood: this.state.cFood - Const.breathDropAmount
+            });
+        },
+
+        updatePhoto: function(src) {
+            this.photo = src;
+            this.marker.setIcon({
+                url: this.photo,
+                scaledSize: new google.maps.Size(40, 40),
             });
         },
 
@@ -509,6 +521,7 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
         },
 
         saveGame: function() {
+            localStorage.setItem('userPhoto', this.photo);
             localStorage.setItem('userState', JSON.stringify(this.state));
             localStorage.setItem('userAttrs', JSON.stringify(this.attrs));
             localStorage.setItem('userAchievements', JSON.stringify(this.achievements));
@@ -648,6 +661,7 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
         },
 
         clearSavedGame: function() {
+            localStorage.removeItem('userPhoto');
             localStorage.removeItem('userState');
             localStorage.removeItem('userAttrs');
             localStorage.removeItem('userProperties');

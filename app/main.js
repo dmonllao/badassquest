@@ -14,7 +14,7 @@ define(['GoogleMapsLoader'], function(GoogleMapsLoader) {
             UI.init();
 
             // @type {User} The current user.
-            var user = new User(map, 'Badass', Const.characterPic);
+            var user = new User(map, 'Badass', Const.defaultCharacterPic);
 
             // Start the game.
             var appGame = new Game();

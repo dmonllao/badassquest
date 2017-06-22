@@ -304,6 +304,21 @@ pre.control-combo-top {
     font-family: 'Graduate', cursive;
 }
 
+.player-photo {
+    width: 90%;
+    margin: 20px auto 10px auto;
+    border-style: solid;
+    border-width: thick;
+}
+
+.other-players-photo {
+    width: 70%;
+    opacity: 0.4;
+    margin: 20px auto 10px auto;
+    border-style: dashed;
+    border-width: medium;
+}
+
 .big-centered-img {
     width: 40%;
     margin: 20px auto 10px auto;
