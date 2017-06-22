@@ -17,13 +17,9 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
             suppressMarkers : true,
             preserveViewport : true
         };
-
-        // Prepare it for later.
-        this.directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
     }
 
     Router.prototype = {
-        directionsDisplay: null,
         endLocation: {},
         polyline: null,
         animationTimer: null,
@@ -81,9 +77,9 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
             this.step = stepLong;
 
             if (google.maps.geometry.spherical.computeDistanceBetween(this.marker.getPosition(), position) < Const.skipDirectionsAPIDistance) {
-                // Just move it there no need to waste directions API quota.
-                this.marker.setPosition(position);
-                this.done();
+                // Just move it no need to waste directions API quota.
+                this.startRoute([this.marker.getPosition(), position]);
+                return;
 
             } else {
                 // Use google maps directions API.
@@ -92,12 +88,12 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
                         destination: position,
                         travelMode: google.maps.DirectionsTravelMode.WALKING
                     },
-                    this.routeCallback()
+                    this.routeCallback(position)
                 );
             }
         },
 
-        routeCallback: function() {
+        routeCallback: function(position) {
 
             return function(response, status) {
 
@@ -105,15 +101,16 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
                     return;
                 }
 
-                if (status !== google.maps.DirectionsStatus.OK) {
-                    console.error('DirectionsService error: ' + status);
-                    this.clearRoute();
-                    return;
-                }
-
                 // Stop this user active animations.
                 if (this.polyline !== null) {
                     this.clearRoute();
+                }
+
+                if (status !== google.maps.DirectionsStatus.OK) {
+                    // We probably reached directions API free quota limit, fallback to a simple
+                    // route following a straight path.
+                    this.startRoute([this.marker.getPosition(), position]);
+                    return;
                 }
 
                 var route = response.routes[0];
@@ -131,33 +128,40 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
                 }
                 var leg = route.legs[0];
 
-                // Render the directions line.
-                this.directionsDisplay.setMap(this.map);
-                this.directionsDisplay.setDirections(response);
-
                 // Set the start and end locations.
                 this.endLocation.latLng = leg.end_location;
                 this.endLocation.address = leg.end_address;
 
                 var steps = leg.steps;
 
-                this.polyline = new google.maps.Polyline({
-                    path: [],
-                    strokeColor: '#FFFF00',
-                    strokeWeight: 3
-                });
-
+                var pathSteps = [];
                 for (j=0; j < steps.length; j++) {
                     var nextSegment = steps[j].path;
                     for (k=0;k<nextSegment.length;k++) {
-                        this.polyline.getPath().push(nextSegment[k]);
+                        pathSteps.push(nextSegment[k]);
                     }
                 }
-                this.polyline.setMap(this.map);
 
-                this.startAnimation();
+                this.startRoute(pathSteps);
 
             }.bind(this)
+        },
+
+        startRoute: function(pathSteps) {
+
+            this.polyline = new google.maps.Polyline({
+                path: [],
+                strokeColor: '#FFFF00',
+                strokeWeight: 0,
+                strokeOpacity: 0.00001,
+            });
+
+            for (j=0; j < pathSteps.length; j++) {
+                this.polyline.getPath().push(pathSteps[j]);
+            }
+            this.polyline.setMap(this.map);
+
+            this.startAnimation();
         },
 
         startAnimation: function() {
@@ -278,9 +282,6 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
          * Clears the current route.
          */
         clearRoute: function() {
-
-            // Remove DirectionsRenderer.
-            this.directionsDisplay.setMap(null);
 
             // Clear polylines and stop scheduled animation.
             clearTimeout(this.animationTimer);
