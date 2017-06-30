@@ -114,6 +114,12 @@ define(['bs'], function($) {
                 window.open(this.href, 'facebook', 'height=400, width=700');
             });
 
+            $('#share-google-plus').on('click', function(ev) {
+                ev.preventDefault();
+                window.open(this.href,
+                  '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+            });
+
             $('#share-email').on('click', function(ev) {
                 ev.preventDefault();
                 window.open(this.href, 'email', 'height=400, width=550');
