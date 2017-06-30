@@ -27,6 +27,7 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
         shoutTimeout: null,
         current: null,
         eol: null,
+        currentDestination: null,
         step: null,
         tick: 50,
 
@@ -56,6 +57,22 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
 
         route: function(routeMarker, position, stepCallback, destinationCallback, stepLong) {
 
+            // Calculate the distance from the current marker position and from the current destination if there is one.
+            var fromCurrentDestinationSpacing = null;
+            var zoomLevel = this.map.getZoom();
+            if (this.currentDestination) {
+                var fromCurrentDestinationDistance = google.maps.geometry.spherical.computeDistanceBetween(this.currentDestination, position);
+                // This is a bit weird and it does not work nicely in all zoom levels. I've balanced simplicity, laziness and functionality.
+                fromCurrentDestinationSpacing = fromCurrentDestinationDistance / zoomLevel;
+
+                // Skip higher zoom levels as the simple rule above does not work nicely with < 3 (1 or so instead).
+                if (zoomLevel < 18 && fromCurrentDestinationSpacing < 3) {
+                    // Do nothing, no need to waste directions API quota for this.
+                    return;
+                }
+            }
+
+            // Now we can proceed to update the route.
             this.marker = routeMarker;
 
             // Overwrite callback values.
@@ -76,11 +93,11 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
             }
             this.step = stepLong;
 
-            if (google.maps.geometry.spherical.computeDistanceBetween(this.marker.getPosition(), position) < Const.skipDirectionsAPIDistance) {
+            var fromCurrentPosDistance = google.maps.geometry.spherical.computeDistanceBetween(this.marker.getPosition(), position);
+            if (fromCurrentPosDistance < Const.skipDirectionsAPIDistance) {
                 // Just move it no need to waste directions API quota.
                 this.startRoute([this.marker.getPosition(), position]);
                 return;
-
             } else {
                 // Use google maps directions API.
                 directionsService.route({
@@ -96,15 +113,6 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
         routeCallback: function(position) {
 
             return function(response, status) {
-
-                if (this.destroyed === true) {
-                    return;
-                }
-
-                // Stop this user active animations.
-                if (this.polyline !== null) {
-                    this.clearRoute();
-                }
 
                 if (status !== google.maps.DirectionsStatus.OK) {
                     // We probably reached directions API free quota limit, fallback to a simple
@@ -149,12 +157,23 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
 
         startRoute: function(pathSteps) {
 
+            if (this.destroyed === true) {
+                return;
+            }
+
+            // Stop this user active animations.
+            if (this.polyline !== null) {
+                this.clearRoute();
+            }
+
             this.polyline = new google.maps.Polyline({
                 path: [],
                 strokeColor: '#FFFF00',
                 strokeWeight: 0,
                 strokeOpacity: 0.00001,
             });
+
+            this.currentDestination = pathSteps[pathSteps.length - 1];
 
             for (j=0; j < pathSteps.length; j++) {
                 this.polyline.getPath().push(pathSteps[j]);
@@ -188,7 +207,7 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
                 }.bind(this), 2000);
             }
 
-            // Flag this route as active.
+            // Flag this marker as moving.
             this.moving = true;
 
             // We start from 0.
@@ -297,6 +316,7 @@ define(['Const', 'Generator', 'InfoWindow', 'Icon'], function(Const, Generator, 
             }
 
             this.eol = null;
+            this.currentDestination = null;
             this.current = null;
             this.endLocation = {};
         },
