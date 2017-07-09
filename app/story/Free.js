@@ -28,7 +28,7 @@ define(['bs', 'Map', 'story/Base'], function($, Map, StoryBase) {
                 this.getCurrentLocationSelection(callback);
                 return;
             }
-            callback(place.geometry.location);
+            callback(place.geometry.location, place.name);
             $('#text-action').modal('hide');
         }.bind(this));
     };
@@ -38,7 +38,7 @@ define(['bs', 'Map', 'story/Base'], function($, Map, StoryBase) {
         var currentValue = $('#place-input').val();
         geocoder.geocode({"address": currentValue}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
-                callback(results[0].geometry.location);
+                callback(results[0].geometry.location, results[0].name);
                 $('#text-action').modal('hide');
             }
         });

@@ -6,7 +6,8 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
         'Control city areas <i class="fa fa-flag" style="color: #95c355;"></i> by extorting businessmen or buying places <i class="fa fa-home" style="color: #95c355;"></i>.',
         'Click on the map <i class="fa fa-mouse-pointer"></i> or on markers <i class="fa fa-hand-pointer-o"></i> to move around the city.',
         'Zoom out <i class="fa fa-fw fa-minus"></i> to see more nearby places <i class="fa fa-map-marker" style="color: #e15c5c"></i>. You can change the map view by pressing <i class="fa fa-fw fa-map-o"></i>.',
-        'Eat regularly <i class="fa fa-cutlery" style="color: grey;"></i> or your life <i class="fa fa-heart" style="color: #e15c5c;"></i> will start decreasing.'
+        'Eat regularly <i class="fa fa-cutlery" style="color: grey;"></i> or your life <i class="fa fa-heart" style="color: #e15c5c;"></i> will start decreasing.',
+        'Your progress is automatically saved <i class="fa fa-save" style="color: grey;"></i> every few seconds.'
     ];
 
     var initPromise = $.Deferred();
@@ -87,8 +88,8 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
             // Set a nice background while the user selects a position.
             this.map.setCenter(Const.defaultMapCenterBackground);
             this.user.setPosition(Const.defaultMapCenterBackground);
-            this.story.getPosition(this.map, initPromise, function(location) {
-                this.setPosition(location);
+            this.story.getPosition(this.map, initPromise, function(locationCoords, locationName) {
+                this.setPosition(locationCoords);
             }.bind(this));
         }
 
