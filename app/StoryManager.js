@@ -32,26 +32,40 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
                     id: 'resume',
                     text: 'Resume'
                 }, {
-                    id: 'newgame',
+                    id: 'reset',
                     text: 'New game'
                 }
             ], 'continue-buttons') + UI.getIntroFooter();
         } else {
             // Show intro text.
+
             var content = '<h1 class="story-name">' + this.story.getTitle() + '</h1>' +
                 '<div class="story-intro">' + this.story.getIntro() + '</div>' +
                 '<div class="row user-pic-selector">' +
-                '<div class="col-xs-6"><img title="I am what I am" id="trump-pic" alt="Donald Trump" src="img/trump.png" class="player-photo img-responsive img-circle"/></div>' +
-                '<div class="col-xs-6"><img title="Antes de morir prefiero la muerte" id="ramos-pic" alt="Sergio Ramos" src="img/ramos.png" class="other-players-photo img-responsive img-circle"/></div>' +
+                    '<div class="col-xs-6"><img title="I am what I am" id="trump-pic" alt="Donald Trump" src="img/trump.png" class="player-photo img-responsive img-circle"/></div>' +
+                    '<div class="col-xs-6"><img title="Antes de morir prefiero la muerte" id="ramos-pic" alt="Sergio Ramos" src="img/ramos.png" class="other-players-photo img-responsive img-circle"/></div>' +
                 '</div>' +
+                UI.renderActionButtons([{
+                    id: 'newgame',
+                    text: '<i class="fa fa-gamepad"></i> Play'
+                }]) +
                 UI.getIntroFooter();
         }
         UI.showModal(content);
 
+        $('#newgame').on('click', function() {
+            var placeinput = $('#place-input');
+            placeinput.focus();
+            placeinput.popover({
+                content: 'Select a city first',
+                placement: 'bottom'
+            });
+            placeinput.popover('show');
+        });
         $('#resume').on('click', function() {
             $('#text-action').modal('hide');
         });
-        $('#newgame').on('click', function() {
+        $('#reset').on('click', function() {
             this.user.clearGame();
             location.reload();
         }.bind(this));
@@ -89,7 +103,13 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
             this.map.setCenter(Const.defaultMapCenterBackground);
             this.user.setPosition(Const.defaultMapCenterBackground);
             this.story.getPosition(this.map, initPromise, function(locationCoords, locationName) {
-                this.setPosition(locationCoords);
+                // Callback once a location is selected.
+
+                $('#newgame').on('click', function() {
+                    this.setPosition(locationCoords);
+                    $('#text-action').modal('hide');
+                }.bind(this));
+                $('#newgame').removeAttr("disabled");
             }.bind(this));
         }
 

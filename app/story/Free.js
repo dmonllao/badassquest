@@ -28,8 +28,7 @@ define(['bs', 'Map', 'story/Base'], function($, Map, StoryBase) {
                 this.getCurrentLocationSelection(callback);
                 return;
             }
-            callback(place.geometry.location, place.name);
-            $('#text-action').modal('hide');
+            this.positionDecided(callback, place.geometry.location, place.name);
         }.bind(this));
     };
 
@@ -38,10 +37,17 @@ define(['bs', 'Map', 'story/Base'], function($, Map, StoryBase) {
         var currentValue = $('#place-input').val();
         geocoder.geocode({"address": currentValue}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
-                callback(results[0].geometry.location, results[0].name);
-                $('#text-action').modal('hide');
+                this.positionDecided(callback, results[0].geometry.location, results[0].formatted_address);
             }
-        });
+        }.bind(this));
+    };
+
+    Free.prototype.positionDecided = function(callback, locationCoords, locationName) {
+        callback(locationCoords, locationName);
+
+        // Replace the input for a text string so we avoid people entering multiple names.
+        $('#place-input').parent().html('<span>' + locationName + '</span>');
+        $('#newgame').focus();
     };
 
     return Free;
