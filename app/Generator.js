@@ -95,8 +95,8 @@ define(['Const'], function(Const) {
                 infoMessage: 'I need underwear for...a friend! Go and steal it for me, I will pay you.',
                 doneMessage: 'So naughty... this is exactly what I wanted.',
             }, {
-                title: 'Monkey crane',
-                infoMessage: 'I saw in the news that they got a monkey crane, I want it for my private collection!',
+                title: 'Monkey skull',
+                infoMessage: 'I saw in the news that they got a monkey skull, I want it for my private collection!',
                 doneMessage: 'hehehe, thanks. There it is, your reward.'
             }
         ],

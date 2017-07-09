@@ -119,7 +119,6 @@ define(['bs', 'Const'], function($, Const) {
                 }
             }
 
-            console.log('Controlled areas ' + JSON.stringify(groups));
             return groups;
         },
 
