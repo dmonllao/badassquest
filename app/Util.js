@@ -72,5 +72,12 @@ define(['bs'], function($) {
             return size;
         },
 
+        getLeadersBoardSize: function() {
+            return {
+                width: Math.floor(window.innerWidth * 0.8),
+                height: Math.floor(window.innerHeight * 0.7)
+            };
+        },
+
     };
 });

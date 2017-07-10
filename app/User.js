@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindow', 'PissedPeople', 'ControlledAreas', 'Icon'], function($, Const, UI, Generator, Router, Controls, Notifier, InfoWindow, PissedPeople, ControlledAreas, Icon) {
+define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'InfoWindow', 'PissedPeople', 'ControlledAreas', 'Icon', 'ProgressTracker'], function($, Const, UI, Generator, Router, Controls, Notifier, InfoWindow, PissedPeople, ControlledAreas, Icon, ProgressTracker) {
 
     var healthWarningShown = false;
     var foodWarningShown = false;
@@ -337,6 +337,7 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
 
         addProperty: function(property) {
             this.properties[property.poiData.place_id] = property;
+            ProgressTracker.add('property', property.poiData.place_id, property.poiData);
         },
 
         addAchievement: function(achievement) {
@@ -366,6 +367,7 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
         addExtortion: function(extortion) {
             // Actionbase.markAsDone already updated the marker icon.
             this.taxes[extortion.poiData.place_id] = extortion;
+            ProgressTracker.add('extortion', extortion.poiData.place_id, extortion.poiData);
         },
 
         collectTaxes: function() {
@@ -669,6 +671,7 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
             localStorage.removeItem('userPosition');
             localStorage.removeItem('userAchievements');
             localStorage.removeItem('userOngoingMissions');
+            localStorage.removeItem('userMadeLeaderBoard');
 
             localStorage.removeItem('achievementExtort1');
             localStorage.removeItem('achievementBuy1');
@@ -700,9 +703,6 @@ define(['bs', 'Const', 'UI', 'Generator', 'Router', 'Controls', 'Notifier', 'Inf
                     } else {
 
                         switch (this.achievements[i].category) {
-                            case 'basics':
-                                image = '<i class="fa fa-check" style="color: green;"></i>';
-                                break;
                             case 'politics':
                                 image = '<i class="fa fa-building-o"></i>';
                                 break;
