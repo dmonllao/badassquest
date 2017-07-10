@@ -36,7 +36,7 @@ define(['bs'], function($) {
             return styles[index % styles.length];
         },
 
-        renderActionButtons: function(buttons, extraClasses) {
+        renderActionButtons: function(buttons, extraClasses, extraStyles) {
 
             var classes = 'action-buttons';
             if (extraClasses) {
@@ -44,9 +44,16 @@ define(['bs'], function($) {
             }
             var html = '<div class="' + classes + '">';
             for (var i in buttons) {
+
+                var style = '';
+                if (buttons[i].extraStyles) {
+                    style = buttons[i].extraStyles;
+                }
+
                 html = html + '<button id="' + buttons[i].id + '" class="btn ' +
-                    this.getActionButtonStyle(i) + '">' + buttons[i].text + '</button>';
+                    this.getActionButtonStyle(i) + '" style="' + style + '">' + buttons[i].text + '</button>';
             }
+
             html = html + '</div>';
             return html;
         },
