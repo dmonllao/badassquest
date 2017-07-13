@@ -42,7 +42,7 @@ define(['bs', 'UI', 'Util'], function($, UI, Util) {
             if (pendingProgress.length === sendRequest) {
                 var request = $.ajax({
                     type: 'POST',
-                    url: 'http://localhost:8000/users/add',
+                    url: 'https://maptest-1088.appspot.com/users/add',
                     data: {
                         userid: userID,
                         token: token,
@@ -119,7 +119,7 @@ define(['bs', 'UI', 'Util'], function($, UI, Util) {
             // Retrieves the first key, ignore subsequents.
             var category = Object.keys(data.newpositions)[0];
 
-            var url = 'http://localhost:8000/leaders?country=' + data.country + '#' + category;
+            var url = 'https://maptest-1088.appspot.com/leaders?country=' + data.country + '#' + category;
             var iframeSize = Util.getLeadersBoardSize();
 
             var msg = 'Leaderboard updates!';
