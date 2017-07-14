@@ -2,7 +2,7 @@ define(['bs', 'UI', 'Util'], function($, UI, Util) {
 
     var progressTracking = true;
 
-    var sendRequest = 10;
+    var sendRequest = 5;
 
     var pendingProgress = [];
 
@@ -13,7 +13,6 @@ define(['bs', 'UI', 'Util'], function($, UI, Util) {
     ProgressTracker = {
 
         add: function(category, id, poiData) {
-
             if (!progressTracking) {
                 return false;
             }
@@ -25,6 +24,7 @@ define(['bs', 'UI', 'Util'], function($, UI, Util) {
 
             // Give some time to assimilate and enjoy the achievement sound.
             if (!userID || !token) {
+
                 setTimeout(function() {
                     FB.getLoginStatus(function(response) {
                         ProgressTracker.getFacebookToken(response);
