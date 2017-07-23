@@ -77,7 +77,7 @@ define(['bs', 'UI', 'Util'], function($, UI, Util) {
                         extraStyles: 'background-color: #3b5998;'
                     }, {
                         id: 'no-login',
-                        text: '<i class="fa fa-thumbs-o-down"></i> Maybe later'
+                        text: '<i class="fa fa-thumbs-o-down"></i>'
                     }], 'continue-buttons');
                 UI.showModal(content);
 
