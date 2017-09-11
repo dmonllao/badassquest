@@ -91,7 +91,7 @@ define(['Phaser', 'Const', 'Generator', 'Util', 'External', 'Sound', 'UI', 'Heal
         getBackground: function() {
             var size = Util.getGameSize();
 
-            var img = 'img/default-battlefield.png';
+            var img = 'img/default-battlefield.jpg';
             if (this.location) {
                 img = External.getStreetViewImage(this.location, size.width, size.height);
             }

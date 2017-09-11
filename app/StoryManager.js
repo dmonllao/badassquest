@@ -1,4 +1,4 @@
-define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free', 'story/PerthUnderground', 'story/ForPresident'], function($, Const, UI, Map, InfoWindow, MissionsChain, StoryFree, StoryPerthUnderground, StoryForPresident) {
+define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'Foe', 'story/Free', 'story/PerthUnderground', 'story/ForPresident'], function($, Const, UI, Map, InfoWindow, MissionsChain, Foe, StoryFree, StoryPerthUnderground, StoryForPresident) {
 
     // This contains the game instructions, ordered by how important they are to understand how the game works.
     var instructions = [
@@ -165,13 +165,7 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
 
             google.maps.event.addListenerOnce(this.map, 'idle', function() {
                 // After zoom and center is set.
-                var text = 'Hey! You look exactly like my dead son! Are you new in the city? I should adopt you, keep my phone number, I will contact you.';
-                this.addInfoPerson(position, text, function() {
-                    $('#map').trigger('notification:add', {
-                        from: '<img src="img/chuck.jpg" class="img-circle notification-img"> Chuck Norris',
-                        message: 'Explore the city for a while, I hope you survive... catch you later amigou',
-                    });
-                });
+                this.addWelcomePerson(position);
             }.bind(this));
 
             if (showTips) {
@@ -182,7 +176,7 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
             initPromise.resolve(position);
         },
 
-        addInfoPerson: function(userPosition, message, callback) {
+        addWelcomePerson: function(userPosition) {
 
             // The info guy should appear close enough to the user and inside the map bounds.
             var bounds = this.map.getBounds();
@@ -192,8 +186,16 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
             var distance = Math.round(google.maps.geometry.spherical.computeDistanceBetween(userPosition, bounds.getNorthEast()).toFixed() * 0.5);
             var chuckPosition = google.maps.geometry.spherical.computeOffset(userPosition, distance, 45);
 
-            var html = '<img class="big-centered-img img-responsive img-circle" src="img/chuck.jpg"/><div>' + message + '</div>';
-            // Chuck Norris will give you some info.
+            var message = 'Hey! What are you doing here? I am Chuck and this is my neighbourhood. Pay your respects or die.';
+            var html = '<img class="big-centered-img img-responsive img-circle" src="img/chuck.jpg"/><div>' + message + '</div>' + UI.renderActionButtons([
+                {
+                    id: 'fight',
+                    text: 'Fight him'
+                }, {
+                    id: 'apologize',
+                    text: 'Apologize'
+                }
+            ], 'continue-buttons');
             var name = 'Chuck Norris';
             var marker = new google.maps.Marker({
                 map: this.map,
@@ -216,18 +218,51 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'story/Free',
                     google.maps.event.clearInstanceListeners(marker);
                     marker.setClickable(false);
 
-                    // Show info, stop animation and remove the marker after
-                    // 10 secs, considering 10 secs enough for the user to see the message.
-                    self.openInfo(marker, name, html, self.infoPersonWindow);
+                    var infoWindow = self.openInfo(marker, name, html, self.infoPersonWindow);
                     marker.setAnimation(null);
-                    setTimeout(function() {
-                        self.infoPersonWindow.setMap(null);
-                        marker.setMap(null);
-                        marker = null;
-                        if (typeof callback !== "undefined") {
-                            callback();
-                        }
-                    }, 10000);
+                    google.maps.event.addListener(infoWindow, 'domready', function() {
+                        $('#fight').on('click', function(ev) {
+
+                            var foe = new Foe({
+                                name: name,
+                                tHealth: Const.initHealth,
+                                speed: Const.initSpeed,
+                                attack: Math.round(Const.initAttack / 2),
+                                defense: Math.round(Const.initDefense / 2),
+                                duration: 10000,
+                                reRouteLimit: 3
+                            });
+                            foe.setFaceImage('img/chuck.jpg');
+
+                            var position = self.user.marker.getPosition();
+                            var args = {
+                                user: self.user,
+                                foes: [foe],
+                                location: position.lat() + ', ' + position.lng(),
+                                wonCallback: function() {
+                                    $('#game-action').modal('hide');
+                                    self.infoPersonWindow.setMap(null);
+                                    marker.setMap(null);
+                                    marker = null;
+                                    $('#map').trigger('notification:add', {
+                                        from: '<img src="img/chuck.jpg" class="img-circle notification-img"> Chuck Norris',
+                                        message: 'Hey hey relax! Ok, I forgive you, let\'s keep in touch, I may have jobs for you.',
+                                    });
+                                }.bind(self)
+                            };
+                            self.game.state.start('Fight', true, false, args);
+
+                        });
+                        $('#apologize').on('click', function(ev) {
+                            self.infoPersonWindow.setMap(null);
+                            marker.setMap(null);
+                            marker = null;
+                            $('#map').trigger('notification:add', {
+                                from: '<img src="img/chuck.jpg" class="img-circle notification-img"> Chuck Norris',
+                                message: 'What a chiken, better go and play another video game...',
+                            });
+                        });
+                    });
                 });
             });
         },

@@ -210,7 +210,8 @@ define(['bs', 'PoiTypes', 'Map', 'Const', 'UI', 'Util', 'InfoWindow', 'External'
                 }
 
                 if (actions.length > 0) {
-                    content = content + '<div class="action-buttons">';
+                    var style = 'max-width: ' + size.width + 'px;';
+                    content = content + '<div class="action-buttons" style="' + style + '">';
                     for(var i = 0; i < actions.length; i++) {
 
                         // Only some actions are available once the property was bought.

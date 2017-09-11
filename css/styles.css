@@ -213,25 +213,16 @@ pre.control-combo-top {
 }
 
 .infowindow-wrapper .action-buttons {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translate(-50%);
+    text-align: center;
 }
 
 .infowindow-wrapper .action-buttons button {
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-    font-size: 150%;
 }
 
 @media only screen and (max-width : 480px) {
     .infowindow-wrapper .action-buttons button {
         font-size: initial;
-        left: 50%;
-        bottom: 0;
-        position: relative;
-        transform: translate(-50%);
-        margin: 7px 0;
     }
 }
 
@@ -248,7 +239,7 @@ pre.control-combo-top {
 
 
 .action-buttons button {
-    margin: 3px 10px;
+    margin: 3px 5px;
 }
 
 /** Avoid multiple lines action buttons. */
