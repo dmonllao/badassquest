@@ -2,7 +2,7 @@
 
 [http://badassquest.davidmonllao.com](http://badassquest.davidmonllao.com)
 
-[![Play it](http://badassquest.davidmonllao.com/img/readme-img1.png)](http://badassquest.davidmonllao.com)
+[![Play it](http://badassquest.davidmonllao.com/img/readme-img2.png)](http://badassquest.davidmonllao.com)
 
 # Development
 
