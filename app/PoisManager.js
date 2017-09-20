@@ -257,6 +257,10 @@ define(['bs', 'PoiTypes', 'Map', 'Const', 'UI', 'Util', 'InfoWindow', 'External'
                     var action = actions[ev.target.id.substr(10)];
                     action.start();
                 });
+                $('.infowindow-wrapper .poi-img').click(function(ev) {
+                    self.infoWindow.close();
+                    ev.stopPropagation();
+                });
             });
         },
 
