@@ -166,6 +166,7 @@ pre.control-combo-top {
 }
 
 .infowindow-wrapper {
+    float: left;
     margin: 8px;
     margin-bottom: 20px;
     background: #474747;
@@ -175,10 +176,6 @@ pre.control-combo-top {
     box-shadow: 0 0 8px #000;
     color: #f5f5f5;
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-}
-
-.infowindow-wrapper .poi-img {
-    margin-top: -22px;
 }
 
 .infowindow-wrapper h3 {
