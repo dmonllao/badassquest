@@ -39,15 +39,18 @@ define(['bs', 'Const', 'UI', 'Map', 'InfoWindow', 'MissionsChain', 'Foe', 'story
         } else {
             // Show intro text.
 
+            var alertStyles = "background-color: #e74c3c;margin: 15px; border: 1px solid transparent; border-radius: 4px;color:white;font-weight: bold;";
             var content = '<h1 class="story-name">' + this.story.getTitle() + '</h1>' +
                 '<div class="story-intro">' + this.story.getIntro() + '</div>' +
+                '<div style="' + alertStyles + '">Sad news: Despite the changes we implemented to reduce Google Maps API usage, the pricing changes in Google Maps Platform made impossible to maintain this game open and free for everybody.<br/>Thanks to all 63,875 players.</div>' +
                 '<div class="row user-pic-selector">' +
-                    '<div class="col-xs-6"><img title="I am what I am" id="trump-pic" alt="Donald Trump" src="img/trump.png" class="player-photo img-responsive img-circle"/></div>' +
-                    '<div class="col-xs-6"><img title="Antes de morir prefiero la muerte" id="ramos-pic" alt="Sergio Ramos" src="img/ramos.png" class="other-players-photo img-responsive img-circle"/></div>' +
+                    '<div class="col-xs-6"><img title="I am what I am" id="trump-pic" alt="Donald Trump" src="img/trump.png" class="other-players-photo img-responsive img-circle"/></div>' +
+                    '<div class="col-xs-6"><img title="Antes de morir prefiero la muerte" id="ramos-pic" alt="Sergio Ramos" src="img/ramos.png" class="player-photo img-responsive img-circle"/></div>' +
                 '</div>' +
                 UI.renderActionButtons([{
                     id: 'newgame',
-                    text: '<i class="fa fa-gamepad"></i> Play'
+                    text: '<i class="fa fa-gamepad"></i> Play',
+                    extraStyles: 'opacity: .65; filter: alpha(opacity=65); cursor: not-allowed;',
                 }]) +
                 UI.getIntroFooter();
         }
