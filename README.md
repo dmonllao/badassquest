@@ -1,8 +1,15 @@
+# Intro
+
+Badass Quest is an open source framework based on Google Maps API for old-GTA-style games. Unfortunately, on July 2018 Google changed their pricing policy which made [_Badass For President_](http://badassquest.davidmonllao.com), the game that served as example of the framework, unmaintainable (costs changed from zero to $2000AUD a month) and they seem to require a Google developer account with billing enabled even for local development.
+
+| | | |
+|:-------------------------:|:-------------------------:|:-------------------------:|
+|[<img width="1604" alt="Chuck Norris" src="https://github.com/dmonllao/badassquest/raw/master/img/chuck-screen.jpg">](https://github.com/dmonllao/badassquest/raw/master/img/chuck-screen.jpg) Chuck Norris, your friend |[<img width="1604" alt="Fight" src="https://github.com/dmonllao/badassquest/raw/master/img/fight.jpg">](https://github.com/dmonllao/badassquest/raw/master/img/fight.jpg) Fight screen| [<img width="1604" alt="Actions example" src="https://github.com/dmonllao/badassquest/raw/master/img/actions-screen.jpg">](https://github.com/dmonllao/badassquest/raw/master/img/actions-screen.jpg) Actions example |
+|[<img width="1604" alt="Map" src="https://github.com/dmonllao/badassquest/raw/master/img/map-screen.jpg">](https://github.com/dmonllao/badassquest/raw/master/img/map-screen.jpg) Map view | [<img width="1604" alt="Extortion" src="https://github.com/dmonllao/badassquest/raw/master/img/extorted-screen.jpg">](https://github.com/dmonllao/badassquest/raw/master/img/extorted-screen.jpg) Extortion | [<img width="1604" alt="Barcelona's new Mayor" src="https://github.com/dmonllao/badassquest/raw/master/img/rule-barcelona.jpg">](https://github.com/dmonllao/badassquest/raw/master/img/rule-barcelona.jpg) Barcelona's new Mayor |
+
 # Play it
 
 [http://badassquest.davidmonllao.com](http://badassquest.davidmonllao.com)
-
-[![Play it](http://badassquest.davidmonllao.com/img/readme-img2.png)](http://badassquest.davidmonllao.com)
 
 # Development
 
@@ -11,6 +18,7 @@ No i18n, no i10n, no a11y.
 ## Requirements
 * NPM
 * Bower installed globally
+* A Google account with Google Maps APIs and billing enabled
 
 <!-- not displayed as a code block under a list unless we add something like this comment -->
     npm install -g bower
